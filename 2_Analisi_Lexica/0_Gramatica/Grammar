@@ -1,0 +1,89 @@
+Ada:
+	- ___: integer;
+	- ___: character;
+	- ___: boolean;
+	- ___: access _TYPE_;
+
+	- type ___ is [record][new][access] ______ [end record];
+	- ___: array ( _RANGE_) of _TYPE_;
+	- _ACCESS_TYPE_.all-> 	access to the variables pointed byt the access type.
+	
+	- if ___ then ___ end if;
+	- case ___ is
+		when ___ => ; ...when ___ => ;
+	  end case;
+	- while ___ loop ___ end loop;
+	- exception
+		when ___ => ; ... when => ;
+	
+	- procedure ___ ( ___ : [in] [out] ___ ...) is
+		...
+	  begin
+		...
+	  end ____;
+	- function ___ ( ___: [in] [out] ___ ...) return ___ is
+		...
+	  begin
+		...
+		return ____;
+	  end ____;
+	
+	- ___ and [then] ___
+	- ___ or ___
+
+	--Alpha no serian solo A-Z, a-z y 0-9, siendo todo lo demas terminales?
+	Alpha= { '(', ')', '+', '*', '-', '/','%',':',';','"',''','=','>', '<','<=','>=','/=',':=','--',A-Z,a-z,0-9,'.',',','\n','\0'...
+	T={while,loop, end loop, if, then, end if,else, elsif, is, array,range,of, type,new,record, end record,and, or,procedure,begin,end,
+	 in, out, return, function}
+	
+
+	<Init> 		->	<Initfunc> | <InitProc>
+
+--	<InitProc> 	->	procedure <Indentif_p> <Args> <Bloc_proc> --los args no son parte del indentificador?
+
+	<InitProc> 	->	procedure <Indentif_p> <Bloc_proc>
+
+	<Identif_p>	->	<Identif_proc> <Args> | <Identif_func> <Args> --Supongo que <Id_p> y <Id_f> se fusionaran con <Identif> 
+
+	<Bloc_proc> 	->	<Declar> begin <Bloc_i> end <Identif_proc>;
+
+--	<InitFunc> 	->	function <Identif_p> <Args> return <Terme> <Bloc_func> --idem cas <InitProc>
+
+	<InitFunc> 	->	function <Identif_p> return <Terme> <Bloc_func>
+
+	<Bloc_func> 	->	<Declar> begin <Bloc_i> return <Terme>; end <Identif_fun>;
+
+	<Bloc_i> 	->	while <Cond> loop <Bloc_i> end loop;					|
+				if <Cond> then <Bloc_i> end if;						|
+				if <Cond> then <Bloc_i> else <Bloc_i> end if; 				|
+				<Identif>:= <Terme>;<Bloc_i> 						|
+				<Identif>:= <Terme>; 							|
+				null;
+	
+	<Declar>	->	<Init> 									|
+				<Identif>:<Tipus>; <Declar> | <Declar_2>,<Identif>:<Tipus>;<Declar> 	|
+				type <Identif> is <Declar_t>; <Declar> 					|
+				<Identif>: array (...) of <Tipus>; <Declar> 				|
+				lambda	
+
+	<Declar_2>	->	<Declar_2>,<Identif> | <Identif>			
+
+	<Cond>		->	(<Expr>) | <Expr>
+
+	<Expr>		->	<Term> and <Cond> 							| 
+				<Term> and then <Cond> 							|
+				<Term> or <Cond> 							|
+				<Term>
+	
+	<Tipus>		->	integer | character | boolean
+	
+	<Args>		->	<Identif>: <I_O> <Tipus> | <Declar_2>,<Identif>: <I_O> <Tipus> | <Args_i>
+
+	<Args_i>	->	<Identif>: <I_O> <Tipus>;<Args> | <Declar_2>,<Identif>: <I_O> <Tipus>;<Args>
+
+	<Identif>	->	<Char_id>
+
+	<Char_id>	->	(a..z)(A..Z)|<Dig_id>
+
+	<Dig_id>	->	0..9 | <Char_id> | lambda
+

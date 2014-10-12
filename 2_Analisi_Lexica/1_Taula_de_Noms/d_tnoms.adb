@@ -1,3 +1,4 @@
+
 with Ada.Strings.Hash; use ada.Strings;
 package body d_tnoms is
    --Auxiliar operations:
@@ -22,7 +23,7 @@ package body d_tnoms is
       pi,pf: natural;
       i,j:natural;
    begin
-      pi:=tid(p-1).ptc;pf:=tid(p).ptc;
+      pi:=tid(p-1).ptc+1;pf:=tid(p).ptc;
       i:=nom'first;j:=pi;
       while nom(i)=tc(j) and i<nom'Last and j<pf loop i:=i+1; j:=j+1; end loop;
       return nom(i)=tc(j) and i=nom'Last and j=pf;
@@ -31,14 +32,14 @@ package body d_tnoms is
    function equal(text: in string; tn: in tnoms;p:in id_str) return boolean is
       ts: str_table renames tn.ts;
       tc: char_table renames tn.tc;
-      --        ns: integer renames tn.ns;
       pi,pf: integer;
       i,j:integer;
    begin
-      pi:=ts(p-1);pf:=ts(p);
-      i:=text'first;j:=pi;
-      while text(i)= tc(j) and i<text'last and j>pf loop i:=i+1; j:=j-1; end loop;
-      return text(i)=tc(j) and i=text'last and j=pf;
+      pi:=ts(p-1)-1; pf:=ts(p);
+      i:=text'last; j:=pi;
+      while text(i)=tc(j) and i>text'first and j>pf loop i:=i-1;j:=j-1; end loop;
+      return text(i)=tc(j) and i=text'first and j=pf;
+
    end equal;
 
    -- *******************************************************************
@@ -47,13 +48,15 @@ package body d_tnoms is
       tid:id_table renames tn.tid;
       ts: str_table renames tn.ts;
       nid:id renames tn.nid;
+      ns: id_str renames tn.ns;
       nc: integer renames tn.nc;
       ncs:integer renames tn.ncs;
    begin
       for i in hash_index loop td(i):=null_id; end loop;
-      nid:=0;nc:=0;ncs:=max_ch;
+      nid:=0;ns:=0;nc:=0;ncs:=max_ch;
       tid(null_id):=(null_id,nc);ts(null_ids):=max_ch;
    end empty;
+
 
    procedure put(tn: in out tnoms; nom: in string; ident: out id)is
       td: disp_table renames tn.td;
@@ -77,16 +80,15 @@ package body d_tnoms is
       ident:=p;
    end put;
 
-   procedure get(tn: in tnoms; ident: in id;str:out Ada.Strings.Unbounded.Unbounded_String) is
+   function get(tn: in tnoms; ident: in id) return a_string is
       tid: id_table renames tn.tid;
       tc: char_table renames tn.tc;
       nid: id renames tn.nid;
       i,j: integer;
    begin
       if ident=null_id or ident>nid then raise bad_use;end if;
-      i:=tid(ident-1).ptc; j:=tid(ident).ptc;
-      str:=Ada.Strings.Unbounded.To_Unbounded_String(tc(i..j));
-      --        return tc(i..j);
+      i:=tid(ident-1).ptc+1; j:=tid(ident).ptc;
+      return new String'(tc(i..j));
    end get;
 
    procedure put(tn: in out tnoms; text: in string;ids: out id_str)is
@@ -106,11 +108,19 @@ package body d_tnoms is
          ns:=ns+1;ts(ns):=ncs; p:=ns;
       end if;
       ids:=p;
+   exception
+      when space_overflow=> put("Space overflow");
    end put;
 
-   function get(tn: in tnoms; ids: in id_str) return string is
+   function get(tn: in tnoms; ids: in id_str) return a_string is
+      tc:char_table renames tn.tc;
+      ts: str_table renames tn.ts;
+      ns: id_str renames tn.ns;--number of stored strings
+      i,j: integer;
    begin
-      return "";
+      if ids=null_ids or ids>ns then raise bad_use; end if;
+      j:=ts(ids-1)-1;i:=ts(ids);
+      return new String'(tc(i..j));
    end get;
 
 

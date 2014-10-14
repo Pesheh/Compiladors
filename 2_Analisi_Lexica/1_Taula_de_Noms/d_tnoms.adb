@@ -100,9 +100,9 @@ package body d_tnoms is
       p: id_str;
    begin
       p:=null_ids+1;
+      if ns=id_str(max_str) then raise space_overflow; end if;
       while ts(p)/=0 and then not equal(text,tn,p) loop p:=p+1; end loop;
       if ts(p)=0 then
-         if ns=id_str(max_str) then raise space_overflow; end if;
          if ncs -text'Length<nc then raise space_overflow; end if;
          save_string(text,tc,ncs);
          ns:=ns+1;ts(ns):=ncs; p:=ns;

@@ -32,6 +32,7 @@ Ada:
 	- ___ or ___
 
 	--Alpha no serian solo A-Z, a-z y 0-9, siendo todo lo demas terminales?
+	--** == elevado a ..
 	Alpha= { '(', ')', '+', '*', '-', '/','%',':',';','"',''','=','>', '<','<=','>=','/=',':=','--',A-Z,a-z,0-9,'.',',','\n','\0'...
 	T={while,loop, end loop, if, then, end if,else, elsif, is, array,range,of, type,new,record, end record,and, or,procedure,begin,end,
 	 in, out, return, function}
@@ -76,8 +77,8 @@ Ada:
 	<Declar_t>	->	record <Declar_v/a> end record; | new <Tipus>;
 
 	<Array_r>	->	
-
-	<Cond>		->	(<Eval>) | <Eval>
+				--Falta afegir la negacio
+	<Cond>		->	(<Eval>) | <Eval> | not (<Eval>)
 
 	<Eval>		->	<Expr> and <Cond> 								| 
 				<Expr> and then <Cond> 								|
@@ -90,6 +91,9 @@ Ada:
 				<Terme>'>='<Terme>								|
 				<Terme>'='<Terme>								|
 				<Terme>'/='<Terme>	
+				<Terme>										|
+				not <Terme>
+
 
 	<Tipus>		->	integer | character | boolean
 	

@@ -1,0 +1,17 @@
+project make is
+
+	for Languages use ("Ada");	
+	for Source_Dirs use ("./sources");
+	for Object_Dir use "./.objects";	
+	for Main use ("ayacc.adb");
+	for Exec_Dir use "./";
+
+	package Builder is
+        	for Executable ("ayacc.adb") use "ayacc";
+      	end Builder;
+
+	package Compiler is
+                for Default_Switches ("Ada") use ("-gnat2005");
+        end Compiler;
+
+end make;

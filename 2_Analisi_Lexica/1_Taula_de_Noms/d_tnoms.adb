@@ -2,15 +2,21 @@
 with Ada.Strings.Hash; use ada.Strings;
 package body d_tnoms is
    --Auxiliar operations:
-   procedure save_name(nom:in string;tc: in out char_table;nc: in out integer) is
+   procedure save_name(tc: in out char_table;nom:in string;nc: in out integer) is
    begin
-      for i in nom'range loop
+      for i in nom'Range loop
          nc:=nc+1; tc(nc):=nom(i);
       end loop;
    end save_name;
 
+   procedure save_string(tc: in out char_table;text:in string;ncs: in out integer) is
+   begin
+      for i in text'Range loop
+         ncs:=ncs-1;tc(ncs):=text(i);
+      end loop;
+   end save_string;
 
-   function equal(nom: in string;tn: in tnoms;p: id) return boolean is
+   function equal(nom: in string;tn: in tnoms;p:in id) return boolean is
       tid: id_table renames tn.tid;
       tc: char_table renames tn.tc;
       nid: id renames tn.nid;
@@ -23,14 +29,7 @@ package body d_tnoms is
       return nom(i)=tc(j) and i=nom'Last and j=pf;
    end equal;
 
-   procedure save_string(text:in string;tc: in out char_table;ncs: in out integer) is
-   begin
-      for i in reverse  text'range loop
-         ncs:=ncs-1;tc(ncs):=text(i);
-      end loop;
-   end save_string;
-
-   function equal(text: in string; tn: in tnoms;p:id_str) return boolean is
+   function equal(text: in string; tn: in tnoms;p:in id_str) return boolean is
       ts: str_table renames tn.ts;
       tc: char_table renames tn.tc;
       pi,pf: integer;
@@ -74,12 +73,13 @@ package body d_tnoms is
       if p=null_id then
          if nid=id(max_id) then raise space_overflow; end if;
          if nc+nom'Length>ncs then raise space_overflow; end if;
-         save_name(nom,tc,nc);
+         save_name(tc,nom,nc);
          nid:=nid+1;tid(nid):=(td(i),nc);
          td(i):=nid;p:=nid;
       end if;
       ident:=p;
    end put;
+
    function get(tn: in tnoms; ident: in id) return a_string is
       tid: id_table renames tn.tid;
       tc: char_table renames tn.tc;
@@ -103,8 +103,14 @@ package body d_tnoms is
       if ns=id_str(max_str) then raise space_overflow; end if;
       while ts(p)/=0 and then not equal(text,tn,p) loop p:=p+1; end loop;
       if ts(p)=0 then
+<<<<<<< HEAD
          if ncs -text'Length<nc then raise space_overflow; end if;
          save_string(text,tc,ncs);
+=======
+         if ns=id_str(max_str) then raise space_overflow; end if;
+         if ncs-text'Length<nc then raise space_overflow; end if;
+         save_string(tc,text,ncs);
+>>>>>>> 08839528ab462bda7fa44b6f1dd97748b7d3ea72
          ns:=ns+1;ts(ns):=ncs; p:=ns;
       end if;
       ids:=p;

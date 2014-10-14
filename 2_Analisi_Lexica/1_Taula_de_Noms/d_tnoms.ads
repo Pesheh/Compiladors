@@ -6,7 +6,7 @@ with Ada.Strings.Unbounded;
 package d_tnoms is
    type tnoms is limited private;
 
-   max_ch: constant integer := (max_id+max_str)*64;
+   max_ch: constant Natural := (max_id+max_str)*64;
    space_overflow,bad_use: exception;
 
    procedure empty(tn: out tnoms);
@@ -25,9 +25,9 @@ private
          ptc:natural;
       end record;
    type id_table is array (id) of list_item;
-   type str_table is array (id_str) of integer;
+   type str_table is array (id_str) of Natural;
    type disp_table is array (hash_index) of id;
-   subtype char_table is string(1..max_ch);
+   subtype char_table is String(1..max_ch);
 
    type tnoms is
       record
@@ -37,8 +37,8 @@ private
          tc: char_table;
          nid: id;--number of assigned identifiers;
          ns: id_str;--number of stored strings;
-         nc: integer;--number of stored characters as identifiers;
-         ncs: integer;--number of stored characters as strings;
+         nc: Natural;--number of stored characters as identifiers;
+         ncs: Natural;--number of stored characters as strings;
       end record;
 
 end d_tnoms;

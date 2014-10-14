@@ -1,15 +1,15 @@
-project make is
+project Make is
 
-	for Languages use ("Ada");	
-	
-	for Source_Dirs use ("./**");
+   for Languages use ("Ada");
+   for Source_Dirs use ("./**");
+   for Excluded_Source_Dirs use ("./2_Analisi_Lexica/0_Gramatica");
+   for Object_Dir use "./.Object_Files";
+   for Source_Files use ("main.adb","d_tnoms.adb", "d_tnoms.ads", "general_defs.ads");
+   for Main use ("main.adb");
 
-	for Excluded_Source_Dirs use ("./2_Analisi_Lexica/0_Gramatica","./2_Analisi_Lexica/1_Taula_de_Noms/0_t_noms_Pere");	
+   
 
-	for Object_Dir use "./.Object_Files";
+   --for Executable ("main.adb") use "executablename";
 
-	--for Main use ("filename.adb");
+end Make;
 
-	--for Executable ("filename.adb") use "executablename";
-
-end make;

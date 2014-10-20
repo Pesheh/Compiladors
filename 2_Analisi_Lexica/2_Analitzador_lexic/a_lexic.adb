@@ -3,7 +3,7 @@ with text_io; use text_io;
 with example_dfa; use example_dfa; 
 with example_io; use example_io; 
 --# line 1 "example.l"
---# line 5 "example.l"
+--# line 6 "example.l"
 
 
 	with d_token,a_lexic; use d_token,a_lexic;
@@ -25,16 +25,18 @@ subtype short is integer range -32768..32767;
 
 -- returned upon end-of-file
 YY_END_TOK : constant integer := 0;
-YY_END_OF_BUFFER : constant := 21;
+YY_END_OF_BUFFER : constant := 23;
 subtype yy_state_type is integer;
 yy_current_state : yy_state_type;
 INITIAL : constant := 0;
-yy_accept : constant array(0..40) of short :=
+yy_accept : constant array(0..56) of short :=
     (   0,
-        0,    0,   21,   19,    1,   19,   15,   13,   14,   16,
-        5,    6,    8,   12,    9,   19,   19,   19,   19,    0,
-       18,    7,   10,   11,   17,   17,   17,    3,    0,   17,
-       17,   17,   17,   17,    4,   17,   17,   17,    2,    0
+       21,   21,   23,   21,    1,   21,   15,   13,   14,   16,
+       18,    5,    6,    8,   12,    9,   21,   21,   21,   21,
+       21,   21,    0,   19,   21,   18,   21,    7,   10,   11,
+       17,   17,   17,    3,   19,   21,   21,   20,   20,   18,
+       21,   17,   17,    0,   18,   21,   17,   17,   18,   17,
+        4,   17,   17,   17,    2,    0
     ) ;
 
 yy_ec : constant array(ASCII.NUL..ASCII.DEL) of short :=
@@ -43,65 +45,83 @@ yy_ec : constant array(ASCII.NUL..ASCII.DEL) of short :=
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    3,    1,    1,    1,    1,    1,    1,
-        1,    4,    5,    1,    6,    1,    7,    8,    8,    8,
-        8,    8,    8,    8,    8,    8,    8,    9,   10,   11,
-       12,   13,    1,    1,   14,   14,   14,   14,   14,   14,
-       14,   14,   14,   14,   14,   14,   14,   14,   14,   15,
-       14,   14,   14,   14,   14,   14,   14,   14,   14,   14,
-        1,    1,    1,    1,    1,    1,   16,   17,   18,   19,
+        1,    4,    5,    1,    6,    1,    7,    8,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,   10,   11,   12,
+       13,   14,    1,    1,   15,   15,   15,   15,   15,   15,
+       15,   15,   15,   15,   15,   15,   15,   15,   15,   16,
+       15,   15,   15,   15,   15,   15,   15,   15,   15,   15,
+        1,    1,    1,    1,   17,    1,   18,   19,   20,   21,
 
-       20,   16,   21,   16,   22,   16,   16,   16,   16,   23,
-       24,   16,   16,   25,   26,   16,   27,   16,   16,   16,
-       16,   16,    1,    1,    1,    1,    1
+       22,   18,   23,   18,   24,   18,   18,   18,   18,   25,
+       26,   18,   18,   27,   28,   18,   29,   18,   18,   18,
+       18,   18,    1,    1,    1,    1,    1
     ) ;
 
-yy_meta : constant array(0..27) of short :=
+yy_meta : constant array(0..29) of short :=
     (   0,
-        1,    1,    1,    1,    1,    1,    1,    2,    1,    1,
-        1,    1,    1,    2,    2,    2,    2,    2,    2,    2,
-        2,    2,    2,    2,    2,    2,    2
+        1,    2,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1
     ) ;
 
-yy_base : constant array(0..42) of short :=
+yy_base : constant array(0..60) of short :=
     (   0,
-        0,    0,   51,   52,   52,   47,   52,   52,   52,   52,
-       37,   52,   36,   52,   35,    0,   21,   25,   18,   40,
-       39,   52,   52,   52,    0,   17,   19,    0,   36,   20,
-       15,   16,   12,   15,    0,    6,    7,   11,    0,   52,
-       27,   28
+        0,    0,  114,    0,  115,   28,    0,    0,  107,    0,
+       24,   99,    0,   98,    0,   97,   41,   82,   86,   79,
+        0,   32,  103,  102,   34,   63,   30,    0,    0,    0,
+        0,   78,   80,    0,   99,   71,   73,  115,    0,   69,
+       73,   81,   76,   96,   75,   79,   76,   72,   79,   74,
+        0,   56,   52,   21,    0,  115,   39,   88,   90,   92
     ) ;
 
-yy_def : constant array(0..42) of short :=
+yy_def : constant array(0..60) of short :=
     (   0,
-       40,    1,   40,   40,   40,   41,   40,   40,   40,   40,
-       40,   40,   40,   40,   40,   42,   42,   42,   42,   41,
-       40,   40,   40,   40,   42,   42,   42,   42,   41,   42,
-       42,   42,   42,   42,   42,   42,   42,   42,   42,    0,
-       40,   40
+       56,    1,   56,   57,   56,   58,   57,   57,   57,   57,
+       57,   57,   57,   57,   57,   57,   56,   17,   17,   17,
+       57,   58,   59,   57,   60,   57,   57,   57,   57,   57,
+       17,   17,   17,   17,   56,   58,   60,   56,   57,   57,
+       57,   17,   17,   59,   57,   57,   17,   17,   57,   17,
+       17,   17,   17,   17,   17,    0,   56,   56,   56,   56
     ) ;
 
-yy_nxt : constant array(0..79) of short :=
+yy_nxt : constant array(0..144) of short :=
     (   0,
         4,    5,    6,    7,    8,    9,   10,    4,   11,   12,
-       13,   14,   15,   16,   17,   16,   18,   16,   16,   16,
-       16,   19,   16,   16,   16,   16,   16,   20,   20,   25,
-       39,   38,   37,   36,   35,   34,   33,   32,   21,   31,
-       30,   29,   21,   28,   27,   26,   24,   23,   22,   21,
-       40,    3,   40,   40,   40,   40,   40,   40,   40,   40,
-       40,   40,   40,   40,   40,   40,   40,   40,   40,   40,
-       40,   40,   40,   40,   40,   40,   40,   40,   40
+       13,   14,   15,   16,   17,   18,    4,   17,   19,   17,
+       17,   17,   17,   20,   17,   17,   17,   17,   17,   23,
+       24,   26,   26,   23,   24,   38,   39,   41,   41,   21,
+       27,   21,   55,   21,   21,   21,   21,   21,   31,   31,
+       21,   21,   21,   21,   21,   31,   31,   21,   31,   31,
+       31,   31,   31,   31,   31,   31,   31,   31,   31,   31,
+       40,   40,   23,   24,   38,   39,   45,   45,   54,   27,
+       46,   46,   45,   45,   53,   27,   49,   49,   22,   22,
+       23,   23,   37,   37,   52,   27,   51,   50,   35,   48,
+
+       47,   44,   43,   42,   36,   35,   34,   33,   32,   30,
+       29,   28,   25,   56,    3,   56,   56,   56,   56,   56,
+       56,   56,   56,   56,   56,   56,   56,   56,   56,   56,
+       56,   56,   56,   56,   56,   56,   56,   56,   56,   56,
+       56,   56,   56,   56
     ) ;
 
-yy_chk : constant array(0..79) of short :=
+yy_chk : constant array(0..144) of short :=
     (   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,   41,   41,   42,
-       38,   37,   36,   34,   33,   32,   31,   30,   29,   27,
-       26,   21,   20,   19,   18,   17,   15,   13,   11,    6,
-        3,   40,   40,   40,   40,   40,   40,   40,   40,   40,
-       40,   40,   40,   40,   40,   40,   40,   40,   40,   40,
-       40,   40,   40,   40,   40,   40,   40,   40,   40
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    6,
+        6,   11,   11,   22,   22,   25,   25,   27,   27,   57,
+       11,   17,   54,   17,   17,   17,   17,   17,   17,   17,
+       17,   17,   17,   17,   17,   17,   17,   17,   17,   17,
+       17,   17,   17,   17,   17,   17,   17,   17,   17,   17,
+       26,   26,   36,   36,   37,   37,   40,   40,   53,   26,
+       41,   41,   45,   45,   52,   40,   46,   46,   58,   58,
+       59,   59,   60,   60,   50,   49,   48,   47,   44,   43,
+
+       42,   35,   33,   32,   24,   23,   20,   19,   18,   16,
+       14,   12,    9,    3,   56,   56,   56,   56,   56,   56,
+       56,   56,   56,   56,   56,   56,   56,   56,   56,   56,
+       56,   56,   56,   56,   56,   56,   56,   56,   56,   56,
+       56,   56,   56,   56
     ) ;
 
 
@@ -162,7 +182,7 @@ begin
 	end if;
 	while ( yy_chk(yy_base(yy_current_state) + yy_c) /= yy_current_state ) loop
 	    yy_current_state := yy_def(yy_current_state);
-	    if ( yy_current_state >= 41 ) then
+	    if ( yy_current_state >= 57 ) then
 		yy_c := yy_meta(yy_c);
 	    end if;
 	end loop;
@@ -247,13 +267,13 @@ begin -- of YYLex
 		end if;
 		while ( yy_chk(yy_base(yy_current_state) + yy_c) /= yy_current_state ) loop
 		    yy_current_state := yy_def(yy_current_state);
-		    if ( yy_current_state >= 41 ) then
+		    if ( yy_current_state >= 57 ) then
 			yy_c := yy_meta(yy_c);
 		    end if;
 		end loop;
 		yy_current_state := yy_nxt(yy_base(yy_current_state) + yy_c);
 	    yy_cp := yy_cp + 1;
-if ( yy_current_state = 40 ) then
+if ( yy_current_state = 56 ) then
     exit;
 end if;
 	end loop;
@@ -297,83 +317,91 @@ end if;
 
 
 when 1 => 
---# line 7 "example.l"
+--# line 8 "example.l"
 null;
 
 when 2 => 
---# line 8 "example.l"
+--# line 9 "example.l"
 TEXT_IO.PUT_LINE("PROCEDURE"); RETURN PC_procedure;
 
 when 3 => 
---# line 9 "example.l"
+--# line 10 "example.l"
 TEXT_IO.PUT_LINE("IS"); RETURN PC_is;
 
 when 4 => 
---# line 10 "example.l"
+--# line 11 "example.l"
 TEXT_IO.PUT_LINE("BEGIN"); RETURN PC_begin;
 
 when 5 => 
---# line 11 "example.l"
+--# line 12 "example.l"
 TEXT_IO.PUT_LINE("COLON"); RETURN Colon;
 
 when 6 => 
---# line 12 "example.l"
+--# line 13 "example.l"
 TEXT_IO.PUT_LINE("SEMICOLON"); RETURN Semicolon;
 
 when 7 => 
---# line 13 "example.l"
+--# line 14 "example.l"
 TEXT_IO.PUT_LINE("ASSIGNATION"); RETURN Assignation;
 
 when 8 => 
---# line 14 "example.l"
+--# line 15 "example.l"
 TEXT_IO.PUT_LINE("LESS"); RETURN Less;
 
 when 9 => 
---# line 15 "example.l"
+--# line 16 "example.l"
 TEXT_IO.PUT_LINE("MORE"); RETURN More;
 
 when 10 => 
---# line 16 "example.l"
+--# line 17 "example.l"
 TEXT_IO.PUT_LINE("LESS OR EQUAL"); RETURN Less_or_equal;
 
 when 11 => 
---# line 17 "example.l"
+--# line 18 "example.l"
 TEXT_IO.PUT_LINE("MORE OR EQUAL"); RETURN More_or_equal;
 
 when 12 => 
---# line 18 "example.l"
+--# line 19 "example.l"
 TEXT_IO.PUT_LINE("EQUAL"); RETURN Equal;
 
 when 13 => 
---# line 19 "example.l"
+--# line 20 "example.l"
 TEXT_IO.PUT_LINE("ADDITION"); RETURN Addition;
 
 when 14 => 
---# line 20 "example.l"
+--# line 21 "example.l"
 TEXT_IO.PUT_LINE("SUBSTRACTION"); RETURN Substraction;
 
 when 15 => 
---# line 21 "example.l"
+--# line 22 "example.l"
 TEXT_IO.PUT_LINE("MULTIPLICATION"); RETURN Multiplication;
 
 when 16 => 
---# line 22 "example.l"
+--# line 23 "example.l"
 TEXT_IO.PUT_LINE("DIVISION"); RETURN Division;
 
 when 17 => 
---# line 23 "example.l"
+--# line 24 "example.l"
 TEXT_IO.PUT_LINE("IDENTIFIER"); RETURN Identifier;
 
 when 18 => 
 --# line 25 "example.l"
-PUT("STRING   ");PUT_LINE(Example_DFA.YYText);return Str;
+TEXT_IO.PUT_LINE("INTEGER"); RETURN Number;
 
 when 19 => 
 --# line 26 "example.l"
-PUT("NOT  ");PUT(Example_DFA.YYText);new_line;return Error;						
+TEXT_IO.PUT_LINE("STRING"); RETURN Str;
 
 when 20 => 
+--# line 27 "example.l"
+TEXT_IO.PUT_LINE("COMMENT"); RETURN Comment;
+
+when 21 => 
 --# line 28 "example.l"
+TEXT_IO.PUT_LINE("ERROR"); RETURN Error;						
+
+when 22 => 
+--# line 30 "example.l"
 ECHO;
 when YY_END_OF_BUFFER + INITIAL + 1 => 
     return End_Of_Input;
@@ -426,6 +454,6 @@ when YY_END_OF_BUFFER + INITIAL + 1 =>
             end case; -- case (yy_act)
         end loop; -- end of loop waiting for end of file
 end YYLex;
---# line 28 "example.l"
+--# line 30 "example.l"
 end a_lexic;
 

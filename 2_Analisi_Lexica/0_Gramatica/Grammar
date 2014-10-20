@@ -38,84 +38,130 @@ Ada:
 	 in, out, return, function}
 	
 
-	<Init> 		->	<Initfunc> | <InitProc>
+	{INIT} 		->	{INITFUNC} 
+			|	{INITPROC}
 
---	<InitProc> 	->	procedure <Indentif_p> <Args> <Bloc_proc> --los args no son parte del indentificador?
+	{INITPROC} 	->	procedure {INDENTIF_P} is {BLOC_PROC}
 
-	<InitProc> 	->	procedure <Indentif_p> <Bloc_proc>
+	{INITFUNC} 	->	function {IDENTIF_P} return {TERME} is {BLOC_FUNC}
 
-	<Identif_p>	->	<Identif_proc> <Args> | <Identif_func> <Args> --Supongo que <Id_p> y <Id_f> se fusionaran con <Identif> 
+	{BLOC_PROC} 	->	{DECLAR} begin {BLOC_I} end {IDENTIF_PROC};
 
-	<Bloc_proc> 	->	<Declar> begin <Bloc_i> end <Identif_proc>;
+	{BLOC_FUNC} 	->	{DECLAR} begin {BLOC_I} return {TERME}; end {IDENTIF_FUN};
 
---	<InitFunc> 	->	function <Identif_p> <Args> return <Terme> <Bloc_func> --idem cas <InitProc>
-
-	<InitFunc> 	->	function <Identif_p> return <Terme> <Bloc_func>
-
-	<Bloc_func> 	->	<Declar> begin <Bloc_i> return <Terme>; end <Identif_fun>;
-
-	<Bloc_i> 	->	while <Cond> loop <Bloc_i> end loop;						|
-				if <Cond> then <Bloc_i> end if;							|
-				if <Cond> then <Bloc_i> else <Bloc_i> end if; 					|
-				<Identif>:= <Terme>;<Bloc_i> 							|
-				<Identif>:= <Terme>; 								|
-				<Identif_p>;<Bloc_id>								|
-				<Identif_p>;									|
-				null;
+	{BLOC_I} 	->	{S_ITER}										
+			|	{S_COND}										
+			|	{S_ASSIGN};{BLOC_I}
+			|	{S_CRIDA};{BLOC_I}
+			|	null;
 	
-	<Declar>	->	<Init> 										|
-				<Declar_v/a>									|
-				type <Identif> is <Declar_t> <Declar> 						|
-				lambda	
+	{DECLAR}	->	{INIT}
+			|	{S_DECLAR_V/A}
+			|	{S_DECLAR_T}
+			|	lambda
 
-	<Declar_v/a> 	->	<Identif>:<Tipus>;<Declar_v/a> | <Declar_2>,<Identif>:<Tipus>;<Declar_v/a>	|
-				<Identif>: array (<Array_r>) of <Tipus>;<Declar_v/a> 				|
-				null;
+	{DECLAR_2}	->	{IDENTIF},{DECLAR_2} 
+			|	{IDENTIF}			
 
-	<Declar_2>	->	<Declar_2>,<Identif> | <Identif>			
+	{S_DECLAR_V/A} 	->	{IDENTIF}:{TIPUS};{S_DECLAR_V/A} 
+			| 	{IDENTIF},{DECLAR_2}:{TIPUS};{S_DECLAR_V/A}		
+			|	{IDENTIF}: array ({ARRAY_R}) of {TIPUS};{S_DECLAR_V/A} 					
+			|	null;
 
-	<Declar_t>	->	record <Declar_v/a> end record; | new <Tipus>;
+	{S_DECLAR_V/A_2}->	{IDENTIF}:{TIPUS};{S_DECLAR_V/A} 
+			| 	{IDENTIF},{DECLAR_2}:{TIPUS};{S_DECLAR_V/A}
+                        |	{IDENTIF}: array ({ARRAY_R}) of {TIPUS};{S_DECLAR_V/A}
+			|	lambda
 
-	<Array_r>	->	
-				--Falta afegir la negacio
-	<Cond>		->	(<Eval>) | <Eval> | not (<Eval>)
+	{S_DECLAR_T}	->	type {IDENTIF} is {S_DECLAR_T_2};{DECLAR} 
 
-	<Eval>		->	<Expr> and <Cond> 								| 
-				<Expr> and then <Cond> 								|
-				<Expr> or <Cond> 								|
-				<Expr>
+	{S_DECLAR_T_2}	->	record {S_DECLAR_V/A} end record 	
+			| 	new {TIPUS}
+
+	{ARRAY_R}	->	{TIPUS} range {ENT}..{ENT} 
+			| 	{TIPUS} range {ENT}..{ENT}, {ARRAY_R}
 	
-	<Expr>		->	<Terme>'<'<Terme> 								|
-				<Terme>'>'<Terme>								|
-				<Terme>'<='<Terme>								|
-				<Terme>'>='<Terme>								|
-				<Terme>'='<Terme>								|
-				<Terme>'/='<Terme>	
-				<Terme>										|
-				not <Terme>
+	{S_ITER}	->	while {COND} loop {BLOC_I} end loop;
 
+	{S_COND}	->	if {COND} then {BLOC_I} {S_COND_2}
 
-	<Tipus>		->	integer | character | boolean
+	{S_COND_2}	->	end if; 
+			| 	else {BLOC_I} end if;
+
+	{S_ASSIGN}	->	{IDENTIF}:={TERME}
+
+	{S_CRIDA}	->	{IDENTIF_P}
+
+	{IDENTIF_P}	->	{IDENTIF}({ARGS}) 
+			| 	{IDENTIF}
+
+	{IDENTIF}	->	{CHAR_ID}
+
+	{CHAR_ID}	->	[a..z][A..Z] 
+			|	{DIG_ID}
+
+	{DIG_ID}	->	[0..9] 
+			| 	{CHAR_ID} 
+			| 	lambda
+
+	{ARGS}		->	{IDENTIF}: {I_O} {TIPUS} 
+			| 	{DECLAR_2},{IDENTIF}: {I_O} {TIPUS} 
+			| 	{ARGS_I}
+
+	{ARGS_I}	->	{IDENTIF}: {I_O} {TIPUS};{ARGS} 
+			| 	{DECLAR_2},{IDENTIF}: {I_O} {TIPUS};{ARGS}
+
+	{COND}		->	({EVAL}) 
+			| 	{EVAL}  
+			| 	not ({EVAL})
+
+	-- Falta afegir les opcions amb parentesis a tots els nivells i la negacio de la var inmediata sense parentesis
+	-- Tambe es important remarcar que aixi es podrien crear expressions tipus:
+	-- (1=1)<not(1/=1), etc. Suposo que a l'etapa d'analisi sintactic es controlen
+
+	{EVAL}		->	{EXPR} and {COND} 
+			|	{EXPR} and then {COND}
+			|	{EXPR} or {COND}
+			|	{EXPR}
+			|	not ({EXPR})
+
+	{EXPR}		->	{TERME} < {EVAL}
+			|	{TERME} > {EVAL}
+			|	{TERME} <= {EVAL}
+			|	{TERME} >= {EVAL}
+			|	{TERME} = {EVAL}
+			|	{TERME} /= {EVAL}		
+			|	{TERME}	
+			|	-({TERME}) --?
+
+	{TERME}		->	{FACT} * {EXPR} 
+			| 	{FACT} / {EXPR} 
+			| 	{FACT} % {EXPR} 
+			| 	{FACT}
+			|	-({FACT})
+
+	{FACT}		->	{OPER} + {TERME} 
+			| 	{OPER} - {TERME} 
+			| 	{OPER}
+
+	{OPER}		->	{ENT}
+			|	{IDENTIF} 
+			| 	({IDENTIF}) 
+
+	{ENT}		->	{OPER_NUM}
+			|	-{OPER_NUM} --Realment no hauriem de permetre que es fes un -0. <- FIX IT
+
+	-- Cal afegir la feature de: 1_123_123?
+	{OPER_NUM}	->	0
+			|	[1..9]{OPER_NUM_2}
+
+	{OPER_NUM_2}	->	[0..9]{OPER_NUM_2}
+			|	lambda
+
+	{TIPUS}		->	integer 
+			| 	character 
+			| 	boolean
 	
-	<Args>		->	<Identif>: <I_O> <Tipus> | <Declar_2>,<Identif>: <I_O> <Tipus> | <Args_i>
-
-	<Args_i>	->	<Identif>: <I_O> <Tipus>;<Args> | <Declar_2>,<Identif>: <I_O> <Tipus>;<Args>
-
-	<I_O>		->	in | out | in out
-
-	<Identif>	->	<Char_id>
-
-	<Char_id>	->	(a..z)(A..Z) | <Dig_id>
-
-	<Dig_id>	->	0..9 | <Char_id> | lambda
-
-	<Terme>		->	<Fact> * <Fact> | <Fact> / <Fact> | <Fact> % <Fact> | <Fact>
-
-	<Fact>		->	<Oper> + <Oper> | <Oper> - <Oper> | -<Oper> | <Oper>
-
-	<Oper>		->	0 | 1..9<Oper_num>									|
-				<Terme> | (<Terme>) 									|
-				<Identif> | (<Identif>) 
-
-	<Oper_num>	->	0..9 | 0..9<Oper_num>
-
+	{I_O}		->	in 
+			| 	out 
+			| 	in out

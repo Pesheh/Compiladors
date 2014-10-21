@@ -45,9 +45,9 @@ Ada:
 
 	{INITFUNC} 	->	function {IDENTIF_P} return {TERME} is {BLOC_FUNC}
 
-	{BLOC_PROC} 	->	{DECLAR} begin {BLOC_I} end {IDENTIF_PROC};
+	{BLOC_PROC} 	->	{DECLAR} begin {BLOC_I} end {IDENTIF_P};
 
-	{BLOC_FUNC} 	->	{DECLAR} begin {BLOC_I} return {TERME}; end {IDENTIF_FUN};
+	{BLOC_FUNC} 	->	{DECLAR} begin {BLOC_I} return {TERME}; end {IDENTIF_P};
 
 	{BLOC_I} 	->	{S_ITER}										
 			|	{S_COND}										
@@ -66,17 +66,18 @@ Ada:
 	{S_DECLAR_V/A} 	->	{IDENTIF}:{TIPUS};{S_DECLAR_V/A} 
 			| 	{IDENTIF},{DECLAR_2}:{TIPUS};{S_DECLAR_V/A}		
 			|	{IDENTIF}: array ({ARRAY_R}) of {TIPUS};{S_DECLAR_V/A} 					
-			|	null;
+-- Seria correcte definir-ho a aquest nivell? Seria adequat posar-ho enlloc de {S_DECLAR_V/A}?
+			|	{DECLAR} 
 
-	{S_DECLAR_V/A_2}->	{IDENTIF}:{TIPUS};{S_DECLAR_V/A} 
-			| 	{IDENTIF},{DECLAR_2}:{TIPUS};{S_DECLAR_V/A}
-                        |	{IDENTIF}: array ({ARRAY_R}) of {TIPUS};{S_DECLAR_V/A}
-			|	lambda
+	{S_DECLAR_T}	->	type {IDENTIF} is {S_DECLAR_T_2};{S_DECLAR_T}
+			|	{DECLAR} 
 
-	{S_DECLAR_T}	->	type {IDENTIF} is {S_DECLAR_T_2};{DECLAR} 
-
-	{S_DECLAR_T_2}	->	record {S_DECLAR_V/A} end record 	
+	{S_DECLAR_T_2}	->	record {S_DECLAR_RECORD} end record 	
 			| 	new {TIPUS}
+	
+	{S_DECLAR_RECORD}->	{IDENTIF}:{TIPUS};{S_DECLAR_RECORD}
+                        |       {IDENTIF},{DECLAR_2}:{TIPUS};{S_DECLAR_RECORD}
+                        |       {IDENTIF}: array ({ARRAY_R}) of {TIPUS};{S_DECLAR_RECORD} --?
 
 	{ARRAY_R}	->	{TIPUS} range {ENT}..{ENT} 
 			| 	{TIPUS} range {ENT}..{ENT}, {ARRAY_R}
@@ -97,10 +98,14 @@ Ada:
 
 	{IDENTIF}	->	{CHAR_ID}
 
-	{CHAR_ID}	->	[a..z][A..Z] 
+	-- Faltaria afegir '_' entre paraules? (es pot fer a nivell de gramatica?)
+
+	{CHAR_ID}	->	([a..z] | [A..Z]) 
+			|	([a..z] | [A..Z]){DIG_ID}
 			|	{DIG_ID}
 
 	{DIG_ID}	->	[0..9] 
+			|	[0..9]{CHAR_ID}
 			| 	{CHAR_ID} 
 			| 	lambda
 
@@ -132,13 +137,11 @@ Ada:
 			|	{TERME} = {EVAL}
 			|	{TERME} /= {EVAL}		
 			|	{TERME}	
-			|	-({TERME}) --?
 
 	{TERME}		->	{FACT} * {EXPR} 
 			| 	{FACT} / {EXPR} 
 			| 	{FACT} % {EXPR} 
 			| 	{FACT}
-			|	-({FACT})
 
 	{FACT}		->	{OPER} + {TERME} 
 			| 	{OPER} - {TERME} 

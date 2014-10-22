@@ -1,0 +1,116 @@
+PROC		->	procedure ID_PROC is DECLAR+ begin SENT+ end ID_PROC;
+
+DECLAR+		->	DECLAR+ DECLAR
+		|	DECLAR
+
+DECLAR		->	PROC
+		|	DECLAR_V+
+		|	DECLAR_T+
+		|	null; -- beneficios de poner esto en vez de lamba?
+
+DECLAR_V+	->	DECLAR_V+ DECLAR_V
+		|	DECLAR_V
+
+DECLAR_V	->	L_ID:ID;
+
+DECLAR_T+	->	DECLAR_T+ DECLAR_T
+		|	DECLAR_T
+
+DECLAR_T	->	type ID is DECLAR_T_2;
+
+DECLAR_T_2	->	record DECLAR_V end record
+		|	new ID
+		|	array (ARRAY_R+) of ID
+
+-- **************************************************************************************** --
+
+SENT+		->	SENT+ SENT
+		|	SENT
+
+SENT		->	S_ITER
+		|	S_COND
+		|	S_ASSIGN
+		|	S_CRIDA
+		|	null; --idem null anterior.
+
+S_ITER		->	while COND loop SENT+ end loop;
+
+S_COND		->	if COND then SENT+ end if;
+		|	if COND then SENT+ else SENT+ end if;
+
+S_ASSIGN	->	ID:=IDX; --Faltaria añadir la asignacion DESDE un array o record?
+		|	ID(IDX):=IDX;
+		|	ID.ID:=IDX;
+
+S_CRIDA		->	ID_PROC;
+
+-- **************************************************************************************** --
+
+COND		->	LOG_AND+
+
+LOG_AND+	->	LOG_AND+ and LOG_AND
+		|	LOG_AND
+
+LOG_AND		->	LOG_OR+ and LOG_OR+
+		|	LOG_OR+
+
+LOG_OR+		->	LOG_OR+ or LOG_OR
+		|	LOG_OR
+
+LOG_OR		->	COMP or COMP
+		|	COMP
+
+COMP		->	TERM OP_C TERM
+		|	TERM
+
+TERM		->	F OP_A F
+		|	F
+
+F		->	OP_U FACT
+
+FACT		->	EXPR OP_F EXPR
+		|	EXPR
+
+EXPR		->	OP_E E
+
+E		->	LIT
+		|	ID
+		|	(COND)
+
+OP_C		->	< | > | <= | >= | = | /=
+
+OP_A		->	+ | -
+
+OP_U		->	- | lambda
+
+OP_F		->	* | / | mod
+
+OP_E		->	not | lambda -- si escau afegir potencia i abs
+
+-- **************************************************************************************** --
+
+ID_PROC		->	ID(ARG+)
+		|	ID
+
+L_ID		->	L_ID,ID
+		|	ID
+
+ID		->	LIT_STR --?
+
+ARG+		->	ARG+#ARG
+		|	ARG
+
+ARG		->	L_ID:I_O ID
+
+I_O		->	in
+		|	out
+		|	in out
+
+ARRAY_R+	->	ARRAY_R+,ARRAY_R
+		|	ARRAY_R
+
+ARRAY_R		->	ID range IDX..IDX
+
+IDX		->	LIT_ENT
+		|	LIT_CAR
+		|	ID

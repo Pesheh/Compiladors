@@ -11,10 +11,10 @@ package d_tnoms is
 
    procedure empty(tn: out tnoms);
    procedure put(tn: in out tnoms; nom: in string; ident: out id);
-   function get(tn: in tnoms; ident: in id)return a_string;
+   function get(tn: in tnoms; ident: in id)return string;
 
    procedure put(tn: in out tnoms; text: in string;ids: out id_str);
-   function get(tn: in tnoms; ids: in id_str) return a_string;
+   function get(tn: in tnoms; ids: in id_str) return string;
 
 private
    b: constant Hash_Type:=Hash_Type(max_id); --In the Ada.Containers package;

@@ -11,7 +11,7 @@ package body d_tnoms is
 
    procedure save_string(tc: in out char_table;text:in string;ncs: in out integer) is
    begin
-      for i in text'Range loop
+      for i in reverse text'Range loop
          ncs:=ncs-1;tc(ncs):=text(i);
       end loop;
    end save_string;
@@ -28,20 +28,6 @@ package body d_tnoms is
       while nom(i)=tc(j) and i<nom'Last and j<pf loop i:=i+1; j:=j+1; end loop;
       return nom(i)=tc(j) and i=nom'Last and j=pf;
    end equal;
-
-   function equal(text: in string; tn: in tnoms;p:in id_str) return boolean is
-      ts: str_table renames tn.ts;
-      tc: char_table renames tn.tc;
-      pi,pf: integer;
-      i,j:integer;
-   begin
-      pi:=ts(p-1)-1; pf:=ts(p);
-      i:=text'last; j:=pi;
-      while text(i)=tc(j) and i>text'first and j>pf loop i:=i-1;j:=j-1; end loop;
-      return text(i)=tc(j) and i=text'first and j=pf;
-
-   end equal;
-
    -- *******************************************************************
    procedure empty(tn: out tnoms)is
       td:disp_table renames tn.td;
@@ -80,7 +66,7 @@ package body d_tnoms is
       ident:=p;
    end put;
 
-   function get(tn: in tnoms; ident: in id) return a_string is
+   function get(tn: in tnoms; ident: in id) return string is
       tid: id_table renames tn.tid;
       tc: char_table renames tn.tc;
       nid: id renames tn.nid;
@@ -88,7 +74,7 @@ package body d_tnoms is
    begin
       if ident=null_id or ident>nid then raise bad_use;end if;
       i:=tid(ident-1).ptc+1; j:=tid(ident).ptc;
-      return new String'(tc(i..j));
+      return tc(i..j);
    end get;
 
    procedure put(tn: in out tnoms; text: in string;ids: out id_str)is
@@ -97,22 +83,17 @@ package body d_tnoms is
       ns: id_str renames tn.ns;
       ncs: integer renames tn.ncs;
       nc:integer renames tn.nc;
-      p: id_str;
    begin
-      p:=null_ids+1;
       if ns=id_str(max_str) then raise space_overflow; end if;
-      while ts(p)/=0 and then not equal(text,tn,p) loop p:=p+1; end loop;
-      if ts(p)=0 then
-         if ncs -text'Length<nc then raise space_overflow; end if;
-         save_string(tc,text,ncs);
-         ns:=ns+1;ts(ns):=ncs; p:=ns;
-      end if;
-      ids:=p;
+      if ncs -text'Length<nc then raise space_overflow; end if;
+      save_string(tc,text,ncs);
+      ns:=ns+1;ts(ns):=ncs; 
+      ids:=ns;
    exception
       when space_overflow=> put("Space overflow");
    end put;
 
-   function get(tn: in tnoms; ids: in id_str) return a_string is
+   function get(tn: in tnoms; ids: in id_str) return string is
       tc:char_table renames tn.tc;
       ts: str_table renames tn.ts;
       ns: id_str renames tn.ns;--number of stored strings
@@ -120,7 +101,7 @@ package body d_tnoms is
    begin
       if ids=null_ids or ids>ns then raise bad_use; end if;
       j:=ts(ids-1)-1;i:=ts(ids);
-      return new String'(tc(i..j));
+      return tc(i..j);
    end get;
 
 

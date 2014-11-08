@@ -29,8 +29,14 @@ D2[0-9]
 
 %%
 
-	with d_token,a_lexic; use d_token,a_lexic;
+	with d_token; use d_token;
 	WITH Example_io,Example_dfa;Use Example_io,Example_dfa;
+package a_lexic is
+        procedure open(name: in String);
+        procedure close;
+        function YYLex return Token;    -- YYText?
+end a_lexic;
+
 package body a_lexic is
         procedure open(name: in String) is
         begin

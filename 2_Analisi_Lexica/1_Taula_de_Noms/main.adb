@@ -10,12 +10,11 @@ begin
    empty(tn);
    put(tn,"Hello",ids);
    put(ids'Img); put("   ");
-   ret:=get(tn,ids);
-   put(ret.all); new_line;
+   put(get(tn,ids));
+   new_line;
    put(tn,"HelloHelloHelloHelloHello",ids);
    put(ids'Img); put("   ");
    put(tn,"HelloHelloHelloHelloHello",ids);
    put(ids'Img); put("   ");
-   ret:=get(tn,ids);
-   put(ret.all);
+   put(get(tn,ids));
 end Main;

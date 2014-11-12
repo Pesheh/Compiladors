@@ -1,0 +1,5 @@
+procedure alfile is
+	i : integer
+begin
+ 	1+2=3;
+end alfile;

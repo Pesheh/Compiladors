@@ -3,7 +3,7 @@ with Ada.Strings.Unbounded;
 use general_defs;use d_tnoms; use Ada.Text_IO;use Ada.strings;
 procedure Main is
    tn:tnoms;
-   ident:id;
+   ident:id_nom;
    ids:id_str;
    ret: a_string;
 begin

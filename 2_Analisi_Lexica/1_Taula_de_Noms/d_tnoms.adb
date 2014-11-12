@@ -16,10 +16,10 @@ package body d_tnoms is
       end loop;
    end save_string;
 
-   function equal(nom: in string;tn: in tnoms;p:in id) return boolean is
+   function equal(nom: in string;tn: in tnoms;p:in id_nom) return boolean is
       tid: id_table renames tn.tid;
       tc: char_table renames tn.tc;
-      nid: id renames tn.nid;
+      nid: id_nom renames tn.nid;
       pi,pf: natural;
       i,j:natural;
    begin
@@ -33,7 +33,7 @@ package body d_tnoms is
       td:disp_table renames tn.td;
       tid:id_table renames tn.tid;
       ts: str_table renames tn.ts;
-      nid:id renames tn.nid;
+      nid:id_nom renames tn.nid;
       ns: id_str renames tn.ns;
       nc: integer renames tn.nc;
       ncs:integer renames tn.ncs;
@@ -44,20 +44,20 @@ package body d_tnoms is
    end empty;
 
 
-   procedure put(tn: in out tnoms; nom: in string; ident: out id)is
+   procedure put(tn: in out tnoms; nom: in string; ident: out id_nom)is
       td: disp_table renames tn.td;
       tid: id_table renames tn.tid;
       tc: char_table renames tn.tc;
-      nid: id renames tn.nid;
+      nid: id_nom renames tn.nid;
       nc: integer renames tn.nc;
       ncs: integer renames tn.ncs;
       i:hash_type;
-      p:id;
+      p:id_nom;
    begin
       i:=hash(nom) mod b;p:=td(i);
       while p/=null_id and then not equal(nom,tn,p) loop p:=tid(p).psh; end loop;
       if p=null_id then
-         if nid=id(max_id) then raise space_overflow; end if;
+         if nid=id_nom(max_id) then raise space_overflow; end if;
          if nc+nom'Length>ncs then raise space_overflow; end if;
          save_name(tc,nom,nc);
          nid:=nid+1;tid(nid):=(td(i),nc);
@@ -66,10 +66,10 @@ package body d_tnoms is
       ident:=p;
    end put;
 
-   function get(tn: in tnoms; ident: in id) return string is
+   function get(tn: in tnoms; ident: in id_nom) return string is
       tid: id_table renames tn.tid;
       tc: char_table renames tn.tc;
-      nid: id renames tn.nid;
+      nid: id_nom renames tn.nid;
       i,j: integer;
    begin
       if ident=null_id or ident>nid then raise bad_use;end if;
@@ -89,8 +89,8 @@ package body d_tnoms is
       save_string(tc,text,ncs);
       ns:=ns+1;ts(ns):=ncs; 
       ids:=ns;
-   exception
-      when space_overflow=> put("Space overflow");
+   --exception
+   --   when space_overflow=> put("Space overflow");
    end put;
 
    function get(tn: in tnoms; ids: in id_str) return string is

@@ -1,6 +1,6 @@
 #!/bin/bash
-aflex -E example.l
-gnatchop -w example_io.a
-gnatchop -w  example_dfa.a
-gnatchop -w example.a
-gnatmake example.adb
+aflex -E  pershe.l
+gnatchop -w pershe_io.a
+gnatchop -w pershe_dfa.a
+gnatchop -w pershe.a
+gnatmake -P ../../make.gpr

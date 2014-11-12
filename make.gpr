@@ -3,8 +3,8 @@ project Make is
    for Languages use ("Ada");
    for Source_Dirs use ("./**");
    for Object_Dir use "./.Object_Files";
-   for Source_Files use ("main.adb","d_tnoms.adb", "d_tnoms.ads", "general_defs.ads");
-   for Main use ("main.adb");
+   for Exec_Dir use "./6_Executables";	
+   for Main use ("main.adb", "al_example.adb", "c_tnoms.adb");
 
    for Excluded_Source_Dirs use ("./2_Analisi_Lexica/0_Gramatica","./5_Auxiliar_Tools/**");
 

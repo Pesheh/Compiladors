@@ -1,8 +1,9 @@
 #!/bin/bash
-rm *_io*
-rm *_dfa*
-rm *.a
-rm *.o
-rm *.ali
-rm a_lex*
-rm example
+rm -f *_io*
+rm -f *_dfa*
+rm -f *.a
+rm -f *.o
+rm -f *.ali
+rm -f a_lex*
+rm -f example
+rm -f c_tnoms

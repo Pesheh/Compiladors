@@ -1,15 +1,39 @@
-LOWER [a-z]
-UPPER [A-Z]
+CAR [a-zA-Z]
 D1[1-9]
 D2[0-9]
 
+
+NUMBER (({D2}|{D1}{D2}|{D1}{D2}{D2})(_({D2}{D2}{D2}))+)|({D1}({D2}*))
+CHARACTER \'({CAR}|{D2})\'
+STRING \"(([^\"]*)((\"\")*)([^\"]*))*\"
+IDENTIFIER {CAR}({CAR}|{D2})*
+COMMENT \-\-([^"\n"])*"\n"
+OTHERS [\n\t" "]+
+
 %%
 
-\n																	{null;}
 "procedure"															{TEXT_IO.PUT_LINE("PROCEDURE"); RETURN PC_procedure;}
-"is"																	{TEXT_IO.PUT_LINE("IS"); RETURN PC_is;}
+"is"																{TEXT_IO.PUT_LINE("IS"); RETURN PC_is;}
 "begin"																{TEXT_IO.PUT_LINE("BEGIN"); RETURN PC_begin;}
-"end"																	{TEXT_IO.PUT_LINE("END"); RETURN PC_end;}
+"end"																{TEXT_IO.PUT_LINE("END"); RETURN PC_end;}
+"type"																{TEXT_IO.PUT_LINE("END"); RETURN PC_end;}
+"record"															{TEXT_IO.PUT_LINE("RECORD"); RETURN PC_record;}
+"new"																{TEXT_IO.PUT_LINE("NEW"); RETURN PC_new;}
+"array"																{TEXT_IO.PUT_LINE("ARRAY"); RETURN PC_array;}
+"of"																{TEXT_IO.PUT_LINE("OF"); RETURN PC_of;}
+"while"																{TEXT_IO.PUT_LINE("WHILE"); RETURN PC_while;}
+"loop"																{TEXT_IO.PUT_LINE("LOOP"); RETURN PC_loop;}
+"if"																{TEXT_IO.PUT_LINE("IF"); RETURN PC_if;}
+"else"																{TEXT_IO.PUT_LINE("ELSE"); RETURN PC_else;}
+"then"																{TEXT_IO.PUT_LINE("THEN"); RETURN PC_then;}
+"not"																{TEXT_IO.PUT_LINE("NOT"); RETURN PC_not;}
+"in"																{TEXT_IO.PUT_LINE("IN"); RETURN PC_in;}
+"out"																{TEXT_IO.PUT_LINE("OUT"); RETURN PC_out;}
+"in out"															{TEXT_IO.PUT_LINE("IN_OUT"); RETURN PC_in_out;}
+"range"																{TEXT_IO.PUT_LINE("RANGE"); RETURN PC_range;}
+-- Id.id:=.. <<< com repr el '.'? o mes ben dit, que acceptam aqui?
+"("																	{TEXT_IO.PUT_LINE("BRACKET_L"); RETURN Bracket_Left;}
+")"																	{TEXT_IO.PUT_LINE("BRACKET_R"); RETURN Bracket_Right;}
 ":"																	{TEXT_IO.PUT_LINE("COLON"); RETURN Colon;}
 ";"																	{TEXT_IO.PUT_LINE("SEMICOLON"); RETURN Semicolon;}
 ":="																{TEXT_IO.PUT_LINE("ASSIGNATION"); RETURN Assignation;}
@@ -22,10 +46,15 @@ D2[0-9]
 "-"																	{TEXT_IO.PUT_LINE("SUBSTRACTION"); RETURN Substraction;}
 "*"																	{TEXT_IO.PUT_LINE("MULTIPLICATION"); RETURN Multiplication;}
 "/"																	{TEXT_IO.PUT_LINE("DIVISION"); RETURN Division;}
-({LOWER}|{UPPER})({LOWER}|{UPPER}|{D2})+?							{TEXT_IO.PUT_LINE("IDENTIFIER"); RETURN Identifier;}
-(({D1}|{D1}{D2}|{D1}{D2}{D2})(_({D2}{D2}{D2}))+)|({D1}({D2}*))		{TEXT_IO.PUT_LINE("INTEGER"); RETURN Number;}
-\"(([^\"]*)((\"\")*)([^\"]*))*\"									{TEXT_IO.PUT_LINE("STRING"); RETURN Str;}
-\-\-([^"\n"])*["\n"]												{TEXT_IO.PUT_LINE("COMMENT"); RETURN Comment;}
+"mod"																{TEXT_IO.PUT_LINE("MODULUS"); RETURN Module;}
+"**"																{TEXT_IO.PUT_LINE("POW"); RETURN Power;}
+{IDENTIFIER}														{TEXT_IO.PUT_LINE("IDENTIFIER"); RETURN Identifier;}
+{NUMBER}															{TEXT_IO.PUT_LINE("INTEGER"); RETURN Number;}
+{STRING}															{TEXT_IO.PUT_LINE("STRING"); RETURN Str;}
+{CHARACTER}															{TEXT_IO.PUT_LINE("CHARACTER"); RETURN Char;}
+{COMMENT}															{TEXT_IO.PUT_LINE("COMMENT"); RETURN Comment;}
+{OTHERS}															{null;}
+.																	{TEXT_IO.PUT_LINE("ERROR"); RETURN Error;}
 
 %%
 

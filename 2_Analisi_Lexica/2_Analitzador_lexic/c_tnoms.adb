@@ -24,8 +24,8 @@ begin
 		
 		case tk is
 			when Error => Put_Line("Error: "&To_String(s));
-			when Identifier => 	d_tnoms.put(tn,To_String(s),id); ids(i):=id; i:=i+1; Put_Line(id'Img&To_String(s)); 
-			when Str => d_tnoms.put(tn,To_String(s),id_st); ids_str(i2):=id_st; i2:=i2+1; Put_Line(To_String(s));
+			when Identifier => 	d_tnoms.put(tn,To_String(s),id);ids(i):=id; i:=i+1; Put_Line("ID:"&To_String(s)); 
+			when Str => d_tnoms.put(tn,To_String(s),id_st); ids_str(i2):=id_st; i2:=i2+1; Put_Line("STR:"&To_String(s));
 			when End_Of_Input => Put_Line("EOF");
 			when others => Put_Line(To_String(s));
 		end case;
@@ -36,14 +36,14 @@ begin
 	end loop Read_Input;
 
 	Put_Line("Tnoms content:");
-	j:=1; Put_Line(i);
+	j:=1; 
 	while j<i loop
-		Put_Line("Id:"&get(tn,ids(j)));
-		j:=j+i;
+		Put_Line("Id("&ids(j)'Img&"):"&get(tn,ids(j)));
+		j:=j+1;
 	end loop;
 	j:=1;
 	while j<i2 loop
-		Put_Line("Str:"&get(tn,ids_str(j)));
+		Put_Line("Str("&ids_str(j)'Img&"):"&get(tn,ids_str(j)));
 		j:=j+1;
 	end loop;
 	close;

@@ -3,8 +3,11 @@ D1[1-9]
 D2[0-9]
 
 
-NUMBER (({D2}|{D1}{D2}|{D1}{D2}{D2})(_({D2}{D2}{D2}))+)|({D1}({D2}*))
-CHARACTER \'({CAR}|{D2})\'
+R_KEYWORDS ["procedure"|"is"|"begin"|"end"|"type"|"record"|"new"|"array"|"of"|"while"|"loop"|"if"|"else"|"then"|"not"|"in"|"out"|"in out"|"range"]
+TERMINALS ["("|")"|":"|";"|":="|"<"|">"|"<="|">="|"="|"+"|"-"|"*"|"/"|"mod"|"**"]
+--NUMBER (({D2}|{D1}{D2}|{D1}{D2}{D2})(_({D2}{D2}{D2}))+)|({D1}({D2}*))
+NUMBER ({D2}|{D1}{D2}|{D1}{D2}{D2})(_?({D2}{D2}{D2}))*
+CHARACTER \'\001-\177]\'
 STRING \"(([^\"]*)((\"\")*)([^\"]*))*\"
 IDENTIFIER {CAR}({CAR}|{D2})*
 COMMENT \-\-([^"\n"])*"\n"
@@ -54,7 +57,8 @@ OTHERS [\n\t" "]+
 {CHARACTER}															{TEXT_IO.PUT_LINE("CHARACTER"); RETURN Char;}
 {COMMENT}															{TEXT_IO.PUT_LINE("COMMENT"); RETURN Comment;}
 {OTHERS}															{null;}
-.																	{TEXT_IO.PUT_LINE("ERROR"); RETURN Error;}
+<*>																	{TEXT_IO.PUT_LINE("ERROR"); RETURN Error;}
+-- [^({R_KEYWORDS}|{TERMINALS}|{IDENTIFIER}|{NUMBER}|{STRING}|{CHARACTER}|{COMMENT}|{OTHERS})]* {TEXT_IO.PUT_LINE("ERROR"); RETURN Error;}
 
 %%
 

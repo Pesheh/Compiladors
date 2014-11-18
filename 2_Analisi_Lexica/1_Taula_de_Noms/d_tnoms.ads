@@ -31,14 +31,14 @@ private
 
    type tnoms is
       record
-         td: disp_table;
-         tid: id_table;
-         ts: str_table;
+         td: disp_table:=(others=>null_id);
+         tid: id_table:=(others=>(null_id,0));
+         ts: str_table:=(others=>max_ch);
          tc: char_table;
-         nid: id_nom;--number of assigned identifiers;
-         ns: id_str;--number of stored strings;
-         nc: Natural;--number of stored characters as identifiers;
-         ncs: Natural;--number of stored characters as strings;
+         nid: id_nom:=null_id;--number of assigned identifiers;
+         ns: id_str:=null_ids;--number of stored strings;
+         nc: Natural:=0;--number of stored characters as identifiers;
+         ncs: Natural:=max_ch;--number of stored characters as strings;
       end record;
 
 end d_tnoms;

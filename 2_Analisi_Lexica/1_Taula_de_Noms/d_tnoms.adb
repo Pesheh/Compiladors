@@ -39,7 +39,7 @@ package body d_tnoms is
       ncs:integer renames tn.ncs;
    begin
       for i in hash_index loop td(i):=null_id; end loop;
-      nid:=0;ns:=0;nc:=0;ncs:=max_ch;
+      nid:=null_id;ns:=null_ids;nc:=0;ncs:=max_ch;
       tid(null_id):=(null_id,nc);ts(null_ids):=max_ch;
    end empty;
 

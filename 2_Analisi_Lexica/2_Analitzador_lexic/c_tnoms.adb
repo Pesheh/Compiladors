@@ -14,7 +14,7 @@
 		if Argument_Count=1 then
 			open(Argument(1)); --per fer proves
 			i:=1; i2:=1;
-			empty(tn);
+		--	empty(tn);
 			Read_Input:
 			loop 
 				tk:=YYLex;

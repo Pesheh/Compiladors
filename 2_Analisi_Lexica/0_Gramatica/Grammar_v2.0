@@ -1,4 +1,4 @@
-PROC		->	procedure ID_PROC is DECLAR+ begin SENT+ end ID_PROC;
+PROC		->	procedure ID_PROC is DECLAR+ begin SENT+ end proc;
 
 DECLAR+		->	DECLAR+ DECLAR
 		|	DECLAR
@@ -42,50 +42,49 @@ S_ASSIGN	->	ID:=IDX; --Faltaria añadir la asignacion DESDE un array o record?
 		|	ID(IDX):=IDX;
 		|	ID.ID:=IDX;
 
-S_CRIDA		->	ID_PROC;
+S_CRIDA		->	ID_Ptream on xnoiseOC;
 
 -- **************************************************************************************** --
 
-COND		->	LOG_AND+
+COND		->	AND+ | OR+
 
-LOG_AND+	->	LOG_AND+ and LOG_AND
-		|	LOG_AND
+AND+		-> AND+ and O_REL
+			|  O_REL
+	
+OR+			-> OR+ or O_REL
+			|  O_REL
 
-LOG_AND		->	LOG_OR+ and LOG_OR+
-		|	LOG_OR+
+O_REL		-> E OP_REL E
+			|  E
 
-LOG_OR+		->	LOG_OR+ or LOG_OR
-		|	LOG_OR
+E			-> OP_U_C E0
+			|  E0
 
-LOG_OR		->	COMP or COMP
-		|	COMP
+E0			-> E1 OP_B_C E1
+			|  E1
 
-COMP		->	TERM OP_C TERM
-		|	TERM
+E1			-> E2 OP_B_E E2
+			|  E2
 
-TERM		->	F OP_A F
-		|	F
+E2			-> OP_U_E E3
+			|  E3 OR_E E3
+			|  E3
 
-F		->	OP_U FACT
+E3			-> LIT
+			|  ID
+			|  (COND)
 
-FACT		->	EXPR OP_F EXPR
-		|	EXPR
+OP_REL		-> < | > | <= | >= | /= | =
 
-EXPR		->	OP_E E
+OP_B_C		-> + | -
 
-E		->	LIT
-		|	ID
-		|	(COND)
+OP_B_E		-> * | / | mod
 
-OP_C		->	< | > | <= | >= | = | /=
+OP_U_C		-> -
 
-OP_A		->	+ | -
+OP_U_E		-> not
 
-OP_U		->	- | lambda
-
-OP_F		->	* | / | mod
-
-OP_E		->	not | lambda -- si escau afegir potencia i abs
+OP_E		-> **
 
 -- **************************************************************************************** --
 

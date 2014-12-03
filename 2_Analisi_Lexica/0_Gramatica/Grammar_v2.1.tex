@@ -62,7 +62,7 @@
 		&$|$&\textbf{null};\\
 		\\
 		SENTS\_CONT&$\to$&SENT\\
-		&$|$&SENT
+		&$|$&SENT\\
 		\\
 		SENT&$\to$&S\_ITER\\
 		&$|$&S\_COND\\
@@ -96,7 +96,7 @@
 	\end{tabular}
 	\section{Expressions}
 	\begin{tabular}{l l l}
-		EXPR&$\to$&E0 | E1 | E2\\
+		EXPR&$\to$&E0 $|$ E1 $|$ E2\\
 		\\
 		E0&$\to$&E0 \textbf{and} E2\\
 		&$|$&E2 \textbf{and} E2\\
@@ -104,7 +104,7 @@
 		E1&$\to$&E1 \textbf{or} E2\\
 		&$|$&E2 \textbf{or} E2\\
 		\\
-		E2&$\to$&E2OP\_REL E3\\
+		E2&$\to$&E2 OP\_REL E3\\
 		&$|$&E3\\
 		\\
 		E3&$\to$&E3 OP\_B\_C E4\\
@@ -115,7 +115,7 @@
 		\\
 		E5&$\to$&OP\_N E6\\
 		&$|$&E6 OP\_E E6\\
-		&$|$&E6
+		&$|$&E6\\
 		\\
 		E6&$\to$&REF\\
 		&$|$&(EXPR)\\
@@ -132,7 +132,7 @@
 		\\
 		OP\_N&$\to$&\textbf{not}\\
 		\\
-		OP\_E&$\to$&**
+		OP\_E&$\to$&**\\
 		\\
 		OP\_REL\\
 		\\

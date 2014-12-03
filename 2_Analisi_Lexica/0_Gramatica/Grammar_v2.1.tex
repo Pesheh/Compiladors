@@ -1,0 +1,143 @@
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{listings}
+
+\begin{document}
+	\pagenumbering{arabic}
+	\section{Declaracions}
+
+	\begin{tabular}{l l l}
+		PROC&$\to$&\textbf{procedure} C\_PROC \textbf{is}\\
+		&&\hspace*{5mm}DECLS\\
+		&&\textbf{begin}\\
+		&&\hspace*{5mm}SENTS\\
+		&&\textbf{end procedure};\\
+		\\
+		DECLS&$\to$&DECLS DECL\\
+		&\textbar&$\lambda$\\
+		\\
+		DECL&$\to$&PROC\\
+		&\textbar&DECL\_VAR\\
+		&\textbar&DECL\_T\\
+		\\
+		DECL\_RVARS&$\to$&DECL\_RVARS DECL\_VAR\\
+		&\textbar&DECL\_VAR\\
+		\\
+		DECL\_VAR&$\to$&L\_ID:ID;\\
+		&\textbar&L\_ID:\textbf{const} ID:=EXPR;\\
+		\\
+		DECL\_T&$\to$&\textbf{type} ID \textbf{is} DECL\_T\_CONT\\
+		\\
+		DECL\_T\_CONT&$\to$&\textbf{new} ID \textbf{range} IDX..IDX;\\
+		&$|$&\textbf{record}\\
+		&&\hspace*{5mm}DECL\_RVARS\\
+		&&\textbf{end record};\\
+		&$|$&\textbf{array} (L\_ID) \textbf{of} ID;
+	\end{tabular}
+	\subsection{Decls Auxiliars}
+	\begin{tabular}{l l l}
+		C\_PROC&$\to$&ID(ARGS)\\
+		&$|$&ID\\
+		\\
+		ARGS&$\to$&ARGS;ARG\\
+		&$|$&ARG\\
+		\\
+		ARG&$\to$&L\_ID:MODE ID\\
+		\\
+		MODE&$\to$&\textbf{in}\\
+		&$|$&\textbf{out}\\
+		&$|$&\textbf{in out}\\
+		\\
+		IDXS&$\to$&IDXS,IDX\\
+		&$|$&IDX\\
+		\\
+		IDX&$\to$&EXPR\\
+		\\
+		L\_ID&$\to$&L\_ID,ID\\
+		&$|$&ID
+	\end{tabular}
+	\section{Sentencies}
+	\begin{tabular}{l l l}
+		SENTS&$\to$&SENTS\_CONT\\
+		&$|$&\textbf{null};\\
+		\\
+		SENTS\_CONT&$\to$&SENT\\
+		&$|$&SENT
+		\\
+		SENT&$\to$&S\_ITER\\
+		&$|$&S\_COND\\
+		&$|$&S\_CRIDA\\
+		&$|$&S\_ASSIGN\\
+		\\
+		S\_ITER&$\to$&\textbf{while} EXPR \textbf{loop}\\
+		&&\hspace*{5mm}SENTS\\
+		&&\textbf{end loop};\\
+		\\
+		S\_COND&$\to$&\textbf{if} EXPR \textbf{then}\\
+		&&\hspace*{5mm}SENTS\\
+		&&\textbf{end if};\\
+		&$|$&\textbf{if} EXPR \textbf{then}\\
+		&&\hspace*{5mm}SENTS\\
+		&&\textbf{else};\\
+		&&\hspace*{5mm}SENTS\\
+		&&\textbf{end if};\\
+		\\
+		S\_CRIDA&$\to$&C\_PROC;\\
+		\\
+		S\_ASSIGN&$\to$&REF:=EXPR;
+	\end{tabular}
+	\subsection{Sents Auxiliars}
+	\begin{tabular}{l l l}
+		REF&$\to$&REF.CAMP\\
+		&$|$&CAMP\\
+		\\
+		CAMP&$\to$&ID\\
+		&$|$&ID(IDXS)
+	\end{tabular}
+	\section{Expressions}
+	\begin{tabular}{l l l}
+		EXPR&$\to$&E0 | E1 | E2\\
+		\\
+		E0&$\to$&E0 \textbf{and} E2\\
+		&$|$&E2 \textbf{and} E2\\
+		\\
+		E1&$\to$&E1 \textbf{or} E2\\
+		&$|$&E2 \textbf{or} E2\\
+		\\
+		E2&$\to$&E2OP\_REL E3\\
+		&$|$&E3\\
+		\\
+		E3&$\to$&E3 OP\_B\_C E4\\
+		&$|$&E4\\
+		\\
+		E4&$\to$&E4 OP\_B\_E E5\\
+		&$|$&E5\\
+		\\
+		E5&$\to$&OP\_N E6\\
+		&$|$&E6 OP\_E E6\\
+		&$|$&E6
+		\\
+		E6&$\to$&REF\\
+		&$|$&(EXPR)\\
+		&$|$&LIT\\
+		&$|$&-LIT\\
+		&$|$&TUPLA
+	\end{tabular}
+	\subsection{Exprs Auxiliars}
+	\begin{tabular}{l l l}
+		TUPLA&$\to$&(L\_EXPR)\\
+		\\
+		L\_EXPR&$|$&L\_EXPR, EXPR\\
+		&$|$&EXPR\\
+		\\
+		OP\_N&$\to$&\textbf{not}\\
+		\\
+		OP\_E&$\to$&**
+		\\
+		OP\_REL\\
+		\\
+		OP\_B\_C\\
+		\\
+		OP\_B\_E
+	\end{tabular}
+\end{document}

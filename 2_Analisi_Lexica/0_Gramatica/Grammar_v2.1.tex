@@ -78,11 +78,12 @@
 		&&\textbf{end if};\\
 		&$|$&\textbf{if} EXPR \textbf{then}\\
 		&&\hspace*{5mm}SENTS\\
-		&&\textbf{else};\\
+		&&\textbf{else}\\
 		&&\hspace*{5mm}SENTS\\
 		&&\textbf{end if};\\
 		\\
-		S\_CRIDA&$\to$&C\_PROC;\\
+		S\_CRIDA&$\to$&ID(L\_EXPR);\\
+		&$|$&ID;\\
 		\\
 		S\_ASSIGN&$\to$&REF:=EXPR;
 	\end{tabular}

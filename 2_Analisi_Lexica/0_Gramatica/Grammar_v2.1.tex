@@ -4,8 +4,7 @@
 
 \begin{document}
 	\pagenumbering{arabic}
-	\section{Declaracions}
-
+	\section{Decls}
 	\begin{tabular}{l l l}
 		PROC&$\to$&\textbf{procedure} C\_PROC \textbf{is}\\
 		&&\hspace*{5mm}DECLS\\
@@ -28,13 +27,13 @@
 		\\
 		DECL\_T&$\to$&\textbf{type} ID \textbf{is} DECL\_T\_CONT\\
 		\\
-		DECL\_T\_CONT&$\to$&\textbf{new} ID \textbf{range} IDX..IDX;\\
+		DECL\_T\_CONT&$\to$&\textbf{new} RANG;\\
 		&$|$&\textbf{record}\\
 		&&\hspace*{5mm}DECL\_RVARS\\
 		&&\textbf{end record};\\
 		&$|$&\textbf{array} (L\_ID) \textbf{of} ID;
 	\end{tabular}
-	\subsection{Decls Auxiliars}
+	\subsection{Auxliars}
 	\begin{tabular}{l l l}
 		C\_PROC&$\to$&ID(ARGS)\\
 		&$|$&ID\\
@@ -48,15 +47,16 @@
 		&$|$&\textbf{out}\\
 		&$|$&\textbf{in out}\\
 		\\
-		IDXS&$\to$&IDXS,IDX\\
-		&$|$&IDX\\
-		\\
-		IDX&$\to$&EXPR\\
-		\\
 		L\_ID&$\to$&L\_ID,ID\\
+		&$|$&ID\\
+		\\
+		RANG&$\to$&ID \textbf{range} RANG\_CONT\\
+		\\
+		RANG\_CONT&$\to$&OP\_U LIT..OP\_U LIT\\
+		&$|$&ID..ID\\
 		&$|$&ID
 	\end{tabular}
-	\section{Sentencies}
+	\section{Sents}
 	\begin{tabular}{l l l}
 		SENTS&$\to$&SENTS\_CONT\\
 		&$|$&\textbf{null};\\
@@ -82,20 +82,27 @@
 		&&\hspace*{5mm}SENTS\\
 		&&\textbf{end if};\\
 		\\
-		S\_CRIDA&$\to$&ID(L\_EXPR);\\
+		S\_CRIDA&$\to$&ID(PARAMS);\\
 		&$|$&ID;\\
 		\\
 		S\_ASSIGN&$\to$&REF:=EXPR;
 	\end{tabular}
-	\subsection{Sents Auxiliars}
+	\subsection{Auxiliars}
 	\begin{tabular}{l l l}
 		REF&$\to$&REF.CAMP\\
 		&$|$&CAMP\\
 		\\
 		CAMP&$\to$&ID\\
-		&$|$&ID(IDXS)
+		&$|$&ID(L\_IDX)\\
+		\\
+		L\_IDX&$\to$&L\_IDX,IDX\\
+		&$|$&IDX\\
+		\\
+		IDX&$\to$&EXPR\\
+		\\
+		PARAMS&$\to$&L\_EXPR
 	\end{tabular}
-	\section{Expressions}
+	\section{Exprs}
 	\begin{tabular}{l l l}
 		EXPR&$\to$&E0 $|$ E1 $|$ E2\\
 		\\
@@ -108,37 +115,40 @@
 		E2&$\to$&E2 OP\_REL E3\\
 		&$|$&E3\\
 		\\
-		E3&$\to$&E3 OP\_B\_C E4\\
-		&$|$&E4\\
+		E3&$\to$&OP\_U E4\\
 		\\
-		E4&$\to$&E4 OP\_B\_E E5\\
+		E4&$\to$&E4 OP\_B\_C E5\\
 		&$|$&E5\\
 		\\
-		E5&$\to$&OP\_N E6\\
-		&$|$&E6 OP\_E E6\\
+		E5&$\to$&E5 OP\_B\_E E6\\
 		&$|$&E6\\
 		\\
-		E6&$\to$&REF\\
+		E6&$\to$&OP\_N E7\\
+		&$|$&E7 OP\_E E7\\
+		&$|$&E7\\
+		\\
+		E7&$\to$&REF\\
 		&$|$&(EXPR)\\
 		&$|$&LIT\\
-		&$|$&-LIT\\
 		&$|$&TUPLA
 	\end{tabular}
-	\subsection{Exprs Auxiliars}
+	\subsection{Auxiliars}
 	\begin{tabular}{l l l}
-		TUPLA&$\to$&(L\_EXPR)\\
+		OP\_B\_C&$\to$&+ $|$ -\\
 		\\
-		L\_EXPR&$|$&L\_EXPR, EXPR\\
-		&$|$&EXPR\\
-		\\
-		OP\_N&$\to$&\textbf{not}\\
+		OP\_B\_E\\
 		\\
 		OP\_E&$\to$&**\\
 		\\
+		OP\_N&$\to$&\textbf{not}\\
+		\\
 		OP\_REL\\
 		\\
-		OP\_B\_C\\
+		OP\_U&$\to$&- $|$ $\lambda$\\
 		\\
-		OP\_B\_E
+		TUPLA&$\to$&(L\_EXPR)\\
+		\\
+		L\_EXPR&$\to$&L\_EXPR, EXPR\\
+		&$|$&EXPR
 	\end{tabular}
 \end{document}

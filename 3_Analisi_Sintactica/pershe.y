@@ -4,14 +4,15 @@
 %right coma
 %left punt punticoma
 %right pc_and pc_or
+%nonassoc s_rel
 %left s_mes s_menys
 %left s_prod s_quoci
+%left pc_mod
 %right pc_not
 %right lit id
 %token parentesi_t
 %right parentesi_o
-%left dummy
-%right dummy_r
+%right right
 
 %%
 PROC:
@@ -24,7 +25,7 @@ PROC:
 
 DECLS:
 	 DECLS DECL
-  |	 
+  |--lambda	 
   ;
 
 DECL:
@@ -39,7 +40,7 @@ DECL_VAR:
   ;
 
 DECL_CONST:
-	 LID dospunts pc_const id dospunts IDX punticoma
+	 id dospunts pc_const id dospunts IDX punticoma
   ;
 
 DECL_T:
@@ -93,7 +94,8 @@ RANG:
   ;
   
 IDX:
-	 OP_U IDX_CONT
+	 s_menys IDX_CONT
+  |  IDX_CONT
   ;
 
 IDX_CONT:
@@ -136,8 +138,7 @@ S_COND:
   ;
 
 S_CRIDA:
-	 id parentesi_o PARAMS parentesi_t punticoma
-  |  id punticoma
+  	 REF punticoma -- Que passara amb les crides on el valor dels parametres no es pugui calcular en temps de compilacio?
   ;
 
 S_ASSIGN:
@@ -150,16 +151,12 @@ REF:
 
 QS:
 	 QS Q
-  |  
+  |--lambda  
   ;
 
 Q:
 	 punt id
   |	 parentesi_o LEXPR parentesi_t
-  ;
-
-PARAMS:
-	 LEXPR
   ;
 
 EXPR:
@@ -179,14 +176,15 @@ E1:
   ;
 
 E2:
-	 E2 OP_REL E3
+	 E2 s_rel E3
   |  E2 s_mes E3
   |  E2 s_menys E3
   |  E2 s_prod E3
   |  E2 s_quoci E3
-  |  E3 OP_E E3
+  |  E2 pc_mod E3
+  |	 M1 E3 s_prod s_prod E3 
   |  pc_not E3
-  |	 s_menys E3 %prec dummy
+  |	 s_menys E3
   |  E3
   ;
 
@@ -196,17 +194,8 @@ E3:
   |  lit
   ;
 
-OP_E:
-	s_prod s_prod
-  ;
-
-OP_REL:
-	 
-  ;
-
-OP_U:
-	 s_menys %prec dummy
-  |  
+M1:
+     %prec right
   ;
 
 LEXPR:

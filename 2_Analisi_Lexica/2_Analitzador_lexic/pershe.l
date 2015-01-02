@@ -4,8 +4,8 @@ D2[0-9]
 
 -- R_KEYWORDS ["procedure"|"is"|"begin"|"end"|"type"|"record"|"new"|"array"|"of"|"while"|"loop"|"if"|"else"|"then"|"not"|"in"|"out"|"in out"|"range"]
 -- TERMINALS ["("|")"|":"|";"|":="|"<"|">"|"<="|">="|"="|"+"|"-"|"*"|"/"|"mod"|"**"]
--- NUMBER (({D2}|{D1}{D2}|{D1}{D2}{D2})(_({D2}{D2}{D2}))+)|({D1}({D2}*))
-NUMBER ({D2}|{D1}{D2}|{D1}{D2}{D2})(_?({D2}{D2}{D2}))*
+NUMBER (({D2}|{D1}{D2}|{D1}{D2}{D2})(_({D2}{D2}{D2}))+)|({D1}({D2}*))
+-- NUMBER ({D2}|{D1}{D2}|{D1}{D2}{D2})(_?({D2}{D2}{D2}))*
 CHARACTER \'[\001-\177]\'
 STRING \"(([^\"]*)((\"\")*)([^\"]*))*\"
 IDENTIFIER {CAR}(_?({CAR}|{D2}))*
@@ -117,19 +117,20 @@ OTHERS [\n\t" "]+
 				Put(tok_begin_line,width=>1,base=>10);Put(":");Put(tok_begin_col,width=>1,base=>10);Put(":: ");
 				j:=j+(Integer'Image(tok_begin_line)'Length)+(Integer'Image(tok_begin_col)'Length)+2;
 				Put(">>");
-				for i in (yy_ch_buf'first)..(yy_cp-1) loop --no estic segur de que sigui correcte al 100% pero...	
+				Put(yytext);
+				--for i in (yy_ch_buf'first)..(yy_cp-1) loop --no estic segur de que sigui correcte al 100% pero...	
 					-- if character != newline, horitzontal tab and space
-					if yy_ch_buf(i)/=character'Val(10) and yy_ch_buf(i)/=character'Val(9) and yy_ch_buf(i)/=character'Val(32) then 
-						put(yy_ch_buf(i));j:=j+1;
-					end if;
-				end loop;
-				New_Line(2);
-				k:=0;
-				while k<j loop
-					Put(" ");
-					k:=k+1;
-				end loop;
-				Put("^");
+				--	if yy_ch_buf(i)/=character'Val(10) and yy_ch_buf(i)/=character'Val(9) and yy_ch_buf(i)/=character'Val(32) then 
+				--		put(yy_ch_buf(i));j:=j+1;
+				--	end if;
+				--end loop;
+				--New_Line(2);
+				--k:=0;
+				--while k<j loop
+				--	Put(" ");
+				--	k:=k+1;
+				--end loop;
+				--Put("^");
 			else --Experimental
 				if yy_ch_buf(yy_cp)=';' or tok_begin_line_prev<tok_begin_line or yy_ch_buf(yy_cp)=' ' or yy_ch_buf(yy_cp)=character'Val(9) then
 					ometre:=false; pometre:=false;

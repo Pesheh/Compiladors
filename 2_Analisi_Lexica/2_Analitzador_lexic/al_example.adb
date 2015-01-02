@@ -6,7 +6,8 @@ begin --Example
 	Read_Input:
 	loop 
 		tk:=YYLex;
-		Put_Line("L"&YYText);
+		New_Line(1);
+		--Put_Line("Token: "&YYText);
 		exit Read_Input
 			when tk= End_of_Input;
 	end loop Read_Input;

@@ -1,10 +1,10 @@
-%token pc_procedure pc_is pc_begin pc_end pc_const pc_new pc_type pc_record pc_array pc_of pc_in pc_out pc_in_out pc_null pc_range pc_while pc_loop pc_if pc_then pc_else
+%token pc_procedure pc_is pc_begin pc_end pc_const pc_new pc_type pc_record pc_array pc_of pc_in pc_in_out pc_null pc_range pc_while pc_loop pc_if pc_then pc_else
 %right dospuntsigual 
 %right dospunts
 %right coma
 %left punt punticoma
 %right pc_and pc_or
-%nonassoc s_rel
+%nonassoc op_rel
 %left s_mes s_menys
 %left s_prod s_quoci
 %left pc_mod
@@ -176,7 +176,7 @@ E1:
   ;
 
 E2:
-	 E2 s_rel E3
+	 E2 op_rel E3
   |  E2 s_mes E3
   |  E2 s_menys E3
   |  E2 s_prod E3

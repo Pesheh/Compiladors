@@ -1,63 +1,93 @@
-CAR [a-zA-Z]
-D1[1-9]
-D2[0-9]
+--alphabetical character
+ALPH_C [a-zA-Z]
 
--- R_KEYWORDS ["procedure"|"is"|"begin"|"end"|"type"|"record"|"new"|"array"|"of"|"while"|"loop"|"if"|"else"|"then"|"not"|"in"|"out"|"in out"|"range"]
--- TERMINALS ["("|")"|":"|";"|":="|"<"|">"|"<="|">="|"="|"+"|"-"|"*"|"/"|"mod"|"**"]
-NUMBER (({D2}|{D1}{D2}|{D1}{D2}{D2})(_({D2}{D2}{D2}))+)|({D1}({D2}*))
--- NUMBER ({D2}|{D1}{D2}|{D1}{D2}{D2})(_?({D2}{D2}{D2}))*
-CHARACTER \'[\001-\177]\'
-STRING \"(([^\"]*)((\"\")*)([^\"]*))*\"
-IDENTIFIER {CAR}(_?({CAR}|{D2}))*
-COMMENT \-\-([^"\n"])*"\n"
-OTHERS [\n\t" "]+
+--graphic char including " and Space
+GC [\040-\176] 
+
+--idem as before excluding " 
+GC_NON_Q [\040-\041]|[\043-\176] 
+
+--non graphic char and Space
+NON_GC [\001-\040]
+
+--digit
+D [0-9]
+
+--non zero digit
+NZD [1-9]
+
+--numbers like x_yyy, xy_y, xyy_yyy, xyy(_yyy)+ where x != 0
+NUM_WITH_LOWERBAR (({D}|{NZD}{D}|{NZD}{D}{D})(_({D}{D}{D}))+)
+
+--numbers not starting with 0
+NUM_WITHOUT_LOWERBAR ({NZD}{D}*)
+
+--inner element of a string, it may be a graphic character (without the double quote) or a double double quote.
+STRING_BODY (\"\"|{GC_NON_Q}+)*
+
+NUMBER {NUM_WITH_LOWERBAR}|{NUM_WITHOUT_LOWERBAR}
+
+STRING \"{STRING_BODY}\"
+
+IDENTIFIER {ALPH_C}(_?({ALPH_C}|{D}))*
+
+CHARACTER \'{GC}\'
+
+COMMENT \-\-{GC}*\n
+
+OTHERS {NON_GC}+
 
 %%
 
-"procedure"															{ECHO; RETURN PC_procedure;}
-"is"																{ECHO; RETURN PC_is;}
-"begin"																{ECHO; RETURN PC_begin;}
-"end"																{ECHO; RETURN PC_end;}
-"type"																{ECHO; RETURN PC_end;}
-"record"															{ECHO; RETURN PC_record;}
-"new"																{ECHO; RETURN PC_new;}
-"array"																{ECHO; RETURN PC_array;}
-"of"																{ECHO; RETURN PC_of;}
-"while"																{ECHO; RETURN PC_while;}
-"loop"																{ECHO; RETURN PC_loop;}
-"if"																{ECHO; RETURN PC_if;}
-"else"																{ECHO; RETURN PC_else;}
-"then"																{ECHO; RETURN PC_then;}
-"not"																{ECHO; RETURN PC_not;}
-"in"																{ECHO; RETURN PC_in;}
-"out"																{ECHO; RETURN PC_out;}
-"in out"															{ECHO; RETURN PC_in_out;}
-"range"																{ECHO; RETURN PC_range;}
--- Id.id:=.. <<< com repr el '.'? o mes ben dit, que acceptam aqui?
-"("																	{ECHO; RETURN Bracket_Left;}
-")"																	{ECHO; RETURN Bracket_Right;}
-":"																	{ECHO; RETURN Colon;}
-";"																	{ECHO; RETURN Semicolon;}
-":="																{ECHO; RETURN Assignation;}
-"<"																	{ECHO; RETURN Less;}
-">"																	{ECHO; RETURN More;}
-"<="																{ECHO; RETURN Less_or_equal;}
-">="																{ECHO; RETURN More_or_equal;}
-"="																	{ECHO; RETURN Equal;}
-"+"																	{ECHO; RETURN Addition;}
-"-"																	{ECHO; RETURN Substraction;}
-"*"																	{ECHO; RETURN Multiplication;}
-"/"																	{ECHO; RETURN Division;}
-"mod"																{ECHO; RETURN Module;}
-"**"																{ECHO; RETURN Power;}
-{IDENTIFIER}														{ECHO; RETURN Identifier;}
-{NUMBER}															{ECHO; RETURN Number;}
-{STRING}															{ECHO; RETURN Str;}
-{CHARACTER}															{ECHO; RETURN Char;}
-{COMMENT}															{ECHO; RETURN Comment;}
+"procedure"															{ECHO; RETURN pc_procedure;}
+"is"																{ECHO; RETURN pc_is;}
+"begin"																{ECHO; RETURN pc_begin;}
+"end"																{ECHO; RETURN pc_end;}
+"const"																{ECHO; RETURN pc_const;}
+"new"																{ECHO; RETURN pc_new;}
+"type"																{ECHO; RETURN pc_type;}
+"record"															{ECHO; RETURN pc_record;}
+"array"																{ECHO; RETURN pc_array;}
+"of"																{ECHO; RETURN pc_of;}
+"while"																{ECHO; RETURN pc_while;}
+"loop"																{ECHO; RETURN pc_loop;}
+"if"																{ECHO; RETURN pc_if;}
+"else"																{ECHO; RETURN pc_else;}
+"then"																{ECHO; RETURN pc_then;}
+"not"																{ECHO; RETURN _not;}
+"in"																{ECHO; RETURN pc_in;}
+"in out"															{ECHO; RETURN pc_in_out;}
+"null"																{ECHO; RETURN pc_null;}
+"range"																{ECHO; RETURN pc_range;}
+"and"																{ECHO; RETURN pc_and;}
+"or"																{ECHO; RETURN pc_or;}
+"("																	{ECHO; RETURN parentesi_o;}
+")"																	{ECHO; RETURN parentesi_t;}
+"."																	{ECHO; RETURN punt;}
+","																	{ECHO; RETURN coma;}
+":"																	{ECHO; RETURN dospunts;}
+";"																	{ECHO; RETURN punticoma;}
+":="																{ECHO; RETURN dospuntsigual;}
+"<"																	{ECHO; RETURN op_rel;}
+">"																	{ECHO; RETURN op_rel;}
+"<="																{ECHO; RETURN op_rel;}
+">="																{ECHO; RETURN op_rel;}
+"="																	{ECHO; RETURN op_rel;}
+"/="																{ECHO; RETURN op_rel;}
+"+"																	{ECHO; RETURN s_mes;}
+"-"																	{ECHO; RETURN s_menys;}
+"*"																	{ECHO; RETURN s_prod;}
+"/"																	{ECHO; RETURN s_quoci;}
+"mod"																{ECHO; RETURN pc_mod;}
+{IDENTIFIER}														{ECHO; put(" Id"); RETURN id;}
+{NUMBER}															{ECHO; put(" Num"); RETURN lit;}
+{STRING}															{ECHO; put(" Str"); RETURN lit;}
+{CHARACTER}															{ECHO; RETURN lit;}
+
+-- els comentaris no ens importen per re?
+{COMMENT}															{ECHO; put(" Comm");}
 {OTHERS}															{null;}
-.																	{rec_Err; RETURN Error;}--{ECHO; RETURN Error;}
--- [^({R_KEYWORDS}|{TERMINALS}|{IDENTIFIER}|{NUMBER}|{STRING}|{CHARACTER}|{COMMENT}|{OTHERS})]* {ECHO; RETURN Error;}
+.																	{put("ERR: "); ECHO; RETURN Error;}
 
 %%
 
@@ -167,7 +197,6 @@ OTHERS [\n\t" "]+
 		
 				case tk is
 					when Identifier => 	d_tnoms.put(tn,YYText,id); New_Line(1);ids(i):=id; i:=i+1; Put_Line("ID:"&YYText); 
-					when Str => d_tnoms.put(tn,YYText,id_st); New_Line(1);ids_str(i2):=id_st; i2:=i2+1; Put_Line("STR:"&YYText);
 					when End_Of_Input => Put_Line("EOF");
 					when others => New_Line(1);
 				end case;

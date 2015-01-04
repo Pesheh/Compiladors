@@ -80,7 +80,6 @@ ARG:
 
 MODE:
 	 Pc_in
-  |	 Pc_out
   |  Pc_in_out
   ;
 
@@ -204,4 +203,10 @@ LEXPR:
   ;
 %%
 
+	package a_sintactic is
+		procedure YYParse;
+	end a_sintactic;
+
+	package body a_sintactic is
 ##
+	end a_sintactic;

@@ -9,7 +9,7 @@ package d_atribut is
     type pnode is access node;
     type tnode(nd_nul,nd_id,nd_lit,nd_op_rel,nd_PC);
 
-    type trelacio(menor,major,menorigual,majorigual,igual);
+    type trelacio(menor,major,menorigual,majorigual,igual,diferent);
     type posicio is
         record
             fila: natural;

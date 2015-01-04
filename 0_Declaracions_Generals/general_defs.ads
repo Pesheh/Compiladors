@@ -9,7 +9,7 @@ package general_defs is
    
     null_id: constant id_nom:=0;
 
-    type despl is natural;
+    type despl is new natural;
 
     type tipus_desc is (dnula,dvar,dconst,dindx,dtipus,dcamp,dproc,dargc);
     type tipus_subj is (tsb_nul, tsb_bool, tsb_car, tsb_ent, tsb_arr, tsb_rec);
@@ -17,12 +17,12 @@ package general_defs is
         record
             ocup: despl;
             case tsb is
-                when tsb_bool, tsb_car, tsb_ent => null;
+                when tsb_bool | tsb_car | tsb_ent => null;
                 when tsb_arr => null;
                 when tsb_rec => null;
                 when tsb_nul => null;
             end case;
-        end record
+        end record;
     type descripcio(td: tipus_desc:= dnula) is
         record
             case td is

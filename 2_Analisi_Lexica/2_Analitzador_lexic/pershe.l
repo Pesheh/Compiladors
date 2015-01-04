@@ -39,50 +39,50 @@ OTHERS {NON_GC}+
 
 %%
 
-"procedure"															{ECHO; RETURN pc_procedure;}
-"is"																{ECHO; RETURN pc_is;}
-"begin"																{ECHO; RETURN pc_begin;}
-"end"																{ECHO; RETURN pc_end;}
-"const"																{ECHO; RETURN pc_const;}
-"new"																{ECHO; RETURN pc_new;}
-"type"																{ECHO; RETURN pc_type;}
-"record"															{ECHO; RETURN pc_record;}
-"array"																{ECHO; RETURN pc_array;}
-"of"																{ECHO; RETURN pc_of;}
-"while"																{ECHO; RETURN pc_while;}
-"loop"																{ECHO; RETURN pc_loop;}
-"if"																{ECHO; RETURN pc_if;}
-"else"																{ECHO; RETURN pc_else;}
-"then"																{ECHO; RETURN pc_then;}
-"not"																{ECHO; RETURN _not;}
-"in"																{ECHO; RETURN pc_in;}
-"in out"															{ECHO; RETURN pc_in_out;}
-"null"																{ECHO; RETURN pc_null;}
-"range"																{ECHO; RETURN pc_range;}
-"and"																{ECHO; RETURN pc_and;}
-"or"																{ECHO; RETURN pc_or;}
-"("																	{ECHO; RETURN parentesi_o;}
-")"																	{ECHO; RETURN parentesi_t;}
-"."																	{ECHO; RETURN punt;}
-","																	{ECHO; RETURN coma;}
-":"																	{ECHO; RETURN dospunts;}
-";"																	{ECHO; RETURN punticoma;}
-":="																{ECHO; RETURN dospuntsigual;}
-"<"																	{ECHO; RETURN op_rel;}
-">"																	{ECHO; RETURN op_rel;}
-"<="																{ECHO; RETURN op_rel;}
-">="																{ECHO; RETURN op_rel;}
-"="																	{ECHO; RETURN op_rel;}
-"/="																{ECHO; RETURN op_rel;}
-"+"																	{ECHO; RETURN s_mes;}
-"-"																	{ECHO; RETURN s_menys;}
-"*"																	{ECHO; RETURN s_prod;}
-"/"																	{ECHO; RETURN s_quoci;}
-"mod"																{ECHO; RETURN pc_mod;}
-{IDENTIFIER}														{ECHO; put(" Id"); RETURN id;}
-{NUMBER}															{ECHO; put(" Num"); RETURN lit;}
-{STRING}															{ECHO; put(" Str"); RETURN lit;}
-{CHARACTER}															{ECHO; RETURN lit;}
+"procedure"															{ECHO; RETURN Pc_procedure;}
+"is"																{ECHO; RETURN Pc_is;}
+"begin"																{ECHO; RETURN Pc_begin;}
+"end"																{ECHO; RETURN Pc_end;}
+"const"																{ECHO; RETURN Pc_const;}
+"new"																{ECHO; RETURN Pc_new;}
+"type"																{ECHO; RETURN Pc_type;}
+"record"															{ECHO; RETURN Pc_record;}
+"array"																{ECHO; RETURN Pc_array;}
+"of"																{ECHO; RETURN Pc_of;}
+"while"																{ECHO; RETURN Pc_while;}
+"loop"																{ECHO; RETURN Pc_loop;}
+"if"																{ECHO; RETURN Pc_if;}
+"else"																{ECHO; RETURN Pc_else;}
+"then"																{ECHO; RETURN Pc_then;}
+"not"																{ECHO; RETURN Pc_not;}
+"in"																{ECHO; RETURN Pc_in;}
+"in out"															{ECHO; RETURN Pc_in_out;}
+"null"																{ECHO; RETURN Pc_null;}
+"range"																{ECHO; RETURN Pc_range;}
+"and"																{ECHO; RETURN Pc_and;}
+"or"																{ECHO; RETURN Pc_or;}
+"("																	{ECHO; RETURN Parentesi_o;}
+")"																	{ECHO; RETURN Parentesi_t;}
+"."																	{ECHO; RETURN Punt;}
+","																	{ECHO; RETURN Coma;}
+":"																	{ECHO; RETURN Dospunts;}
+";"																	{ECHO; RETURN Punticoma;}
+":="																{ECHO; RETURN Dospuntsigual;}
+"<"																	{ECHO; RETURN Op_rel;}
+">"																	{ECHO; RETURN Op_rel;}
+"<="																{ECHO; RETURN Op_rel;}
+">="																{ECHO; RETURN Op_rel;}
+"="																	{ECHO; RETURN Op_rel;}
+"/="																{ECHO; RETURN Op_rel;}
+"+"																	{ECHO; RETURN S_mes;}
+"-"																	{ECHO; RETURN S_menys;}
+"*"																	{ECHO; RETURN S_prod;}
+"/"																	{ECHO; RETURN S_quoci;}
+"mod"																{ECHO; RETURN Pc_mod;}
+{IDENTIFIER}														{ECHO; put(" Id"); RETURN Identif;}
+{NUMBER}															{ECHO; put(" Num"); RETURN Lit;}
+{STRING}															{ECHO; put(" Str"); RETURN Lit;}
+{CHARACTER}															{ECHO; RETURN Lit;}
 
 -- els comentaris no ens importen per re?
 {COMMENT}															{ECHO; put(" Comm");}
@@ -196,7 +196,7 @@ OTHERS {NON_GC}+
 				tk:=YYLex;
 		
 				case tk is
-					when Identifier => 	d_tnoms.put(tn,YYText,id); New_Line(1);ids(i):=id; i:=i+1; Put_Line("ID:"&YYText); 
+					when Identif => 	d_tnoms.put(tn,YYText,id); New_Line(1);ids(i):=id; i:=i+1; Put_Line("ID:"&YYText); 
 					when End_Of_Input => Put_Line("EOF");
 					when others => New_Line(1);
 				end case;

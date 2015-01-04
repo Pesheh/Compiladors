@@ -1,26 +1,26 @@
-%token pc_procedure pc_is pc_begin pc_end pc_const pc_new pc_type pc_record pc_array pc_of pc_in pc_in_out pc_null pc_range pc_while pc_loop pc_if pc_then pc_else
-%right dospuntsigual 
-%right dospunts
-%right coma
-%left punt punticoma
-%right pc_and pc_or
-%nonassoc op_rel
-%left s_mes s_menys
-%left s_prod s_quoci
-%left pc_mod
-%right pc_not
-%right lit id
-%token parentesi_t
-%right parentesi_o
+%token Pc_procedure Pc_is Pc_begin Pc_end Pc_const Pc_new Pc_type Pc_record Pc_array Pc_of Pc_in Pc_in_out Pc_null Pc_range Pc_while Pc_loop Pc_if Pc_then Pc_else
+%right Dospuntsigual 
+%right Dospunts
+%right Coma
+%left Punt Punticoma
+%right Pc_and Pc_or
+%nonassoc Op_rel
+%left S_mes S_menys
+%left S_prod S_quoci
+%left Pc_mod
+%right Pc_not
+%right Lit Identif
+%token Parentesi_t
+%right Parentesi_o
 %right right
 
 %%
 PROC:
-	 pc_procedure C_PROC pc_is
+	 Pc_procedure C_PROC Pc_is
 	 	DECLS
-	 pc_begin
+	 Pc_begin
 	 	SENTS
-	 pc_end pc_procedure punticoma
+	 Pc_end Pc_procedure Punticoma
   ;
 
 DECLS:
@@ -36,23 +36,23 @@ DECL:
   ;
 
 DECL_VAR:
-	 LID dospunts id punticoma
+	 LID Dospunts Identif Punticoma
   ;
 
 DECL_CONST:
-	 id dospunts pc_const id dospunts IDX punticoma
+	 Identif Dospunts Pc_const Identif Dospunts IDX Punticoma
   ;
 
 DECL_T:
-	 pc_type id pc_is DECL_T_CONT
+	 Pc_type Identif Pc_is DECL_T_CONT
   ;
 
 DECL_T_CONT:
-	 pc_new RANG punticoma
-  |	 pc_type id pc_is pc_record
+	 Pc_new RANG Punticoma
+  |	 Pc_type Identif Pc_is Pc_record
   	 	DCAMPS
-	 pc_end pc_record punticoma
-  |  pc_type id pc_is pc_array parentesi_o LID parentesi_t pc_of id punticoma
+	 Pc_end Pc_record Punticoma
+  |  Pc_type Identif Pc_is Pc_array Parentesi_o LID Parentesi_t Pc_of Identif Punticoma
   ;
  
 DCAMPS:
@@ -65,47 +65,47 @@ DCAMP:
   ;
 
 C_PROC:
-	 id parentesi_o ARGS parentesi_t
-  |  id
+	 Identif Parentesi_o ARGS Parentesi_t
+  |  Identif
   ;
 
 ARGS:
-	 ARGS punticoma ARG
+	 ARGS Punticoma ARG
   |  ARG
   ;
 
 ARG:
-	 LID dospunts MODE id
+	 LID Dospunts MODE Identif
   ;
 
 MODE:
-	 pc_in
-  |	 pc_out
-  |  pc_in_out
+	 Pc_in
+  |	 Pc_out
+  |  Pc_in_out
   ;
 
 LID:
-	 LID coma id
-  |  id
+	 LID Coma Identif
+  |  Identif
   ;
 
 RANG:
-	 id pc_range IDX punt punt IDX
+	 Identif Pc_range IDX Punt Punt IDX
   ;
   
 IDX:
-	 s_menys IDX_CONT
+	 S_menys IDX_CONT
   |  IDX_CONT
   ;
 
 IDX_CONT:
-	 lit
-  |  id
+	 Lit
+  |  Identif
   ;
 
 SENTS:
 	 SENTS_NOB
-  |  pc_null punticoma
+  |  Pc_null Punticoma
   ;
 
 SENTS_NOB:
@@ -121,32 +121,32 @@ SENT:
   ;
 
 S_ITER:
-	 pc_while EXPR pc_loop
+	 Pc_while EXPR Pc_loop
 	 	SENTS
-	 pc_end pc_loop punticoma
+	 Pc_end Pc_loop Punticoma
   ;
 
 S_COND:
-	 pc_if EXPR pc_then
+	 Pc_if EXPR Pc_then
 	 	SENTS
-	 pc_end pc_if punticoma
-  |	 pc_if EXPR pc_then
+	 Pc_end Pc_if Punticoma
+  |	 Pc_if EXPR Pc_then
   		SENTS
-	 pc_else
+	 Pc_else
 	 	SENTS
-	 pc_end pc_if punticoma
+	 Pc_end Pc_if Punticoma
   ;
 
 S_CRIDA:
-  	 REF punticoma -- Que passara amb les crides on el valor dels parametres no es pugui calcular en temps de compilacio?
+  	 REF Punticoma -- Que passara amb les crides on el valor dels parametres no es pugui calcular en temps de compilacio?
   ;
 
 S_ASSIGN:
-	 REF dospuntsigual EXPR punticoma
+	 REF Dospuntsigual EXPR Punticoma
   ;
 
 REF:
-	 id QS
+	 Identif QS
   ;
 
 QS:
@@ -155,8 +155,8 @@ QS:
   ;
 
 Q:
-	 punt id
-  |	 parentesi_o LEXPR parentesi_t
+	 Punt Identif
+  |	 Parentesi_o LEXPR Parentesi_t
   ;
 
 EXPR:
@@ -166,32 +166,32 @@ EXPR:
   ;
 
 E0:
-	 E0 pc_and E2
-  |  E2 pc_and E2
+	 E0 Pc_and E2
+  |  E2 Pc_and E2
   ;
 
 E1:
-	 E1 pc_or E2
-  |  E2 pc_or E2
+	 E1 Pc_or E2
+  |  E2 Pc_or E2
   ;
 
 E2:
-	 E2 op_rel E3
-  |  E2 s_mes E3
-  |  E2 s_menys E3
-  |  E2 s_prod E3
-  |  E2 s_quoci E3
-  |  E2 pc_mod E3
-  |	 M1 E3 s_prod s_prod E3 
-  |  pc_not E3
-  |	 s_menys E3
+	 E2 Op_rel E3
+  |  E2 S_mes E3
+  |  E2 S_menys E3
+  |  E2 S_prod E3
+  |  E2 S_quoci E3
+  |  E2 Pc_mod E3
+  |	 M1 E3 S_prod S_prod E3 
+  |  Pc_not E3
+  |	 S_menys E3
   |  E3
   ;
 
 E3:
 	 REF
-  |  parentesi_o EXPR parentesi_t
-  |  lit
+  |  Parentesi_o EXPR Parentesi_t
+  |  Lit
   ;
 
 M1:
@@ -199,7 +199,7 @@ M1:
   ;
 
 LEXPR:
-	 LEXPR coma EXPR
+	 LEXPR Coma EXPR
   |  EXPR
   ;
 %%

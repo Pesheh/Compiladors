@@ -1,4 +1,4 @@
-with d_token,a_lexic,Ada.Strings.Unbounded,Ada.Text_IO; use d_token,a_lexic,Ada.Strings.Unbounded,Ada.Text_IO;
+with pershe_tokens,a_lexic,Ada.Strings.Unbounded,Ada.Text_IO; use pershe_tokens,a_lexic,Ada.Strings.Unbounded,Ada.Text_IO;
 procedure al_example is
 	tk		: Token;
 begin --Example

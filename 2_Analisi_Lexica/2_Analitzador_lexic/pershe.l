@@ -91,7 +91,7 @@ OTHERS {NON_GC}+
 
 %%
 
-	with d_token; use d_token;
+	with pershe_tokens; use pershe_tokens;
 	with Ada.Text_IO, Ada.Integer_Text_IO; use Ada.Text_IO, Ada.Integer_Text_IO;
 	with pershe_io,pershe_dfa;use pershe_io,pershe_dfa;
 	package a_lexic is
@@ -176,7 +176,7 @@ OTHERS {NON_GC}+
 	end a_lexic;
 
 	with Ada.Text_IO,Ada.Integer_Text_IO,Ada.Command_Line; use Ada.Text_IO,Ada.Integer_Text_IO,Ada.Command_Line;
-	with d_token,a_lexic; use d_token,a_lexic;
+	with pershe_tokens,a_lexic; use pershe_tokens,a_lexic;
 	with d_tnoms, general_defs; use d_tnoms, general_defs;
 	procedure C_Tnoms is
 		tk		: Token;

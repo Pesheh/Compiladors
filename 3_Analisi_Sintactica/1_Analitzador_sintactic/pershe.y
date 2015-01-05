@@ -11,8 +11,12 @@
 %right Pc_not
 %right Lit Identif
 %token Parentesi_t
-%right Parentesi_o
-%right right
+%right Parentesi_o -- aquest token tambe s'empra com a dummy per otorgar precedencia i associativitat a M1
+
+%with d_atribut;
+{ 
+subtype YYSType is d_atribut.atribut;
+}
 
 %%
 PROC:
@@ -194,7 +198,7 @@ E3:
   ;
 
 M1:
-     %prec right
+     %prec Parentesi_o
   ;
 
 LEXPR:

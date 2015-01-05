@@ -4,10 +4,46 @@ package d_atribut is
     --pragma pure; 
     
     --!!!probablemente faltan cosas o hay cosas incorrectas!!!
-    type node;
-    type atribut is access node;
-    type pnode is access node;
-    type tnode is (nd_null,nd_id,nd_lit,nd_op_rel,nd_PC);
+    type atribut;
+    type pnode is access atribut;
+    -- nd arg inclou el mode
+	type tnode is (nd_null,
+				   nd_proc,
+				   nd_decls,
+				   nd_decl,
+				   nd_decl_var,
+				   nd_decl_const,
+				   nd_decl_t,
+				   nd_decl_t_cont,
+				   nd_dcamps,
+				   nd_dcamp,
+				   nd_c_proc,
+				   nd_args,
+				   nd_arg,
+				   nd_lid,
+				   nd_rang,
+				   nd_idx,
+				   nd_idx_cont,
+				   nd_sents,
+				   nd_sents_nob,
+				   nd_sent,
+				   nd_siter,
+				   nd_scond,
+				   nd_scrida,
+				   nd_sassign,
+				   nd_ref,
+				   nd_qs,
+				   nd_q,
+				   nd_expr,
+				   nd_e0,
+				   nd_e1,
+				   nd_e2,
+				   nd_e3,
+				   nd_lexpr,
+				   nd_id,
+				   nd_lit,
+				   nd_op_rel,
+				   nd_PC);
 
     type trelacio is (menor,major,menorigual,majorigual,igual,diferent);
     type posicio is
@@ -16,7 +52,7 @@ package d_atribut is
             columna: natural;
         end record;
     
-    type node(tn: tnode:= nd_null) is
+    type atribut(tn: tnode:= nd_null) is
         record
             case tn is
 				when nd_null 	=> 
@@ -30,8 +66,12 @@ package d_atribut is
 				when nd_op_rel 	=>     
 					tipus: trelacio;
 					ope,opd: pnode; -- operador esquerra/dreta
+				when nd_lid | nd_decl_var	=>
+					fe,fd: pnode;
 				when nd_PC 		=> 
-					null; 
+					null;
+				when others => -- Anar substituint aquests 'others' amb els corresponents tipusXD
+					null;
             end case;
         end record;
 

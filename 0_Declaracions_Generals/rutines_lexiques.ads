@@ -7,6 +7,6 @@ package rutines_lexiques is
     procedure rl_identifier(a: out atribut; col: in natural; fil: in natural; text: in String );
     procedure rl_literal(a: out atribut; col: in natural; fil: in natural; text: in String);
     procedure rl_op_rel(a: out atribut; col: in natural; fil: in natural; text: in String);
-    procedure rl_PC(a: out atribut; col: in natural; fil: in natural; text: in String);
-
+    procedure rl_in(a: out atribut);
+    procedure rl_in_out(a: out atribut);
 end rutines_lexiques;

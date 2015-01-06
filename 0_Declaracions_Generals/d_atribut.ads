@@ -20,6 +20,7 @@ package d_atribut is
 				   nd_c_proc,
 				   nd_args,
 				   nd_arg,
+                   nd_mode,
 				   nd_lid,
 				   nd_rang,
 				   nd_idx,
@@ -42,10 +43,10 @@ package d_atribut is
 				   nd_lexpr,
 				   nd_id,
 				   nd_lit,
-				   nd_op_rel,
-				   nd_PC);
+				   nd_op_rel);
 
     type trelacio is (menor,major,menorigual,majorigual,igual,diferent);
+    type tmode is (md_in,md_in_out);
     type posicio is
         record
             fila: natural;
@@ -57,20 +58,54 @@ package d_atribut is
             case tn is
 				when nd_null 	=> 
 					null;
+
 				when nd_id 		=> 
 					id: id_nom; 
 					id_pos: posicio;
+
 				when nd_lit		=>
 					ids: id_str; 
 					lit_pos: posicio;
+
 				when nd_op_rel 	=>     
 					tipus: trelacio;
 					ope,opd: pnode; -- operador esquerra/dreta
-				when nd_lid | nd_decl_var	=>
+				
+                when nd_lid | nd_decl_var	=>
 					fe,fd: pnode;
-				when nd_PC 		=> 
-					null;
-				when others => -- Anar substituint aquests 'others' amb els corresponents tipusXD
+                
+                when nd_mode    =>
+                    tmd: tmode;
+                
+                when nd_c_proc  =>
+                    proc_id: pnode;
+                    args: pnode;
+                
+                when nd_proc    =>
+                    cproc: pnode;
+                    decls: pnode;
+                    sents: pnode;
+			
+                when nd_args    =>
+                    args: pnode;
+                    arg: pnode;
+                
+                when nd_arg =>
+                    idarg: id_nom;
+                    darg: descripcio;
+                    mode: pnode;
+
+                when nd_decls   =>
+                    decls: pnode;
+                    decl: pnode;
+
+                when nd_decl    =>
+                    decl_real: pnode;
+
+                when nd_decl_var    =>
+                   null; 
+
+                when others => -- Anar substituint aquests 'others' amb els corresponents tipusXD
 					null;
             end case;
         end record;

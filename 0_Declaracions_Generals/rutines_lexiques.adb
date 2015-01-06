@@ -44,6 +44,7 @@ package body rutines_lexiques is
                 "<"  => tr:= menor;
                 ">"  => tr:= major;
                 "="  => tr:= igual;
+                "/=" => tr:= diferent;
                 "<=" => tr:= menorigual;
                 ">=" => tr:= majorigual;
         end case;
@@ -52,10 +53,19 @@ package body rutines_lexiques is
     end rl_op_rel;
 
 
-    procedure rl_PC(a: out atribut; col: in natural; fil: in natural; text: in String) is 
+    procedure rl_in(a: out atribut) is
     begin
-        null;
-    end rl_PC;
+        a:= new node(nd_mode);
+        a.tmd:= md_in;
+    end rl_in;
+
+
+    procedure rl_in_out(a: out atribut) is
+    begin
+        a:= new node(nd_mode);
+        a.tmd:= md_in_out;
+    end rl_in_out;
+
 
 
 end rutines_lexiques;

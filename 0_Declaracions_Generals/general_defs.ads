@@ -11,8 +11,12 @@ package general_defs is
 
 
 -- T_Simbols stuff
-
-	type valor is new natural; -- sols per compilar
+	type tidx is (positiu, negatiu);
+	type valor is
+		record
+			signe: tidx;
+			v: natural; --temp
+		end record; 
 	type num_var is new natural; -- sols per compilar
 	type num_proc is new natural; -- sols per compilar
 
@@ -45,7 +49,7 @@ package general_defs is
 					nv: num_var; -- gc
                 when dconst => 
 					tc: id_nom; -- tipus de la constant
-					vc: valor; -- valor de la constant <- record que canvia segons si es char, int or bool?
+					vc: valor; -- valor de la constant 
                 when dindx  => 
 					tind: id_nom;
                 when dtipus => 

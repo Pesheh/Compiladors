@@ -50,8 +50,8 @@ package d_atribut is
 
     type trelacio is (menor,major,menorigual,majorigual,igual,diferent);
     type tmode is (md_in,md_in_out);
-    type tidx is (positiu, negatiu); --Lo veo como la manera mas facil de implementar el s_menys en el principio
-    --Si tienes otras ideas..??
+    -- type tidx esta en general_defs 'cuz lol
+	--Si tienes otras ideas..??
     type posicio is
         record
             fila: natural;

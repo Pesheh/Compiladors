@@ -4,10 +4,9 @@ package d_atribut is
     --pragma pure; 
     
     --!!!probablemente faltan cosas o hay cosas incorrectas!!!
-	type node;
-	type atribut is access node;
-    type pnode is access node;
-    -- nd arg inclou el mode. Estan todos los tipos, pero tal vez faltan mas o sobran algunos.
+    type atribut;
+    type pnode is access atribut;
+    -- nd arg inclou el mode
 	type tnode is (nd_null,
 				   nd_proc,
 				   nd_decls,
@@ -48,13 +47,15 @@ package d_atribut is
 
     type trelacio is (menor,major,menorigual,majorigual,igual,diferent);
     type tmode is (md_in,md_in_out);
+    type tidx is (positiu, negatiu); --Lo veo como la manera mas facil de implementar el s_menys en el principio
+    --Si tienes otras ideas..??
     type posicio is
         record
             fila: natural;
             columna: natural;
         end record;
     
-    type node(tn: tnode:= nd_null) is
+    type atribut(tn: tnode:= nd_null) is
         record
             case tn is
 				when nd_null 	=> 
@@ -105,6 +106,22 @@ package d_atribut is
 
                 when nd_decl_var    =>
                    null; 
+
+                when nd_decl_const  =>
+                    const_id: pnode;
+                    const_tipus: pnode;
+                    const_valor: pnode;
+
+                when nd_idx =>
+                    t: tidx;
+                    cidx: pnode;
+
+                when nd_idx_cont    =>
+                    idx_valor: pnode;
+                    
+				when nd_decl_t  =>
+                    
+				when nd_decl_t_cont   =>
 
                 when others => -- Anar substituint aquests 'others' amb els corresponents tipusXD
 					null;

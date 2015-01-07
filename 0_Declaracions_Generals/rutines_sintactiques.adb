@@ -13,11 +13,11 @@ package body rutines_sintactiques is
         p: pnode;
     begin
         proc:= new node(nd_proc);
-        proc.cproc:= cproc;
-        proc.decl:= decls;
-        proc.sents:= sents;
+        proc.proc_cproc:= cproc;
+        proc.proc_decl:= decls;
+        proc.proc_sents:= sents;
 
-        id:= cproc.proc_id.id;
+        id:= cproc.cproc_id.id;
         desc:= new descripcio(dproc);
         desc.np:=nou_proc;
         
@@ -31,16 +31,16 @@ package body rutines_sintactiques is
 	procedure rs_C_Proc(cproc: out YYSType; proc_id: in YYSType; args: in YYSType) is
     begin
         cproc:= new node(nd_c_proc);
-        cproc.proc_id:= proc_id;
-        cproc.args:= args;
+        cproc.cproc_id:= proc_id;
+        cproc.cproc_args:= args;
     end rs_C_Proc;
 
 
 	procedure rs_C_Proc(cproc: out YYSType; proc_id: in YYSType) is
     begin
         cproc:= new node(nd_c_proc);
-        cproc.proc_id:= proc_id;
-        cproc.args:= null;
+        cproc.cproc_id:= proc_id;
+        cproc.cproc_args:= null;
     end rs_C_Proc;
 
 
@@ -65,8 +65,8 @@ package body rutines_sintactiques is
 	procedure rs_Decls(decls: out YYSType; decls_seg: in YYSType; decl: YYSType) is
     begin
         decls:= new node(nd_decls);
-        decls.decls:= decls_seg;
-        decls.decl:= decl;
+        decls.decls_decls:= decls_seg;
+        decls.decls_decl:= decl;
     end rs_Decls;
    
     
@@ -88,9 +88,9 @@ package body rutines_sintactiques is
         error: boolean;
     begin
         decl:= new node(nd_decl_const);
-        decl.id_const:= id_const;
-        decl.const_tipus:= tipus;
-        decl.const_valor:= valor;
+        decl.dconst_id:= id_const;
+        decl.dconst_tipus:= tipus;
+        decl.dconst_valor:= valor;
         
         desc:= new descripcio(dconst);
         desc.tc:= tipus.id;
@@ -104,14 +104,39 @@ package body rutines_sintactiques is
 	procedure rs_Idx(idx: out YYSType; idx_cont: in YYSType; signe: in character) is
     begin
         idx:= new node(nd_idx);
-        idx.cidx:= idx_cont;
+        idx.idx_cont:= idx_cont;
         case signe is
-            when '-' => idx.t:= negatiu;
-            when '+' => idx.t:= positiu;
+            when '-' => idx.idx_tipus:= negatiu;
+            when '+' => idx.idx_tipus:= positiu;
             when others =>
                 raise error;
         end case;
     end rs_Idx;
+
+
+	procedure rs_Idx_Cont(idx_cont: out YYSType; valor: in YYSType) is
+    begin
+        idx_cont:= new node(nd_idx_cont);
+        idx_cont.idxc_valor:= valor;
+    end rs_Idx_Cont;
+
+
+	procedure rs_Decl_T(decl: out YYSType; id_type: in YYSType; decl_cont: in YYSType) is
+    begin
+        decl:= new node(nd_decl_t);
+        
+    end rs_Decl_T;
+  
+    
+	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType) is
+    begin
+
+    end rs_Decl_T_Cont;
+
+    
+    procedure rs_Decl_T_Cont(decl: out YYSType; lista_id: in YYSType; id_array: in YYSType) is
+    begin
+    end rs_Decl_T_Cont;
 
 
     --rutines auxiliars 

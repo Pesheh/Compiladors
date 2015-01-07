@@ -13,19 +13,19 @@ package rutines_sintactiques is
 	procedure rs_Arg(arg: out YYSType; mode: in YYSType; tipus: in YYSType);
 
 	procedure rs_Decls(decls: out YYSType; decls_seg: in YYSType; decl: YYSType);
-    --No estoy del todo seguro de esta manera de estructurar las declaraciones.
 	procedure rs_Decl(decl: out YYSType; decl_real: in YYSType); 
 	procedure rs_Decl_Var(decl: out YYSType; lista_id: in YYSType; tipus: in YYSType);
-	rs_Decl_Const;
-	rs_Decl_T;
-	rs_Decl_T_Cont;
+    procedure rs_Decl_Const(decl: out YYSType; id_const: in YYSType; tipus: in YYSType; valor: in YYSType);
+	procedure rs_Idx(idx: out YYSType; idx_cont: in YYSType; signe: in character);
+	procedure rs_Idx_Cont(idx_cont: out YYSType; valor: in YYSType);
+	procedure rs_Decl_T(decl: out YYSType; id_type: in YYSType; decl_cont: in YYSType);
+	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType);
+	procedure rs_Decl_T_Cont(decl: out YYSType; lista_id: in YYSType; id_array: in YYSType);
 	rs_DCamps;
 	rs_DCampr;
 	rs_Mode;
 	rs_Lid;
 	rs_Rang;
-	rs_Idx;
-	rs_Idx_Cont;
 	rs_Sents;
 	rs_Sents_Nob;
 	rs_Sent;
@@ -44,5 +44,5 @@ package rutines_sintactiques is
 	rs_LExpr;
 
 
-    proc_error,arg_error: exception;
+    error,proc_error,arg_error,const_error: exception;
 end rutines_sintactiques;

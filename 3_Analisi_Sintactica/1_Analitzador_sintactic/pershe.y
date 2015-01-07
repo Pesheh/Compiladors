@@ -79,7 +79,7 @@ ARGS:
   ;
 
 ARG:
-	 LID Dospunts MODE Identif		{rs_Arg($$,$3,$4);}
+	 LID Dospunts MODE Identif		{rs_Arg($$,$1,$3,$4);}
   ;
 
 MODE:

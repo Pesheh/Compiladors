@@ -19,7 +19,7 @@ package body rutines_lexiques is
         pos:= (fil,col);
         put(tn,text,id);
 
-        a.pos:= pos; a.id:= id;
+        a.id_pos:= pos; a.id_id:= id;
     end rl_identifier;
 
 
@@ -32,7 +32,7 @@ package body rutines_lexiques is
         pos:= (fil,col);
         put(tn,text,ids);
 
-        a.pos:= pos; a.ids:= ids;
+        a.lit_pos:= pos; a.lit_ids:= ids;
     end rl_literal;
 
 
@@ -40,21 +40,21 @@ package body rutines_lexiques is
     begin
         a:= new node(nd_op_rel);
 
-        a.tipus:= tr; a.ope:= null; a.opd:= null;
+        a.orel_tipus:= tr; a.orel_ope:= null; a.orel_opd:= null;
     end rl_op_rel;
 
 
     procedure rl_in(a: out atribut) is
     begin
         a:= new node(nd_mode);
-        a.tmd:= md_in;
+        a.mode_tipus:= md_in;
     end rl_in;
 
 
     procedure rl_in_out(a: out atribut) is
     begin
         a:= new node(nd_mode);
-        a.tmd:= md_in_out;
+        a.mode_tipus:= md_in_out;
     end rl_in_out;
 
 

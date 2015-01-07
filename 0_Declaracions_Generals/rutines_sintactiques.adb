@@ -114,6 +114,30 @@ package body rutines_sintactiques is
     end rs_Idx;
 
 
+	procedure rs_Idx_Cont(idx_cont: out YYSType; valor: in YYSType) is
+    begin
+        idx_cont:= new node(nd_idx_cont);
+        idx_cont.idx_valor:= valor;
+    end rs_Idx_Cont;
+
+
+	procedure rs_Decl_T(decl: out YYSType; id_type: in YYSType; decl_cont: in YYSType) is
+    begin
+        decl:= new node(nd_decl_t);
+        
+    end rs_Decl_T;
+  
+    
+	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType) is
+    begin
+    end rs_Decl_T_Cont;
+
+    
+    procedure rs_Decl_T_Cont(decl: out YYSType; lista_id: in YYSType; id_array: in YYSType) is
+    begin
+    end rs_Decl_T_Cont;
+
+
     --rutines auxiliars 
 
     procedure putargs(args: in YYSType; idp: id_nom) is

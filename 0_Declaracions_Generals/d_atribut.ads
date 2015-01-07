@@ -53,7 +53,13 @@ package d_atribut is
             fila: natural;
             columna: natural;
         end record;
-    
+   type rang is
+   		record
+			id: id_nom;
+			linf: pnode;
+			lsup: pnode;
+		end record;
+
     type node(tn: tnode:= nd_null) is
         record
             case tn is
@@ -72,19 +78,20 @@ package d_atribut is
 					tipus: trelacio;
 					ope,opd: pnode; -- operador esquerra/dreta
 				
-                when nd_lid | nd_decl_var	=>
-					fe,fd: pnode;
+                when nd_lid 	=>
+					lid_lid: pnode;
+					lid_id: pnode;
                 
                 when nd_mode    =>
                     tmd: tmode;
                 
                 when nd_c_proc  =>
                     proc_id: pnode;
-                    args: pnode;
+                    cproc_args: pnode;
                 
                 when nd_proc    =>
                     cproc: pnode;
-                    decls: pnode;
+                    proc_decls: pnode;
                     sents: pnode;
 			
                 when nd_args    =>
@@ -103,8 +110,29 @@ package d_atribut is
                 when nd_decl    =>
                     decl_real: pnode;
 
-                when nd_decl_var    =>
-                   null; 
+				when nd_decl_var =>
+					dvar_lid: pnode;
+					dvar_tipus: pnode;
+
+				when nd_decl_const	=>
+					dconst_id: pnode;
+					dconst_tipus: pnode;
+					dconst_valor: pnode;
+
+				when nd_decl_t	=>
+					dt_id: pnode;
+					dt_cont: pnode;
+
+				when nd_decl_t_cont_type =>
+					dtcont_rang: rang;
+
+				when nd_decl_t_cont_record =>
+					dtcont_camps: pnode;
+
+				when nd_decl_t_cont_arry =>
+					dtcont_idx: pnode;
+					dtcont_tipus: pnode;
+
 
                 when others => -- Anar substituint aquests 'others' amb els corresponents tipusXD
 					null;

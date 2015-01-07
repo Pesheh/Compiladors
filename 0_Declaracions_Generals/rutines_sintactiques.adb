@@ -19,7 +19,7 @@ package body rutines_sintactiques is
 
         id:= cproc.proc_id.id;
         desc:= new descripcio(dproc);
-        --desc.np:=??
+        desc.np:=nou_proc;
         
         put(ts,id,desc,error);
         if error then raise proc_error; end if;
@@ -127,4 +127,22 @@ package body rutines_sintactiques is
             putargs(args.args,idp);
         end if;
     end putargs;
+	
+	-- Temporal, a la generacio de codi canvien.
+	-- Añadirlos como variables&procs a general_defs?
+	nv: num_var:= 0;
+	np: num_proc:= 0;
+
+	function nova_var return Num_var is
+	begin
+		nv:= nv+1;
+		return nv;
+	end nova_var;
+
+	function nou_proc return Num_proc is
+	begin
+		np:= np+1;
+		return np;
+	end nou_proc;
+
 end rutines_sintactiques;

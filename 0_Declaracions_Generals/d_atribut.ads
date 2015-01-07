@@ -4,9 +4,10 @@ package d_atribut is
     --pragma pure; 
     
     --!!!probablemente faltan cosas o hay cosas incorrectas!!!
-    type atribut;
-    type pnode is access atribut;
-    -- nd arg inclou el mode
+	type node;
+	type atribut is access node;
+    type pnode is access node;
+    -- nd arg inclou el mode. Estan todos los tipos, pero tal vez faltan mas o sobran algunos.
 	type tnode is (nd_null,
 				   nd_proc,
 				   nd_decls,
@@ -52,7 +53,7 @@ package d_atribut is
             columna: natural;
         end record;
     
-    type atribut(tn: tnode:= nd_null) is
+    type node(tn: tnode:= nd_null) is
         record
             case tn is
 				when nd_null 	=> 

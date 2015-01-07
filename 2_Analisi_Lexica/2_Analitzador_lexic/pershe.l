@@ -68,21 +68,21 @@ OTHERS {NON_GC}+
 ":"																	{ECHO; RETURN Dospunts;}
 ";"																	{ECHO; RETURN Punticoma;}
 ":="																{ECHO; RETURN Dospuntsigual;}
-"<"																	{ECHO; RETURN Op_rel;}
-">"																	{ECHO; RETURN Op_rel;}
-"<="																{ECHO; RETURN Op_rel;}
-">="																{ECHO; RETURN Op_rel;}
-"="																	{ECHO; RETURN Op_rel;}
-"/="																{ECHO; RETURN Op_rel;}
+"<"																	{ECHO; rl_op_rel(YYLVal, tok_begin_col, tok_begin_line, d_atribut.menor); RETURN Op_rel;}
+">"																	{ECHO; rl_op_rel(YYLVal, tok_begin_col, tok_begin_line, d_atribut.major); RETURN Op_rel;}
+"<="																{ECHO; rl_op_rel(YYLVal, tok_begin_col, tok_begin_line, d_atribut.menorigual); RETURN Op_rel;}
+">="																{ECHO; rl_op_rel(YYLVal, tok_begin_col, tok_begin_line, d_atribut.majorigual); RETURN Op_rel;}
+"="																	{ECHO; rl_op_rel(YYLVal, tok_begin_col, tok_begin_line, d_atribut.igual); RETURN Op_rel;}
+"/="																{ECHO; rl_op_rel(YYLVal, tok_begin_col, tok_begin_line, d_atribut.diferent); RETURN Op_rel;}
 "+"																	{ECHO; RETURN S_mes;}
 "-"																	{ECHO; RETURN S_menys;}
 "*"																	{ECHO; RETURN S_prod;}
 "/"																	{ECHO; RETURN S_quoci;}
 "mod"																{ECHO; RETURN Pc_mod;}
-{IDENTIFIER}														{ECHO; put(" Id"); RETURN Identif;}
-{NUMBER}															{ECHO; put(" Num"); RETURN Lit;}
-{STRING}															{ECHO; put(" Str"); RETURN Lit;}
-{CHARACTER}															{ECHO; RETURN Lit;}
+{IDENTIFIER}														{ECHO; put(" Id"); rl_identifier(YYLVal, tok_begin_col, tok_begin_line, yytext);  RETURN Identif;}
+{NUMBER}															{ECHO; put(" Num"); rl_literal(YYLVal, tok_begin_col, tok_begin_line, yytext); RETURN Lit;}
+{STRING}															{ECHO; put(" Str"); rl_literal(YYLVal, tok_begin_col, tok_begin_line, yytext); RETURN Lit;}
+{CHARACTER}															{ECHO; rl_literal(YYLVal, tok_begin_col, tok_begin_line, yytext); RETURN Lit;}
 
 -- els comentaris no ens importen per re?
 {COMMENT}															{ECHO; put(" Comm");}
@@ -104,6 +104,8 @@ OTHERS {NON_GC}+
 		function YYLength return Integer;
 	end a_lexic;
 
+	with d_atribut;
+	with rutines_lexiques; use rutines_lexiques;
 	package body a_lexic is
 		--procediments locals del reconeixedor;
 		procedure rec_Err;
@@ -175,6 +177,7 @@ OTHERS {NON_GC}+
 
 	end a_lexic;
 
+	-- DEPRECATED
 	with Ada.Text_IO,Ada.Integer_Text_IO,Ada.Command_Line; use Ada.Text_IO,Ada.Integer_Text_IO,Ada.Command_Line;
 	with pershe_tokens,a_lexic; use pershe_tokens,a_lexic;
 	with d_tnoms, general_defs; use d_tnoms, general_defs;

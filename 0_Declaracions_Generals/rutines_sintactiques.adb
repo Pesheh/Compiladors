@@ -83,8 +83,37 @@ package body rutines_sintactiques is
     end rs_Decl_Var;
     
     
+    procedure rs_Decl_Const(decl: out YYSType; id_const: in YYSType; tipus: in YYSType; valor: in YYSType) is
+        desc: descripcio;
+        error: boolean;
+    begin
+        decl:= new node(nd_decl_const);
+        decl.id_const:= id_const;
+        decl.const_tipus:= tipus;
+        decl.const_valor:= valor;
+        
+        desc:= new descripcio(dconst);
+        desc.tc:= tipus.id;
+        --desc.valor:=??
+
+        put(ts,id_const.id,desc,error);
+        if error then raise const_error; end if;
+    end rs_Decl_Const;
     
     
+	procedure rs_Idx(idx: out YYSType; idx_cont: in YYSType; signe: in character) is
+    begin
+        idx:= new node(nd_idx);
+        idx.cidx:= idx_cont;
+        case signe is
+            when '-' => idx.t:= negatiu;
+            when '+' => idx.t:= positiu;
+            when others =>
+                raise error;
+        end case;
+    end rs_Idx;
+
+
     --rutines auxiliars 
 
     procedure putargs(args: in YYSType; idp: id_nom) is

@@ -120,8 +120,10 @@ package d_atribut is
                     idx_valor: pnode;
                     
 				when nd_decl_t  =>
+                    null;
                     
 				when nd_decl_t_cont   =>
+                    null;
 
                 when others => -- Anar substituint aquests 'others' amb els corresponents tipusXD
 					null;

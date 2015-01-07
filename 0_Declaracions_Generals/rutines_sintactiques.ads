@@ -13,7 +13,6 @@ package rutines_sintactiques is
 	procedure rs_Arg(arg: out YYSType; mode: in YYSType; tipus: in YYSType);
 
 	procedure rs_Decls(decls: out YYSType; decls_seg: in YYSType; decl: YYSType);
-    --No estoy del todo seguro de esta manera de estructurar las declaraciones.
 	procedure rs_Decl(decl: out YYSType; decl_real: in YYSType); 
 	procedure rs_Decl_Var(decl: out YYSType; lista_id: in YYSType; tipus: in YYSType);
     procedure rs_Decl_Const(decl: out YYSType; id_const: in YYSType; tipus: in YYSType; valor: in YYSType);

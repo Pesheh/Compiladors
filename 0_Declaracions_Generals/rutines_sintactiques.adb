@@ -130,6 +130,7 @@ package body rutines_sintactiques is
     
 	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType) is
     begin
+
     end rs_Decl_T_Cont;
 
     

@@ -4,7 +4,7 @@ with d_atribut; use d_atribut;
 
 
 package body rutines_lexiques is
-    pragma pure;
+    --pragma pure;
     --Definicions
     tn: tnoms; -- Creo que esto deberia ir en un paquete aparte, donde?!
     
@@ -16,7 +16,7 @@ package body rutines_lexiques is
     begin
         a:= new node(nd_id);
         
-        pos.all:= (fil,col);
+        pos:= (fil,col);
         put(tn,text,id);
 
         a.pos:= pos; a.id:= id;
@@ -29,25 +29,16 @@ package body rutines_lexiques is
     begin
         a:= new node(nd_lit);
 
-        pos.all:= (fil,col);
+        pos:= (fil,col);
         put(tn,text,ids);
 
         a.pos:= pos; a.ids:= ids;
     end rl_literal;
 
 
-    procedure rl_op_rel(a: out atribut; col: in natural; fil: in natural; text: in String) is
-        tr: trelacio;
+    procedure rl_op_rel(a: out atribut; col: in natural; fil: in natural; tr: in trelacio) is
     begin
         a:= new node(nd_op_rel);
-        case text is
-                "<"  => tr:= menor;
-                ">"  => tr:= major;
-                "="  => tr:= igual;
-                "/=" => tr:= diferent;
-                "<=" => tr:= menorigual;
-                ">=" => tr:= majorigual;
-        end case;
 
         a.tipus:= tr; a.ope:= null; a.opd:= null;
     end rl_op_rel;

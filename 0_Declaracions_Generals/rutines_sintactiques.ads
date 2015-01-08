@@ -84,5 +84,5 @@ package rutines_sintactiques is
 
 	procedure rs_Mode(mode: out YYStype; tipus: in tmode);
 
-    error,type_error,proc_error,arg_error,record_error,array_error,const_error: exception;
+    error,type_error,proc_error,arg_error,record_error,camp_error,array_error,var_error,const_error: exception;
 end rutines_sintactiques;

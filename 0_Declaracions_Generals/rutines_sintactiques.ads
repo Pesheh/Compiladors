@@ -16,11 +16,20 @@ package rutines_sintactiques is
 	procedure rs_Decl(decl: out YYSType; decl_real: in YYSType); 
 	procedure rs_Decl_Var(decl: out YYSType; lista_id: in YYSType; tipus: in YYSType);
     procedure rs_Decl_Const(decl: out YYSType; id_const: in YYSType; tipus: in YYSType; valor: in YYSType);
-	procedure rs_Idx(idx: out YYSType; idx_cont: in YYSType; signe: in character);
+	procedure rs_Idx(idx: out YYSType; idx_cont: in YYSType; signe: in tidx);
 	procedure rs_Idx_Cont(idx_cont: out YYSType; valor: in YYSType);
 	procedure rs_Decl_T(decl: out YYSType; id_type: in YYSType; decl_cont: in YYSType);
 	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType);
 	procedure rs_Decl_T_Cont(decl: out YYSType; rang_array: in YYSType; tipus_array: in YYSType);
+	
+	procedure rs_DCamps(camps: out YYSType; camp_seg: in YYStype; camp: in YYStype);
+
+	procedure rs_DCamps(camps: out YYSType; camp: in YYStype);
+
+	procedure rs_DCamp(camp: out YYStype; var: in YYStype);
+
+	procedure rs_Lid(lid: out YYStype; id_seg: in YYStype; id: in YYStype);
+	procedure rs_Lid(lid: out YYStype; id: in YYSType);
 	rs_DCamps;
 	rs_DCampr;
 	rs_Mode;
@@ -33,9 +42,9 @@ package rutines_sintactiques is
 	rs_SCond;
 	rs_SCrida;
 	rs_SAssign;
-	rs_Ref;
-	rs_Qs;
-	rs_Q;
+	procedure rs_Ref(ref: out YYSType; ref_id: in YYSType; qs: in YYSType);
+	procedure rs_Qs(qs: out YYSType; qs_in: in YYSType; q: in YYSType);
+    procedure rs_Q(q: out YYSType; contingut: in YYSType);
 	rs_Expr;
 	rs_E0;
 	rs_E1;
@@ -44,5 +53,5 @@ package rutines_sintactiques is
 	rs_LExpr;
 
 
-    error,proc_error,arg_error,record_error,array_error,const_error: exception;
+    error,type_error,proc_error,arg_error,record_error,array_error,const_error: exception;
 end rutines_sintactiques;

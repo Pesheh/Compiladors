@@ -79,6 +79,11 @@ package body rutines_sintactiques is
     procedure rs_Decl_Var(decl: out YYSType; lista_id: in YYSType; tipus: in YYSType) is
     begin
         decl:= new node(nd_decl_var);
+        decl.dvar_lid:= lista_id;
+        decl.dvar_tipus:= tipus;
+
+
+        putvar(lista_id,tipus.id_id);
         --...
     end rs_Decl_Var;
     
@@ -93,7 +98,7 @@ package body rutines_sintactiques is
         decl.dconst_valor:= valor;
         
         desc:= new descripcio(dconst);
-        desc.tc:= tipus.id;
+        desc.tc:= tipus.id_id;
         --desc.valor:=??
 
         put(ts,id_const.id,desc,error);
@@ -101,16 +106,11 @@ package body rutines_sintactiques is
     end rs_Decl_Const;
     
     
-	procedure rs_Idx(idx: out YYSType; idx_cont: in YYSType; signe: in character) is
+	procedure rs_Idx(idx: out YYSType; idx_cont: in YYSType; signe: in idx) is
     begin
         idx:= new node(nd_idx);
         idx.idx_cont:= idx_cont;
-        case signe is
-            when '-' => idx.idx_tipus:= negatiu;
-            when '+' => idx.idx_tipus:= positiu;
-            when others =>
-                raise error;
-        end case;
+        idx.idx_tipus:= signe;
     end rs_Idx;
 
 
@@ -135,9 +135,11 @@ package body rutines_sintactiques is
         
         case decl_cont.tn is
             when nd_decl_t_cont_type    =>
-                --Creo que tenemos que hacer rl para cada uno de los lit ya que sino no sabemos que tsb es
-                --desc.dt:= ?? 
-                
+                desc.dt:= new descr_tipus(tsb_null); --Deberia ser ent/car/bool
+                --desc.dt.ocup:=??;
+                put(ts,id,desc,error);
+                if error then raise type_error; end if;
+
             when nd_decl_t_cont_record  =>
                 desc.dt:= new descr_tipus(tsb_rec);
                 --desc.dt.ocup:=??
@@ -149,6 +151,7 @@ package body rutines_sintactiques is
             when nd_decl_t_cont_arry    =>
                 desc.dt:= new descr_tipus(tsb_arr);
                 desc.tcomp:= decl_cont.dtcont_tipus.id_id;
+                --desc.dt.ocup:= ??;
 
                 put(ts,id,desc,error);
                 if error then raise array_error; end if;
@@ -181,21 +184,91 @@ package body rutines_sintactiques is
         decl.dtcont_tipus:= tipus_array;
     end rs_Decl_T_Cont;
 
+	
+	procedure rs_DCamps(camps: out YYSType; camp: in YYStype) is
+	begin
+		camps:= new node(nd_dcamps);
 
+		camps.dcamps_dcamps:= null;
+		camps.dcamps_dcamp:= camp;
+	end rs_DCamps;
+
+	procedure rs_DCamps(camps: out YYSType; camp_seg: in YYStype; camp: in YYStype) is
+	begin
+		camps:= new node(nd_dcamps);
+
+		camps.dcamps_dcamps:= camp_seg;
+		camps.dcamps_dcamp:= camp;
+	end rs_DCamps;
+
+	procedure rs_DCamp(camp: out YYStype; var: in YYStype) is
+	begin
+		camp:= new node(nd_dcamp);
+
+		camp.dcamp_decl:= var;
+	end rsDCamp;
+
+
+	procedure rs_Lid(lid: out YYStype; id_seg: in YYStype; id: in YYStype) is
+	begin
+		lid:= new node(nd_lid);
+
+		lid.lid_seg:= id_seg;
+		lid.
+	end rs_Lid;
+	procedure rs_Lid(lid: out YYStype; id: in YYStype);
+
+	
+    procedure rs_Ref(ref: out YYSType; ref_id: in YYSType; qs: in YYSType) is
+    begin
+        ref:= new node(nd_ref);
+        ref.ref_id:= ref_id.id_id;
+        ref.ref_qs:= qs;
+    end rs_Ref;
+
+	procedure rs_Qs(qs: out YYSType; qs_in: in YYSType; q: in YYSType) is
+    begin
+        qs:= new node(nd_qs);
+        qs.qs:= qs_in;
+        qs.q:= q;
+    end rs_Qs;
+
+
+    procedure rs_Q(q: out YYSType; contingut: in YYSType) is
+    begin
+        q:= new node(nd_q);
+        q.q_contingut:= contingut;
+    end rs_Q;
+    
+    
     --rutines auxiliars 
 
     procedure putargs(args: in YYSType; idp: id_nom) is
         p: pnode;
+        ps: pnode;
         error: boolean;
     begin
         p:= args.arg;
-        if p/=null then
-            put_arg(ts,idp,p.idarg,p.darg,error);
-            if error then raise arg_error; end if;
-            putargs(args.args,idp);
+        ps:= args.args;
+        put_arg(ts,idp,p.idarg,p.darg,error);
+        if error then raise arg_error; end if;
+        if ps/=null then
+            putargs(ps,idp);
         end if;
     end putargs;
 	
+    procedure putvar(list_id: in YYSType; id_type: in id_nom) is
+        desc: descripcio;
+        p: pnode;
+        error: boolean;
+    begin
+        p:= list_id.lid_id;
+        if p/=null
+        desc:= new descripcio(dvar);
+        desc.tv:= id_type;
+        desc.nv:= nova_var;
+
+    end putvar;
 
     
 	-- Temporal, a la generacio de codi canvien.

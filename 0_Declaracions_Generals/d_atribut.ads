@@ -84,7 +84,7 @@ package d_atribut is
 					orel_opd: pnode; 
 
                 when nd_lid 	=>
-					lid_lid: pnode;
+					lid_seg: pnode;
 					lid_id: pnode;
                 
                 when nd_mode    =>
@@ -190,8 +190,7 @@ package d_atribut is
 					qs_q: pnode;
 
 				when nd_q =>
-					q_id: id_nom;
-					q_lexpr: pnode;
+					q_contingut: pnode;
 
 				when nd_expr =>
 					expr_e: pnode;

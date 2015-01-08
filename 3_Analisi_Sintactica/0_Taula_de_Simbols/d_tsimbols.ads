@@ -9,18 +9,19 @@ package d_tsimbols is
     type iterador_index is private;
     type iterador_arg is private;
 
-    procedure empty(ts: out tsimbols);
-
-
+    -- Operacions generals
+	procedure empty(ts: out tsimbols);
     procedure put(ts: in out tsimbols; id: in id_nom; d: in descripcio; error: out boolean);
     function get(ts: in tsimbols; id: in id_nom) return descripcio;
 
 
+	-- Operacions de record
     procedure put_camp(ts: in out tsimbols; idr,idc: in id_nom; d: in descripcio; error: out boolean); --idr: id record , idc: id camp
     function get_camp(ts: in tsimbols; idr,idc: in id_nom) return descripcio;
     procedure update(ts: in out tsimbols; id: in id_nom; d: in descripcio);
 
 
+	-- Operacions d'array
     procedure put_index(ts: in out tsimbols; ida: in id_nom; di: in descripcio);
     procedure first(ts: in tsimbols; ida: in id_nom; it: in iterador_index);
     procedure next(ts: in tsimbols; it: in out iterador_index);
@@ -28,6 +29,7 @@ package d_tsimbols is
     function is_valid(it: in iterador_index) return boolean;
 
 
+	-- Operacions de procediment
     procedure put_arg(ts: in out tsimbols; idp,ida: in id_nom; da: in descripcio; error: out boolean);
     procedure first(ts: in tsimbols; idp: in id_nom; it: out iterador_arg);
     procedure next(ts: in tsimbols; it in out iterador_arg);
@@ -35,6 +37,7 @@ package d_tsimbols is
     function is_valid(it: in iterador_arg) return boolean;
     
     
+	-- Operacions del compilador! :)
     procedure enter_block(ts: in out tsimbols);
     procedure exit_bock(ts: in out tsimbols);
 
@@ -77,4 +80,5 @@ private
     
     type iterador_index is index_expansio;
     type iterador_arg is index_expansio;
+
 end d_tsimbols;

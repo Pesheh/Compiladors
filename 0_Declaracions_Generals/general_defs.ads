@@ -23,7 +23,7 @@ package general_defs is
 
     type despl is new natural;
 
-    type tipus_subjacent is (tsb_bool, tsb_car, tsb_ent, tsb_arr, tsb_rec, tsb_nul); -- El orden es relevante petar
+    type tipus_subjacent is (tsb_bool, tsb_car, tsb_ent, tsb_arr, tsb_rec, tsb_nul); 
     type descr_tipus(tsb: tipus_subjacent:= tsb_nul) is
         record
             ocup: despl;

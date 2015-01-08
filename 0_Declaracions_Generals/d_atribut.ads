@@ -3,11 +3,9 @@ with general_defs; use general_defs;
 package d_atribut is
     --pragma pure; 
     
-    --!!!probablemente faltan cosas o hay cosas incorrectas!!!
     type node;
 	type atribut is access node;
     type pnode is access node;
-    -- nd arg inclou el mode
 	type tnode is (nd_null,
 				   nd_proc,
 				   nd_decls,

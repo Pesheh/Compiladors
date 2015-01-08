@@ -43,20 +43,4 @@ package body rutines_lexiques is
         a.orel_tipus:= tr; a.orel_ope:= null; a.orel_opd:= null;
     end rl_op_rel;
 
-
-    procedure rl_in(a: out atribut) is
-    begin
-        a:= new node(nd_mode);
-        a.mode_tipus:= md_in;
-    end rl_in;
-
-
-    procedure rl_in_out(a: out atribut) is
-    begin
-        a:= new node(nd_mode);
-        a.mode_tipus:= md_in_out;
-    end rl_in_out;
-
-
-
 end rutines_lexiques;

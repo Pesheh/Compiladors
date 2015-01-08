@@ -16,7 +16,7 @@ D [0-9]
 --non zero digit
 NZD [1-9]
 
---numbers like x_yyy, xy_y, xyy_yyy, xyy(_yyy)+ where x != 0
+--numbers like x_yyy, xy_yyy, xyy_yyy, xyy(_yyy)+ where x != 0
 NUM_WITH_LOWERBAR (({D}|{NZD}{D}|{NZD}{D}{D})(_({D}{D}{D}))+)
 
 --numbers not starting with 0
@@ -107,11 +107,6 @@ OTHERS {NON_GC}+
 	with d_atribut;
 	with rutines_lexiques; use rutines_lexiques;
 	package body a_lexic is
-		--procediments locals del reconeixedor;
-		procedure rec_Err;
-		--variables locals del reconeixedor
-		ometre:boolean:=false; pometre:boolean:=false;
-		tok_begin_line_prev:integer:=0;
         
 		procedure open(name: in String) is
         begin
@@ -134,46 +129,6 @@ OTHERS {NON_GC}+
 		begin
 			return pershe_dfa.YYLength;
 		end YYLength;
-
-	--v1.1 -> To do:
-	--		  Afegir que assenyali CADA un dels caracters erronis en una sola linea -_...XD
-	--		  Gar el func de la part experimental
-	--		  Mirar a veure si el contingut de yy_ch_buf es buida i per tant el metode fa aiguesxD 
-		procedure rec_Err is 
-			j,k:integer;
-		begin
-			if not ometre then
-				ometre:=true; tok_begin_line_prev:=tok_begin_line;
-				j:=1; 
-				Put("Caracter no reconegut:"); j:=j+22;
-				Put(tok_begin_line,width=>1,base=>10);Put(":");Put(tok_begin_col,width=>1,base=>10);Put(":: ");
-				j:=j+(Integer'Image(tok_begin_line)'Length)+(Integer'Image(tok_begin_col)'Length)+2;
-				Put(">>");
-				Put(yytext);
-				--for i in (yy_ch_buf'first)..(yy_cp-1) loop --no estic segur de que sigui correcte al 100% pero...	
-					-- if character != newline, horitzontal tab and space
-				--	if yy_ch_buf(i)/=character'Val(10) and yy_ch_buf(i)/=character'Val(9) and yy_ch_buf(i)/=character'Val(32) then 
-				--		put(yy_ch_buf(i));j:=j+1;
-				--	end if;
-				--end loop;
-				--New_Line(2);
-				--k:=0;
-				--while k<j loop
-				--	Put(" ");
-				--	k:=k+1;
-				--end loop;
-				--Put("^");
-			else --Experimental
-				if yy_ch_buf(yy_cp)=';' or tok_begin_line_prev<tok_begin_line or yy_ch_buf(yy_cp)=' ' or yy_ch_buf(yy_cp)=character'Val(9) then
-					ometre:=false; pometre:=false;
-					New_Line(1);
-				else
-					if not pometre then
-						Put_Line("Tots els altres errors que pertanyen a la mateixa paraula omesos"); pometre:=true;
-					end if;
-				end if;
-			end if;
-		end rec_Err;
 
 	end a_lexic;
 

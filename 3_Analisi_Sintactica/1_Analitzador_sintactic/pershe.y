@@ -24,23 +24,23 @@ PROC:
 	 	DECLS
 	 Pc_begin
 	 	SENTS
-	 Pc_end Pc_procedure Punticoma		{rs_Proc($$,$2,$4,$6);}
+	 Pc_end Pc_procedure Punticoma									{rs_Proc($$,$2,$4,$6);} -- Aquí podem afegir un surt_block
   ;
 
 DECLS:
-	 DECLS DECL		{rs_Decls($$,$1,$2);}
-  |--lambda		{null;}
+	 DECLS DECL														{rs_Decls($$,$1,$2);}
+  |--lambda															{null;}
   ;
 
 DECL:
-	 PROC		{rs_Decl($$,$1);}
-  |  DECL_VAR		{rs_Decl($$,$1);}
-  |  DECL_CONST		{rs_Decl($$,$1);}
-  |  DECL_T		{rs_Decl($$,$1);}
+	 PROC															{rs_Decl($$,$1);}
+  |  DECL_VAR														{rs_Decl($$,$1);}
+  |  DECL_CONST														{rs_Decl($$,$1);}
+  |  DECL_T															{rs_Decl($$,$1);}
   ;
 
 DECL_VAR:
-	 LID Dospunts Identif Punticoma		{rs_Decl_Var($$,$1,$3);}
+	 LID Dospunts Identif Punticoma									{rs_Decl_Var($$,$1,$3);}
   ;
 
 DECL_CONST:
@@ -48,163 +48,162 @@ DECL_CONST:
   ;
 
 DECL_T:
-	 Pc_type Identif Pc_is DECL_T_CONT		{rs_Decl_T($$,$2,$4);}
+	 Pc_type Identif Pc_is DECL_T_CONT								{rs_Decl_T($$,$2,$4);}
   ;
 
 DECL_T_CONT:
-	 Pc_new RANG Punticoma		{rs_Decl_T_Cont($$,$2);}
+	 Pc_new RANG Punticoma											{rs_Decl_T_Cont($$,$2);}
   |	 Pc_record
   	 	DCAMPS
-	 Pc_end Pc_record Punticoma		{rs_Decl_T_Cont($$,$2);}
-  |  Pc_array Parentesi_o LID Parentesi_t Pc_of Identif Punticoma		{rs_Decl_T_Cont($$,$3,$6);}
+	 Pc_end Pc_record Punticoma										{rs_Decl_T_Cont($$,$2);}
+  |  Pc_array Parentesi_o LID Parentesi_t Pc_of Identif Punticoma	{rs_Decl_T_Cont($$,$3,$6);}
   ;
  
 DCAMPS:
-	 DCAMPS DCAMP		{rs_DCamps($$,$1,$2);}
-  |  DCAMP		{rs_DCamps($$,$1);}
+	 DCAMPS DCAMP													{rs_DCamps($$,$1,$2);}
+  |  DCAMP															{rs_DCamps($$,$1);}
   ;
 
 DCAMP:
-	 DECL_VAR		{rs_DCamp($$,$1);}
+	 DECL_VAR														{rs_DCamp($$,$1);}
   ;
 
 C_PROC:
-	 Identif Parentesi_o ARGS Parentesi_t		{rs_C_Proc($$,$1,$3);}
-  |  Identif									{rs_C_Proc($$,$1);}
+	 Identif Parentesi_o ARGS Parentesi_t							{rs_C_Proc($$,$1,$3);}
+  |  Identif														{rs_C_Proc($$,$1);}
   ;
 
 ARGS:
-	 ARGS Punticoma ARG		{rs_Args($$,$1,$3);}
-  |  ARG		{rs_Args($$,$1);}
+	 ARGS Punticoma ARG												{rs_Args($$,$1,$3);}
+  |  ARG															{rs_Args($$,$1);}
   ;
 
 ARG:
-	 LID Dospunts MODE Identif		{rs_Arg($$,$1,$3,$4);}
+	 LID Dospunts MODE Identif										{rs_Arg($$,$1,$3,$4);}
   ;
 
 MODE:
-	 Pc_in		{rs_Mode($$,d_atribut.md_in);}
-  |  Pc_in_out		{rs_Mode($$,d_atribut.md_in_out);}
+	 Pc_in															{rs_Mode($$,d_atribut.md_in);}
+  |  Pc_in_out														{rs_Mode($$,d_atribut.md_in_out);}
   ;
 
 LID:
-	 LID Coma Identif		{rs_Lid($$,$1,$3);}
-  |  Identif		{rs_Lid($$,$1);}
+	 LID Coma Identif												{rs_Lid($$,$1,$3);}
+  |  Identif														{rs_Lid($$,$1);}
   ;
 
 RANG:
-	 Identif Pc_range IDX Punt Punt IDX		{rs_Rang($$,$1,$3,$6);}
+	 Identif Pc_range IDX Punt Punt IDX								{rs_Rang($$,$1,$3,$6);}
   ;
   
 IDX:
-	 S_menys IDX_CONT		{rs_Idx($$,$2,general_defs.negatiu);}
-  |  IDX_CONT		{rs_Idx($$,$1,general_defs.positiu);}
+	 S_menys IDX_CONT												{rs_Idx($$,$2,general_defs.negatiu);}
+  |  IDX_CONT														{rs_Idx($$,$1,general_defs.positiu);}
   ;
 
 IDX_CONT:
-	 Lit		{rs_Idx_Cont($$,$1);}
-  |  Identif		{rs_Idx_Cont($$,$1);}
+	 Lit															{rs_Idx_Cont($$,$1);}
+  |  Identif														{rs_Idx_Cont($$,$1);}
   ;
 
 SENTS:
-	 SENTS_NOB		{rs_Sents($$,$1);}
-  |  Pc_null Punticoma		{null;}
+	 SENTS_NOB														{rs_Sents($$,$1);}
+  |  Pc_null Punticoma												{null;}
   ;
 
 SENTS_NOB:
-	 SENTS_NOB SENT		{rs_Sents_Nob($$,$1,$2);}
-  |  SENT		{rs_Sents_Nob($$,$1);}
+	 SENTS_NOB SENT													{rs_Sents_Nob($$,$1,$2);}
+  |  SENT															{rs_Sents_Nob($$,$1);}
   ;
 
 SENT:
-	 S_ITER		{rs_Sent($$,$1);}
-  |  S_COND		{rs_Sent($$,$1);}
-  |  S_CRIDA		{rs_Sent($$,$1);}
-  |  S_ASSIGN		{rs_Sent($$,$1);}
+	 S_ITER															{rs_Sent($$,$1);}
+  |  S_COND															{rs_Sent($$,$1);}
+  |  S_CRIDA														{rs_Sent($$,$1);}
+  |  S_ASSIGN														{rs_Sent($$,$1);}
   ;
 
 S_ITER:
 	 Pc_while EXPR Pc_loop
 	 	SENTS
-	 Pc_end Pc_loop Punticoma		{rs_SIter($$,$2,$4);}
+	 Pc_end Pc_loop Punticoma										{rs_SIter($$,$2,$4);}
   ;
 
 S_COND:
 	 Pc_if EXPR Pc_then
 	 	SENTS
-	 Pc_end Pc_if Punticoma		{rs_SCond($$,$2,$4);}
+	 Pc_end Pc_if Punticoma											{rs_SCond($$,$2,$4);}
   |	 Pc_if EXPR Pc_then
   		SENTS
 	 Pc_else
 	 	SENTS
-	 Pc_end Pc_if Punticoma		{rs_SCond($$,$2,$4,$6);}
+	 Pc_end Pc_if Punticoma											{rs_SCond($$,$2,$4,$6);}
   ;
 
 S_CRIDA:
-	 -- Que passara amb les crides on el valor dels parametres no es pugui calcular en temps de compilacio?
-  	 REF Punticoma		{rs_SCrida($$,$1);}
+  	 REF Punticoma													{rs_SCrida($$,$1);}
   ;
 
 S_ASSIGN:
-	 REF Dospuntsigual EXPR Punticoma		{rs_SAssign($$,$1,$3);}
+	 REF Dospuntsigual EXPR Punticoma								{rs_SAssign($$,$1,$3);}
   ;
 
 REF:
-	 Identif QS		{rs_Ref($$,$1,$2);}
+	 Identif QS														{rs_Ref($$,$1,$2);}
   ;
 
 QS:
-	 QS Q		{rs_Qs($$,$1,$2);}
-  |--lambda  	{null;}
+	 QS Q															{rs_Qs($$,$1,$2);}
+  |--lambda  														{null;}
   ;
 
 Q:
-	 Punt Identif		{rs_Q($$,$2);}
-  |	 Parentesi_o LEXPR Parentesi_t		{rs_Q($$,$2);}
+	 Punt Identif													{rs_Q($$,$2);}
+  |	 Parentesi_o LEXPR Parentesi_t									{rs_Q($$,$2);}
   ;
 
 EXPR:
-	 E0		{rs_Expr($$,$1);}
-  |  E1		{rs_Expr($$,$1);}
-  |  E2		{rs_Expr($$,$1);}
+	 E0																{rs_Expr($$,$1);}
+  |  E1																{rs_Expr($$,$1);}
+  |  E2																{rs_Expr($$,$1);}
   ;
 
 E0:
-	 E0 Pc_and E2		{rs_E0($$,$1,$3);}
-  |  E2 Pc_and E2		{rs_E0($$,$1,$3);}
+	 E0 Pc_and E2													{rs_E0($$,$1,$3);}
+  |  E2 Pc_and E2													{rs_E0($$,$1,$3);}
   ;
 
 E1:
-	 E1 Pc_or E2		{rs_E1($$,$1,$3);}
-  |  E2 Pc_or E2		{rs_E1($$,$1,$3);}
+	 E1 Pc_or E2													{rs_E1($$,$1,$3);}
+  |  E2 Pc_or E2													{rs_E1($$,$1,$3);}
   ;
 
 E2:
-	 E2 Op_rel E3		{rs_E2($$,$1,d_atribut.o_rel,$3);}
-  |  E2 S_mes E3		{rs_E2($$,$1,d_atribut.sum,$3);}
-  |  E2 S_menys E3		{rs_E2($$,$1,d_atribut.res,$3);}
-  |  E2 S_prod E3		{rs_E2($$,$1,d_atribut.prod,$3);}
-  |  E2 S_quoci E3		{rs_E2($$,$1,d_atribut.quoci,$3);}
-  |  E2 Pc_mod E3		{rs_E2($$,$1,d_atribut.modul,$3);}
-  |	 M1 E3 S_prod S_prod E3		{rs_E2($$,$2,d_atribut.pot,$5);} 
-  |  Pc_not E3		{rs_E2($$,d_atribut.neg_log,$1);}
-  |	 S_menys E3		{rs_E2($$,d_atribut.neg_alg,$1);}
-  |  E3		{rs_E2($$,$1);}
+	 E2 Op_rel E3													{rs_E2($$,$1,d_atribut.o_rel,$3);}
+  |  E2 S_mes E3													{rs_E2($$,$1,d_atribut.sum,$3);}
+  |  E2 S_menys E3													{rs_E2($$,$1,d_atribut.res,$3);}
+  |  E2 S_prod E3													{rs_E2($$,$1,d_atribut.prod,$3);}
+  |  E2 S_quoci E3													{rs_E2($$,$1,d_atribut.quoci,$3);}
+  |  E2 Pc_mod E3													{rs_E2($$,$1,d_atribut.modul,$3);}
+  |	 M1 E3 S_prod S_prod E3											{rs_E2($$,$2,d_atribut.pot,$5);} 
+  |  Pc_not E3														{rs_E2($$,d_atribut.neg_log,$1);}
+  |	 S_menys E3														{rs_E2($$,d_atribut.neg_alg,$1);}
+  |  E3																{rs_E2($$,$1);}
   ;
 
 E3:
-	 REF		{rs_E3($$,$1);}
-  |  Parentesi_o EXPR Parentesi_t		{rs_E3($$,$2);}
-  |  Lit		{rs_E3($$,$1);}
+	 REF															{rs_E3($$,$1);}
+  |  Parentesi_o EXPR Parentesi_t									{rs_E3($$,$2);}
+  |  Lit															{rs_E3($$,$1);}
   ;
 
 M1:
-     %prec Parentesi_o		{null;}
+     %prec Parentesi_o												{null;}
   ;
 
 LEXPR:
-	 LEXPR Coma EXPR		{rs_LExpr($$,$1,$3);}
-  |  EXPR		{rs_LExpr($$,$1);}
+	 LEXPR Coma EXPR												{rs_LExpr($$,$1,$3);}
+  |  EXPR															{rs_LExpr($$,$1);}
   ;
 %%
 
@@ -212,6 +211,7 @@ LEXPR:
 		procedure YYParse;
 	end a_sintactic;
 
+	with d_atribut;
 	with rutines_sintactiques; use rutines_sintactiques;
 	package body a_sintactic is
 ##

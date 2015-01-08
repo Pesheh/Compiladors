@@ -21,6 +21,15 @@ package rutines_sintactiques is
 	procedure rs_Decl_T(decl: out YYSType; id_type: in YYSType; decl_cont: in YYSType);
 	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType);
 	procedure rs_Decl_T_Cont(decl: out YYSType; lista_id: in YYSType; id_array: in YYSType);
+	
+	procedure rs_DCamps(camps: out YYSType; camp_seg: in YYStype; camp: in YYStype);
+
+	procedure rs_DCamps(camps: out YYSType; camp: in YYStype);
+
+	procedure rs_DCamp(camp: out YYStype; var: in YYStype);
+
+	procedure rs_Lid(lid: out YYStype; id_seg: in YYStype; id: in YYStype);
+	procedure rs_Lid(lid: out YYStype; id: in YYStype);
 	rs_DCamps;
 	rs_DCampr;
 	rs_Mode;

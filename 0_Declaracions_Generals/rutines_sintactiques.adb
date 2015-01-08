@@ -138,6 +138,39 @@ package body rutines_sintactiques is
     begin
     end rs_Decl_T_Cont;
 
+	
+	procedure rs_DCamps(camps: out YYSType; camp: in YYStype) is
+	begin
+		camps:= new node(nd_dcamps);
+
+		camps.dcamps_dcamps:= null;
+		camps.dcamps_dcamp:= camp;
+	end rs_DCamps;
+
+	procedure rs_DCamps(camps: out YYSType; camp_seg: in YYStype; camp: in YYStype) is
+	begin
+		camps:= new node(nd_dcamps);
+
+		camps.dcamps_dcamps:= camp_seg;
+		camps.dcamps_dcamp:= camp;
+	end rs_DCamps;
+
+	procedure rs_DCamp(camp: out YYStype; var: in YYStype) is
+	begin
+		camp:= new node(nd_dcamp);
+
+		camp.dcamp_decl:= var;
+	end rsDCamp;
+
+
+	procedure rs_Lid(lid: out YYStype; id_seg: in YYStype; id: in YYStype) is
+	begin
+		lid:= new node(nd_lid);
+
+		lid.lid_seg:= id_seg;
+		lid.
+	end rs_Lid;
+	procedure rs_Lid(lid: out YYStype; id: in YYStype);
 
     --rutines auxiliars 
 

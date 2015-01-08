@@ -86,7 +86,7 @@ package d_atribut is
 					orel_opd: pnode; 
 
                 when nd_lid 	=>
-					lid_lid: pnode;
+					lid_seg: pnode;
 					lid_id: pnode;
                 
                 when nd_mode    =>

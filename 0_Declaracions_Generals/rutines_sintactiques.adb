@@ -161,7 +161,6 @@ package body rutines_sintactiques is
 
     end rs_Decl_T;
 
-    end putcamps;
 
 	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType) is
     begin

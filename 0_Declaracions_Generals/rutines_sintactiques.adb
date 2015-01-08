@@ -160,8 +160,9 @@ package body rutines_sintactiques is
         end case;
 
     end rs_Decl_T;
-  
-    
+
+    end putcamps;
+
 	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType) is
     begin
         case info.tn is
@@ -403,8 +404,7 @@ package body rutines_sintactiques is
 	--rutines auxiliars 
 
     procedure putargs(args: in YYSType; idp: id_nom) is
-        p: pnode;
-        ps: pnode;
+        p,ps: pnode;
         error: boolean;
     begin
         p:= args.arg;
@@ -419,18 +419,49 @@ package body rutines_sintactiques is
 
     procedure putvar(list_id: in YYSType; id_type: in id_nom) is
         desc: descripcio;
-        p: pnode;
+        p,ps: pnode;
         error: boolean;
     begin
         p:= list_id.lid_id;
-        if p/=null
+        ps:= list_id.lid_next
         desc:= new descripcio(dvar);
         desc.tv:= id_type;
         desc.nv:= nova_var;
+        put(ts,p.id_id,desc,error);
+        if error then raise var_error; end if;
 
+        if ps/=null then
+            putvar(ps,id_type);
+        end if;
     end putvar;
-
     
+    procedure putcamps(camps: in YYSType; idr: in id_nom) is
+        desc: descripcio;
+        p, ps: pnode;
+        id: id_nom;
+        error: boolean;
+    begin
+       desc:= new descripcio(dcamp);
+       desc.tcmp:= p.dcamp_decl.dvar_tipus.id_id;
+       --desc.dcmp:= ??
+       
+       --Posar tots el camps que estan en la mateixa
+       --llista de variables (LID)
+       p:=camps.dcamps_dcamp.dcamp_decl.dvar_lid;
+       while p/=null loop
+           put_camp(ts,idr,p.lid_id.id_id,desc,error);
+           if error then raise camp_error; end if;
+           p:= p.lid_seg;
+       end loop;
+       
+       --Seguir amb la llista de camps
+       ps:= camps.dcamps_dcamps;
+       if ps/=null then
+           putcamps(ps,idr);
+       end if;
+
+    end putcamps;
+
 	-- Temporal, a la generacio de codi canvien.
 	-- Añadirlos como variables&procs a general_defs?
 	nv: num_var:= 0;

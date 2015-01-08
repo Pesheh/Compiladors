@@ -56,5 +56,5 @@ package rutines_sintactiques is
     procedure rs_Q(q: out YYSType; contingut: in YYSType);
 
 
-    error,type_error,proc_error,arg_error,record_error,array_error,const_error: exception;
+    error,type_error,proc_error,arg_error,record_error,camp_error,array_error,var_error,const_error: exception;
 end rutines_sintactiques;

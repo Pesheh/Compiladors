@@ -63,7 +63,7 @@ package d_atribut is
 			linf: pnode;
 			lsup: pnode;
 		end record;
-	type operand is (nul, sum, res, prod, quoci, pot, modul, neg_log, neg_alg);
+	type operand is (nul, o_rel, sum, res, prod, quoci, pot, modul, neg_log, neg_alg);
 
 
     type node(tn: tnode:= nd_null) is
@@ -192,8 +192,7 @@ package d_atribut is
 					qs_q: pnode;
 
 				when nd_q =>
-					q_id: id_nom;
-					q_lexpr: pnode;
+					q_contingut: pnode;
 
 				when nd_expr =>
 					expr_e: pnode;
@@ -211,7 +210,7 @@ package d_atribut is
 					e3_cont: pnode;
 
 				when nd_lexpr =>
-					lexpr_lexpr: pnode;
+					lexpr_cont: pnode;
 					lexpr_expr: pnode;
 
             end case;

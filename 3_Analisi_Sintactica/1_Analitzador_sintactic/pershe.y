@@ -83,8 +83,8 @@ ARG:
   ;
 
 MODE:
-	 Pc_in		{rs_Mode($$,$1);}
-  |  Pc_in_out		{rs_Mode($$,$1);}
+	 Pc_in		{rs_Mode($$,d_atribut.md_in);}
+  |  Pc_in_out		{rs_Mode($$,d_atribut.md_in_out);}
   ;
 
 LID:
@@ -142,7 +142,7 @@ S_COND:
 
 S_CRIDA:
 	 -- Que passara amb les crides on el valor dels parametres no es pugui calcular en temps de compilacio?
-  	 REF Punticoma		{rs_SCrida($$,$1,$2);}
+  	 REF Punticoma		{rs_SCrida($$,$1);}
   ;
 
 S_ASSIGN:
@@ -180,15 +180,15 @@ E1:
   ;
 
 E2:
-	 E2 Op_rel E3		{rs_E2($$,$1,$3);}
-  |  E2 S_mes E3		{rs_E2($$,$1,$3);}
-  |  E2 S_menys E3		{rs_E2($$,$1,$3);}
-  |  E2 S_prod E3		{rs_E2($$,$1,$3);}
-  |  E2 S_quoci E3		{rs_E2($$,$1,$3);}
-  |  E2 Pc_mod E3		{rs_E2($$,$1,$3);}
-  |	 M1 E3 S_prod S_prod E3		{rs_E2($$,$2,$5);} 
-  |  Pc_not E3		{rs_E2($$,$1);}
-  |	 S_menys E3		{rs_E2($$,$1);}
+	 E2 Op_rel E3		{rs_E2($$,$1,d_atribut.o_rel,$3);}
+  |  E2 S_mes E3		{rs_E2($$,$1,d_atribut.sum,$3);}
+  |  E2 S_menys E3		{rs_E2($$,$1,d_atribut.res,$3);}
+  |  E2 S_prod E3		{rs_E2($$,$1,d_atribut.prod,$3);}
+  |  E2 S_quoci E3		{rs_E2($$,$1,d_atribut.quoci,$3);}
+  |  E2 Pc_mod E3		{rs_E2($$,$1,d_atribut.modul,$3);}
+  |	 M1 E3 S_prod S_prod E3		{rs_E2($$,$2,d_atribut.pot,$5);} 
+  |  Pc_not E3		{rs_E2($$,d_atribut.neg_log,$1);}
+  |	 S_menys E3		{rs_E2($$,d_atribut.neg_alg,$1);}
   |  E3		{rs_E2($$,$1);}
   ;
 

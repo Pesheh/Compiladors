@@ -29,29 +29,45 @@ package rutines_sintactiques is
 	procedure rs_DCamp(camp: out YYStype; var: in YYStype);
 
 	procedure rs_Lid(lid: out YYStype; id_seg: in YYStype; id: in YYStype);
+	
 	procedure rs_Lid(lid: out YYStype; id: in YYStype);
-	rs_DCamps;
-	rs_DCampr;
-	rs_Mode;
-	rs_Lid;
-	rs_Rang;
-	rs_Sents;
-	rs_Sents_Nob;
-	rs_Sent;
-	rs_SIter;
-	rs_SCond;
-	rs_SCrida;
-	rs_SAssign;
-	rs_Ref;
-	rs_Qs;
-	rs_Q;
-	rs_Expr;
-	rs_E0;
-	rs_E1;
-	rs_E2;
-	rs_E3;
-	rs_LExpr;
 
+	procedure rs_Sents(sents: out YYStype; sent: in YYStype);	
+	procedure rs_Sent_Nob(sents: out YYStype; sent_cont: in YYSType; sent: in YYStype);
+
+	procedure rs_Sent_Nob(sents: out YYStype; sent: in YYStype);
+
+	procedure rs_Sent(sent: out YYStype; stipus: in YYStype);
+
+	procedure rs_SIter(sent: out YYStype; expr: in YYStype; sents: in YYStype);
+
+	procedure rs_SCond(sent: out YYStype; expr: in YYStype; sents: in YYStype);
+	
+	procedure rs_SCond(sent: out YYStype; expr: in YYStype; sents_if: in YYStype; sents_else: in YYStype);
+	
+	procedure rs_SCrida(sent: out YYStype; ref: in YYStype);
+	
+	procedure rs_SAssign(sent: out YYStype; ref: in YYStype; expr: in YYStype);
+
+	procedure rs_LExpr(lexpr: out YYStype; cont: in YYStype; expr: in YYStype);
+
+	procedure rs_LExpr(lexpr: out YYStype; expr: in YYStype);
+
+	procedure rs_Expr(expr: out YYStype; cont: in YYStype);
+
+	procedure rs_E0(expr: out YYStype; ee: in YYStype; ed: in YYStype);
+
+	procedure rs_E1(expr: out YYStype; ee: in YYStype; ed: in YYStype);
+
+	procedure rs_E2(expr: out YYStype; ee: in YYStype; op: in operand; ed: in YYStype);
+
+	procedure rs_E2(expr: out YYStype; op:in operand; ed: in YYStype);
+
+	procedure rs_E2(expr: out YYStype; ed: in YYStype);
+
+	procedure rs_E3(expr: out YYStype; e: in YYStype);
+
+	procedure rs_Mode(mode: out YYStype; tipus: in tmode);
 
     error,proc_error,arg_error,const_error: exception;
 end rutines_sintactiques;

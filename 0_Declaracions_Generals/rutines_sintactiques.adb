@@ -168,11 +168,161 @@ package body rutines_sintactiques is
 		lid:= new node(nd_lid);
 
 		lid.lid_seg:= id_seg;
-		lid.
+		lid.lid_id:= id;
 	end rs_Lid;
-	procedure rs_Lid(lid: out YYStype; id: in YYStype);
 
-    --rutines auxiliars 
+	procedure rs_Lid(lid: out YYStype; id: in YYStype) is
+	begin
+		lid:= new node(nd_lid);
+
+		lid.lid_seg:= null;
+		lid.lid_id:= id;
+	end rs_Lid;
+
+	procedure rs_Sents(sents: out YYStype; sent: in YYStype) is
+	begin
+		sents:= new node(nd_sents);
+
+		sents.sents_cont:= sent;
+	end rs_Sents;
+
+	procedure rs_Sent_Nob(sents: out YYStype; sent_cont: in YYSType; sent: in YYStype) is
+	begin
+		sents:= new node(nd_sents_nob);
+		
+		sents.snb_snb:= sent_cont;
+		sents.snb_sent:= sent;
+	end rs_Sent_Nob;
+
+	procedure rs_Sent_Nob(sents: out YYStype; sent: in YYStype) is 
+	begin
+		sents:= new node(nd_sents_nob);
+
+		sents.snb_snb:= null;
+		sents.snb_sent:= sent;
+	end rs_Sent_Nob;
+
+	procedure rs_Sent(sent: out YYStype; stipus: in YYStype) is
+	begin
+		sent:= new node(nd_sent);
+
+		sent.sent_sent:= stipus;
+	end rs_Sent;
+
+	procedure rs_SCond(sent: out YYStype; expr: in YYStype; sents: in YYStype) is
+	begin
+		sent:= new node(nd_scond);
+
+		sent.scond_expr:= expr;
+		sent.scond_sents:= sents;
+		sent.scond_esents:= null;
+	end rs_SCond;
+	
+	procedure rs_SCond(sent: out YYStype; expr: in YYStype; sents_if: in YYStype; sents_else: in YYStype) is
+	begin
+		sent:= new node(nd_scond);
+
+		sent.scond_expr:= expr;
+		sent.scond_sents:= sents_if;
+		sent.scond_esents:= sents_else;
+	end rs_SCond;
+	
+	procedure rs_SCrida(sent: out YYStype; ref: in YYStype) is
+	begin
+		sent:= new node(nd_scrida);
+
+		sent.scrida_ref:= ref;
+	end rs_SCrida;
+	
+	procedure rs_SAssign(sent: out YYStype; ref: in YYStype; expr: in YYStype) is 
+	begin
+		sent:= new node(nd_sassign);
+
+		sent.sassign_ref:= ref;
+		sent.sassign_expr:= expr;
+	end rs_SAssign;
+
+	procedure rs_LExpr(lexpr: out YYStype; cont: in YYStype; expr: in YYStype) is
+	begin
+		lexpr:= new node(nd_lexpr);
+
+		lexpr.lexpr_cont:= cont;
+		lexpr.lexpr_expr:= expr;
+	end rs_LExpr;
+
+	procedure rs_LExpr(lexpr: out YYStype; expr: in YYStype) is
+	begin
+		lexpr:= new node(nd_lexpr);
+
+		lexpr.lexpr_cont:= null;
+		lexpr.lexpr_expr:= expr;
+	end rs_LExpr;
+
+	procedure rs_Expr(expr: out YYStype; cont: in YYStype) is
+	begin
+		expr:= new node(nd_expr);
+
+		expr.expr_e:= cont;
+	end rs_Expr;
+
+	procedure rs_E0(expr: out YYStype; ee: in YYStype; ed: in YYStype) is
+	begin
+		expr:= new node(nd_e0);
+
+		expr.e_ope:= ee;
+		expr.e_opd:= ed;
+	end rs_E0;
+
+	procedure rs_E1(expr: out YYStype; ee: in YYStype; ed: in YYStype) is
+	begin
+		expr:= new node(nd_e1);
+
+		expr.e_ope:= ee;
+		expr.e_opd:= ed;
+	end rs_E1;
+
+	procedure rs_E2(expr: out YYStype; ee: in YYStype; op: in operand; ed: in YYStype) is
+	begin
+		expr:= new node(nd_e2);
+
+		expr.e2_ope:= ee;
+		expr.e2_opd:= ed;
+		expr.e2_operand:= op;
+	end rs_E2;
+
+	procedure rs_E2(expr: out YYStype; op:in operand; ed: in YYStype) is
+	begin
+		expr:= new node(nd_e2);
+
+		expr.e2_ope:= null;
+		expr.e2_opd:= ed;
+		expr.e2_operand:= op;
+	end rs_E2;
+
+	procedure rs_E2(expr: out YYStype; ed: in YYStype) is
+	begin
+		expr:= new node(nd_e2);
+
+		expr.e2_ope:= null;
+		expr.e2_opd:= null;
+		expr.e2_operand:= op;
+	end rs_E2;
+
+	procedure rs_E3(expr: out YYStype; e: in YYStype) is
+	begin
+		expr:= new node(nd_e3);
+
+		expr.e3_cont:= e;
+	end rs_E3;
+	
+	procedure rs_Mode(mode: out YYStype; tipus: in tmode) is
+	begin
+		mode:= new node(nd_mode);
+
+		mode.mode_tipus:= tipus;
+	end rs_Mode;
+    
+	--rutines auxiliars 
 
     procedure putargs(args: in YYSType; idp: id_nom) is
         p: pnode;

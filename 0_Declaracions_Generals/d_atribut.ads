@@ -70,7 +70,7 @@ package d_atribut is
 
 				when nd_id 		=> 
 					id_id: id_nom; 
-					id_pos: posicio;
+					id_pos: posicio;    
 
 				when nd_lit		=>
 					lit_ids: id_str; 
@@ -102,9 +102,9 @@ package d_atribut is
                     args_arg: pnode;
                 
                 when nd_arg =>
-                    arg_id: id_nom;
-                    arg_descr: descripcio;
-                    arg_mode: pnode;
+                    arg_tipus: pnode;
+                    arg_lid: pnode;
+                    arg_mode: tmode;
 
                 when nd_decls   =>
                     decls_decls: pnode;

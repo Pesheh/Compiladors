@@ -6,7 +6,7 @@ package rutines_sintactiques is
     procedure rs_C_Proc(cproc: out YYSType; proc_id: in YYSType);
     procedure rs_Args(args: out YYSType; args_seg: in YYSType; arg: in YYSType);
     procedure rs_Args(args: out YYSType; arg: in YYSType);
-    procedure rs_Arg(arg: out YYSType; mode: in YYSType; tipus: in YYSType);
+    procedure rs_Arg(arg: out YYSType; lid: in YYSType; mode: in YYSType; tipus: in YYSType);
 	procedure rs_Mode(mode: out YYStype; tipus: in tmode);
 
 

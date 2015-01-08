@@ -50,8 +50,6 @@ package d_atribut is
 
     type trelacio is (menor,major,menorigual,majorigual,igual,diferent);
     type tmode is (md_in,md_in_out);
-    -- type tidx esta en general_defs 'cuz lol
-	--Si tienes otras ideas..??
     type posicio is
         record
             fila: natural;

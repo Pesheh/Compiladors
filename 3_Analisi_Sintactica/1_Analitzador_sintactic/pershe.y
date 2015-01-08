@@ -97,8 +97,8 @@ RANG:
   ;
   
 IDX:
-	 S_menys IDX_CONT		{rs_Idx($$,$2);}
-  |  IDX_CONT		{rs_Idx($$,$1);}
+	 S_menys IDX_CONT		{rs_Idx($$,$2,'-');}
+  |  IDX_CONT		{rs_Idx($$,$1,'+');}
   ;
 
 IDX_CONT:

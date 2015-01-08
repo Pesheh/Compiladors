@@ -17,7 +17,7 @@ package body rutines_sintactiques is
         proc.proc_decl:= decls;
         proc.proc_sents:= sents;
 
-        id:= cproc.cproc_id.id;
+        id:= cproc.cproc_id.id_id;
         desc:= new descripcio(dproc);
         desc.np:=nou_proc;
         
@@ -122,20 +122,63 @@ package body rutines_sintactiques is
 
 
 	procedure rs_Decl_T(decl: out YYSType; id_type: in YYSType; decl_cont: in YYSType) is
+        desc: descripcio;
+        id: id_nom;
+        error: boolean;
     begin
         decl:= new node(nd_decl_t);
+        decl.dt_id:= id_type;
+        decl_dt_cont:= decl_cont;
+
+        id:= id_type.id_id;
+        desc:= new descripcio(dtipus);
         
+        case decl_cont.tn is
+            when nd_decl_t_cont_type    =>
+                --Creo que tenemos que hacer rl para cada uno de los lit ya que sino no sabemos que tsb es
+                --desc.dt:= ?? 
+                
+            when nd_decl_t_cont_record  =>
+                desc.dt:= new descr_tipus(tsb_rec);
+                --desc.dt.ocup:=??
+
+                put(ts,id,desc,error);
+                if error then raise record_error; end if;
+                putcamps(decl_cont.dtcont_camps,id);
+
+            when nd_decl_t_cont_arry    =>
+                desc.dt:= new descr_tipus(tsb_arr);
+                desc.tcomp:= decl_cont.dtcont_tipus.id_id;
+
+                put(ts,id,desc,error);
+                if error then raise array_error; end if;
+                putindxs(decl_cont.dtcont_idx,id);
+
+        end case;
+
     end rs_Decl_T;
   
     
 	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType) is
     begin
+        case info.tn is
+            when nd_rang  =>
+                decl:= new node(nd_decl_t_cont_type);
+                decl.dtcont_rang:= info;
 
+            when nd_camps    =>
+                decl:= new node(nd_decl_t_cont_record);
+                decl.dtcont_camps:= info;
+
+        end case;
     end rs_Decl_T_Cont;
 
     
-    procedure rs_Decl_T_Cont(decl: out YYSType; lista_id: in YYSType; id_array: in YYSType) is
+    procedure rs_Decl_T_Cont(decl: out YYSType; rang_array: in YYSType; tipus_array: in YYSType) is
     begin
+        decl:= new node(nd_decl_t_cont_arry);
+        decl.dtcont_idx:= rang_array;
+        decl.dtcont_tipus:= tipus_array;
     end rs_Decl_T_Cont;
 
 
@@ -153,6 +196,8 @@ package body rutines_sintactiques is
         end if;
     end putargs;
 	
+
+    
 	-- Temporal, a la generacio de codi canvien.
 	-- Añadirlos como variables&procs a general_defs?
 	nv: num_var:= 0;

@@ -20,7 +20,7 @@ package rutines_sintactiques is
 	procedure rs_Idx_Cont(idx_cont: out YYSType; valor: in YYSType);
 	procedure rs_Decl_T(decl: out YYSType; id_type: in YYSType; decl_cont: in YYSType);
 	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType);
-	procedure rs_Decl_T_Cont(decl: out YYSType; lista_id: in YYSType; id_array: in YYSType);
+	procedure rs_Decl_T_Cont(decl: out YYSType; rang_array: in YYSType; tipus_array: in YYSType);
 	rs_DCamps;
 	rs_DCampr;
 	rs_Mode;
@@ -44,5 +44,5 @@ package rutines_sintactiques is
 	rs_LExpr;
 
 
-    error,proc_error,arg_error,const_error: exception;
+    error,proc_error,arg_error,record_error,array_error,const_error: exception;
 end rutines_sintactiques;

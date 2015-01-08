@@ -46,19 +46,27 @@ package body rutines_sintactiques is
 
 	procedure rs_Args(args: out YYSType; args_seg: in YYSType; arg: in YYSType) is
     begin
-        null;
+        args:= new node(nd_args);
+        args.args:= args_seg;
+        args.arg:= arg;
     end rs_Args;
 
 
 	procedure rs_Args(args: out YYSType; arg: in YYSType) is
     begin
-        null;
+        args:= new node(nd_args);
+        args.args:= null;
+        args.arg:= arg;
     end rs_Args;
 
 
-	procedure rs_Arg(arg: out YYSType; mode: in YYSType; tipus: in YYSType) is
-    begin
-        null;
+	procedure rs_Arg(arg: out YYSType;lid: in YYSType; mode: in YYSType; tipus: in YYSType) is
+        desc: descripcio;
+    begin 
+        arg:= new node(nd_arg);
+        arg.lid:= lid;
+        arg.arg_mode:= mode.tmode;
+        arg.arg_tipus:= tipus;
     end rs_Arg;
 
 
@@ -81,10 +89,7 @@ package body rutines_sintactiques is
         decl:= new node(nd_decl_var);
         decl.dvar_lid:= lista_id;
         decl.dvar_tipus:= tipus;
-
-
         putvar(lista_id,tipus.id_id);
-        --...
     end rs_Decl_Var;
     
     
@@ -161,7 +166,22 @@ package body rutines_sintactiques is
 
     end rs_Decl_T;
 
-    end putcamps;
+    procedure putindxs(indxs: in YYSType; ida: in id_nom) is
+        desc: descripcio;
+    begin
+        p:= indxs.lid_id;
+        ps:= indxs.lid_seg;
+        
+        id:= p.id_id;
+        desc:= new descripcio(dindx);
+        desc.tind:= id;
+        put_index(ts,ida,desc);
+        
+        if ps/= null then
+            putindxs(ps,ida);
+        end if;
+    end putindxs;
+
 
 	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType) is
     begin
@@ -403,19 +423,6 @@ package body rutines_sintactiques is
     
 	--rutines auxiliars 
 
-    procedure putargs(args: in YYSType; idp: id_nom) is
-        p,ps: pnode;
-        error: boolean;
-    begin
-        p:= args.arg;
-        ps:= args.args;
-        put_arg(ts,idp,p.idarg,p.darg,error);
-        if error then raise arg_error; end if;
-        if ps/=null then
-            putargs(ps,idp);
-        end if;
-    end putargs;
-	
 
     procedure putvar(list_id: in YYSType; id_type: in id_nom) is
         desc: descripcio;
@@ -434,11 +441,11 @@ package body rutines_sintactiques is
             putvar(ps,id_type);
         end if;
     end putvar;
-    
+
+
     procedure putcamps(camps: in YYSType; idr: in id_nom) is
         desc: descripcio;
         p, ps: pnode;
-        id: id_nom;
         error: boolean;
     begin
        desc:= new descripcio(dcamp);
@@ -459,10 +466,43 @@ package body rutines_sintactiques is
        if ps/=null then
            putcamps(ps,idr);
        end if;
-
     end putcamps;
 
-	-- Temporal, a la generacio de codi canvien.
+
+    procedure putargs(args: in YYSType; idp: id_nom) is
+        p,ps: pnode;
+        error: boolean;
+        desc: descripcio;
+    begin
+        p:= args.arg;
+        
+        case p.arg_mode is
+            when md_in  =>
+                desc:= new descripcio(dargc);
+                desc.ta:= p.arg_tipus.id_id;
+                desc.na:= nova_var;
+
+            when md_in_out  =>
+                desc:= new descripcio(dvar);
+                desc.tv:= p.arg_tipus.id_id;
+                desc.nv:= nova_var;
+        end case;
+       
+        p:= p.arg_lid;
+        while p/=null loop
+           put_arg(ts,idp,p.lid_id.id_id,desc,error);
+           if error then raise arg_error; end if;
+           p:= p.lid_seg;
+        end loop;
+        
+        ps:= args.args;
+        if ps/=null then
+            putargs(ps,idp);
+        end if;
+    end putargs;
+	
+    
+    -- Temporal, a la generacio de codi canvien.
 	-- Añadirlos como variables&procs a general_defs?
 	nv: num_var:= 0;
 	np: num_proc:= 0;

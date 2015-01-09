@@ -177,9 +177,9 @@ package body rutines_sintactiques is
         end case;
 
     end rs_Decl_T;
-  
 
-	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType) is
+	
+    procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType) is
     begin
         case info.tn is
             when nd_rang  =>
@@ -507,8 +507,8 @@ package body rutines_sintactiques is
         end if;
     end putargs;
 	
-  
-	procedure putindxs(indxs: in YYSType; ida: in id_nom) is
+
+    procedure putindxs(indxs: in YYSType; ida: in id_nom) is
         desc: descripcio;
     begin
         p:= indxs.lid_id;
@@ -523,7 +523,7 @@ package body rutines_sintactiques is
             putindxs(ps,ida);
         end if;
     end putindxs;
-
+    
     
     -- Temporal, a la generacio de codi canvien.
 	-- Añadirlos como variables&procs a general_defs?

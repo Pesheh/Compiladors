@@ -6,6 +6,8 @@ package body rutines_sintactiques is
     ts: tsimbols; -- Lo mismo que la de nombres!! 
 
 
+	-- Procediment
+
 	procedure rs_Proc(proc: out YYSType; cproc: in YYSType; decls: in YYSType; sents: in YYSType) is
         desc: descripcio;
         id: id_nom;
@@ -69,6 +71,16 @@ package body rutines_sintactiques is
         arg.arg_tipus:= tipus;
     end rs_Arg;
 
+
+    procedure rs_Mode(mode: out YYStype; tipus: in tmode) is
+	begin
+		mode:= new node(nd_mode);
+
+		mode.mode_tipus:= tipus;
+	end rs_Mode;
+	
+
+	-- Declaracio
 
 	procedure rs_Decls(decls: out YYSType; decls_seg: in YYSType; decl: YYSType) is
     begin
@@ -165,23 +177,7 @@ package body rutines_sintactiques is
         end case;
 
     end rs_Decl_T;
-
-    procedure putindxs(indxs: in YYSType; ida: in id_nom) is
-        desc: descripcio;
-    begin
-        p:= indxs.lid_id;
-        ps:= indxs.lid_seg;
-        
-        id:= p.id_id;
-        desc:= new descripcio(dindx);
-        desc.tind:= id;
-        put_index(ts,ida,desc);
-        
-        if ps/= null then
-            putindxs(ps,ida);
-        end if;
-    end putindxs;
-
+  
 
 	procedure rs_Decl_T_Cont(decl: out YYSType; info: in YYSType) is
     begin
@@ -205,14 +201,6 @@ package body rutines_sintactiques is
         decl.dtcont_tipus:= tipus_array;
     end rs_Decl_T_Cont;
 
-	
-	procedure rs_DCamps(camps: out YYSType; camp: in YYStype) is
-	begin
-		camps:= new node(nd_dcamps);
-
-		camps.dcamps_dcamps:= null;
-		camps.dcamps_dcamp:= camp;
-	end rs_DCamps;
 
 	procedure rs_DCamps(camps: out YYSType; camp_seg: in YYStype; camp: in YYStype) is
 	begin
@@ -222,6 +210,17 @@ package body rutines_sintactiques is
 		camps.dcamps_dcamp:= camp;
 	end rs_DCamps;
 
+
+	procedure rs_DCamps(camps: out YYSType; camp: in YYStype) is
+	begin
+		camps:= new node(nd_dcamps);
+
+		camps.dcamps_dcamps:= null;
+		camps.dcamps_dcamp:= camp;
+	end rs_DCamps;
+
+
+
 	procedure rs_DCamp(camp: out YYStype; var: in YYStype) is
 	begin
 		camp:= new node(nd_dcamp);
@@ -230,37 +229,9 @@ package body rutines_sintactiques is
 	end rsDCamp;
 
 
-	procedure rs_Lid(lid: out YYStype; id_seg: in YYStype; id: in YYStype) is
-	begin
-		lid:= new node(nd_lid);
-
-		lid.lid_seg:= id_seg;
-		lid.lid_id:= id;
-	end rs_Lid;
+	-- Sentencia
 
 	
-    procedure rs_Ref(ref: out YYSType; ref_id: in YYSType; qs: in YYSType) is
-    begin
-        ref:= new node(nd_ref);
-        ref.ref_id:= ref_id.id_id;
-        ref.ref_qs:= qs;
-    end rs_Ref;
-
-	procedure rs_Qs(qs: out YYSType; qs_in: in YYSType; q: in YYSType) is
-    begin
-        qs:= new node(nd_qs);
-        qs.qs:= qs_in;
-        qs.q:= q;
-    end rs_Qs;
-
-
-    procedure rs_Q(q: out YYSType; contingut: in YYSType) is
-    begin
-        q:= new node(nd_q);
-        q.q_contingut:= contingut;
-    end rs_Q;
-
-
 	procedure rs_Sents(sents: out YYStype; sent: in YYStype) is
 	begin
 		sents:= new node(nd_sents);
@@ -293,6 +264,14 @@ package body rutines_sintactiques is
 
 		sent.sent_sent:= stipus;
 	end rs_Sent;
+
+	
+	procedure rs_SIter(sent: out YYStype; expr: in YYStype; sents: in YYStype) is
+    begin
+        sent:= new node(nd_siter);
+        sent.siter_expr:= expr;
+        sent.siter_sents:= sents;
+    end rs_SIter;
 
 
 	procedure rs_SCond(sent: out YYStype; expr: in YYStype; sents: in YYStype) is
@@ -331,8 +310,10 @@ package body rutines_sintactiques is
 		sent.sassign_expr:= expr;
 	end rs_SAssign;
 
-	
-    procedure rs_LExpr(lexpr: out YYStype; cont: in YYStype; expr: in YYStype) is
+
+	-- Expressio
+
+	procedure rs_LExpr(lexpr: out YYStype; cont: in YYStype; expr: in YYStype) is
 	begin
 		lexpr:= new node(nd_lexpr);
 
@@ -414,15 +395,40 @@ package body rutines_sintactiques is
 	end rs_E3;
 	
 	
-    procedure rs_Mode(mode: out YYStype; tipus: in tmode) is
+	-- Altres
+	
+	procedure rs_Lid(lid: out YYStype; id_seg: in YYStype; id: in YYStype) is
 	begin
-		mode:= new node(nd_mode);
+		lid:= new node(nd_lid);
 
-		mode.mode_tipus:= tipus;
-	end rs_Mode;
+		lid.lid_seg:= id_seg;
+		lid.lid_id:= id;
+	end rs_Lid;
+
+	
+    procedure rs_Ref(ref: out YYSType; ref_id: in YYSType; qs: in YYSType) is
+    begin
+        ref:= new node(nd_ref);
+        ref.ref_id:= ref_id.id_id;
+        ref.ref_qs:= qs;
+    end rs_Ref;
+
+	procedure rs_Qs(qs: out YYSType; qs_in: in YYSType; q: in YYSType) is
+    begin
+        qs:= new node(nd_qs);
+        qs.qs:= qs_in;
+        qs.q:= q;
+    end rs_Qs;
+
+
+    procedure rs_Q(q: out YYSType; contingut: in YYSType) is
+    begin
+        q:= new node(nd_q);
+        q.q_contingut:= contingut;
+    end rs_Q;
+
     
 	--rutines auxiliars 
-
 
     procedure putvar(list_id: in YYSType; id_type: in id_nom) is
         desc: descripcio;
@@ -501,6 +507,23 @@ package body rutines_sintactiques is
         end if;
     end putargs;
 	
+  
+	procedure putindxs(indxs: in YYSType; ida: in id_nom) is
+        desc: descripcio;
+    begin
+        p:= indxs.lid_id;
+        ps:= indxs.lid_seg;
+        
+        id:= p.id_id;
+        desc:= new descripcio(dindx);
+        desc.tind:= id;
+        put_index(ts,ida,desc);
+        
+        if ps/= null then
+            putindxs(ps,ida);
+        end if;
+    end putindxs;
+
     
     -- Temporal, a la generacio de codi canvien.
 	-- Añadirlos como variables&procs a general_defs?

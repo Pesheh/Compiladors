@@ -87,9 +87,25 @@ package body d_tsimbols is
         return d;
 
 
-    procedure update(ts: in out tsimbols; id: in id_nom; d: in descripcio);
-
-
+    procedure update(ts: in out tsimbols; id: in id_nom; d: in descripcio) is
+        td: tdescripcio renames ts.td;
+        tb: tblocks renames ts.tb;
+        te: texpansio renames ts.te;
+        prof: integer renames ts.prof;
+        ie: index_expansio;
+        ocup: despl;
+    begin
+        if td(id).d.td /= dtipus then raise no_es_tipus; end if;
+        if td(id).d.dt.tsb /= tsb_rec then 
+            raise no_es_record; 
+        end if;
+        ie:= td(id).next;
+        ocup:= 0;
+        while ie/=0 loop
+            ocup:= ocup+te(ie).d.dcmp;
+        end loop;
+        td(id).d.dt.ocup:= ocup;
+    end update;
 
 
     procedure put_index(ts: in out tsimbols; ida: in id_nom; di: in descripcio) is

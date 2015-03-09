@@ -1,5 +1,5 @@
-with Ada;with general_defs; with d_tnoms; with Ada.Text_IO; with Ada.Integer_Text_IO; with ada.Strings;
-use general_defs;use d_tnoms; use Ada.Text_IO;use Ada.strings;
+with Ada;with decls_generals; with d_tnoms; with Ada.Text_IO; with Ada.Integer_Text_IO; with ada.Strings;
+use decls_generals;use d_tnoms; use Ada.Text_IO;use Ada.strings;
 procedure Main is
    tn:tnoms;
    ident:id_nom;

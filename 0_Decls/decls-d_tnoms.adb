@@ -1,6 +1,6 @@
 with Ada.Strings.Hash; use ada.Strings;
 
-package body d_tnoms is
+package body decls.d_tnoms is
 
    --Auxiliar operations:
     procedure save_name(tc: in out char_table; nom: in string; nc: in out integer) is
@@ -117,4 +117,4 @@ package body d_tnoms is
         return tc(i..j);
     end get;
 
-end d_tnoms;
+end decls.d_tnoms;

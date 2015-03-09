@@ -29,7 +29,7 @@ PROC:
 
 DECLS:
 	 DECLS DECL														{rs_Decls($$,$1,$2);}
-  |--lambda															{null;}
+  |       															{r_atom($$);}
   ;
 
 DECL:
@@ -97,8 +97,8 @@ RANG:
   ;
   
 IDX:
-	 S_menys IDX_CONT												{rs_Idx($$,$2,general_defs.negatiu);}
-  |  IDX_CONT														{rs_Idx($$,$1,general_defs.positiu);}
+	 S_menys IDX_CONT												{rs_Idx($$,$2,decls_generals.negatiu);}
+  |  IDX_CONT														{rs_Idx($$,$1,decls_generals.positiu);}
   ;
 
 IDX_CONT:
@@ -108,7 +108,7 @@ IDX_CONT:
 
 SENTS:
 	 SENTS_NOB														{rs_Sents($$,$1);}
-  |  Pc_null Punticoma												{null;}
+  |  Pc_null Punticoma												{r_atom($$);}
   ;
 
 SENTS_NOB:
@@ -154,7 +154,7 @@ REF:
 
 QS:
 	 QS Q															{rs_Qs($$,$1,$2);}
-  |--lambda  														{null;}
+  |     														{r_atom($$);}
   ;
 
 Q:
@@ -178,6 +178,7 @@ E1:
   |  E2 Pc_or E2													{rs_E1($$,$1,$3);}
   ;
 
+-- Substituir per les corresponents subrutines, una per tipus d'operand
 E2:
 	 E2 Op_rel E3													{rs_E2($$,$1,d_atribut.o_rel,$3);}
   |  E2 S_mes E3													{rs_E2($$,$1,d_atribut.sum,$3);}
@@ -198,7 +199,7 @@ E3:
   ;
 
 M1:
-     %prec Parentesi_o												{null;}
+     %prec Parentesi_o												{r_atom($$);}
   ;
 
 LEXPR:
@@ -212,7 +213,7 @@ LEXPR:
 	end a_sintactic;
 
 	with d_atribut;
-	with rutines_sintactiques; use rutines_sintactiques;
+	with c_arbre; use c_arbre;
 	package body a_sintactic is
 ##
 	end a_sintactic;

@@ -1,9 +1,7 @@
 with Ada.Containers; use Ada.Containers;
 with Ada.Strings; use Ada.Strings;
 
-with general_defs; use general_defs;
-
-package d_tnoms is
+package decls.d_tnoms is
     pragma pure;
 
     type tnoms is limited private;
@@ -48,4 +46,4 @@ private
             nc: Natural:= 0;--num chars idents
             ncs: Natural:= max_ch;--num chars strings
         end record;
-end d_tnoms;
+end decls.d_tnoms;

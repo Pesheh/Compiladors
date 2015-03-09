@@ -1,9 +1,0 @@
-procedure alfile is
-	i : integer
-	j:boolean
-begin
-	i:=('a'); in_a_sad_a_??a;
-	asda?"!D;
-	"hola com esta fosvd?"
---	i:=(1+3); j:=1=4; i**/mod; i='c'; 
-end  alfile;

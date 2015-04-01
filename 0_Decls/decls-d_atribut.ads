@@ -1,12 +1,14 @@
+with decls.d_descripcio;
 package decls.d_atribut is
   --pragma pure;
 
-private
+--private
   type node;
   type pnode is access node;
 	subtype atribut is pnode;
 	type tnode is (
     nd_null,
+    nd_root,
 		nd_proc,
 	  nd_decls,
 		nd_decl,
@@ -60,6 +62,7 @@ private
     md_in,
     md_in_out
   );
+  
 
   type posicio is
     record
@@ -67,12 +70,6 @@ private
       columna: natural;
     end record;
 
-  type rang is
-  	record
-	    id: id_nom;
-			linf: pnode;
-			lsup: pnode;
-		end record;
 
 	type operand is (
     nul,
@@ -93,6 +90,9 @@ private
         when nd_null => 
           null;
 
+        when nd_root =>
+          p: pnode;
+
         when nd_id => 
           id_id: id_nom; 
           id_pos: posicio;    
@@ -100,6 +100,7 @@ private
         when nd_lit =>
           lit_ids: id_str; 
           lit_pos: posicio;
+          lit_tipus: decls.d_descripcio.tipus_subjacent;
 
         when nd_op_rel =>     
           orel_tipus: trelacio;
@@ -150,7 +151,7 @@ private
           dvar_tipus: pnode;
 
         when nd_decl_const =>
-          dconst_id: pnode;
+          dconst_lid: pnode;
           dconst_tipus: pnode;
           dconst_valor: pnode;
 
@@ -169,10 +170,12 @@ private
           dtcont_tipus: pnode;
         
         when nd_rang =>
-          rang_rang: rang;
+	        rang_id: id_nom;
+			    rang_linf: pnode;
+			    rang_lsup: pnode;
 
         when nd_idx =>
-          -- idx_tipus: tidx;
+          idx_tipus: tidx;
           idx_cont: pnode;
 
         when nd_idx_cont =>

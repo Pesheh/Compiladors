@@ -77,9 +77,9 @@ SEPARATOR [ \t\n]+
 "/"																	{r_atom(YYLVal); RETURN S_quoci;}
 "mod"																{r_atom(YYLVal); RETURN Pc_mod;}
 {IDENTIFIER}												{rl_identifier(YYLVal, YYPos, yytext);  RETURN Identif;}
-{NUMBER}														{rl_literal(YYLVal, YYPos, yytext); RETURN Lit;}
-{STRING}													  {rl_literal(YYLVal, YYPos, yytext); RETURN Lit;}
-{CHARACTER}													{rl_literal(YYLVal, YYPos, yytext); RETURN Lit;}
+{NUMBER}														{rl_literal(YYLVal, YYPos, yytext, tsb_ent); RETURN Lit;}
+{STRING}													  {rl_literal(YYLVal, YYPos, yytext, tsb_nul); RETURN Lit;}
+{CHARACTER}													{rl_literal(YYLVal, YYPos, yytext, tsb_car); RETURN Lit;}
 {COMMENT}														{r_atom(YYLVal);}
 {SEPARATOR}													{r_atom(YYLVal);}
 .																	  {r_atom(YYLVal); RETURN Error;}
@@ -88,12 +88,14 @@ SEPARATOR [ \t\n]+
 
 	with Ada.Text_IO, Ada.Integer_Text_IO; use Ada.Text_IO, Ada.Integer_Text_IO;
 	with kobal_io,kobal_dfa;use kobal_io,kobal_dfa;
-  with d_atribut;
+  with decls; use decls;
+  with decls.d_atribut;
   with kobal_tokens;
   package a_lexic is
     procedure open(name: in String);
     procedure close;
-    function YYPos return d_atribut.posicio;
+    procedure YYError(s: in String);
+    function YYPos return decls.d_atribut.posicio;
     function YYLex return kobal_tokens.Token;
 
 		--Auxiliar functions to allow external packages use these *_dfa functions
@@ -101,8 +103,11 @@ SEPARATOR [ \t\n]+
 		function YYLength return Integer;
 	end a_lexic;
 
-	with d_atribut;
-	with c_arbre; use c_arbre;
+  with decls; use decls;
+  with decls.d_atribut; use decls.d_atribut;
+  with decls.d_descripcio; use decls.d_descripcio;
+	with semantica; use semantica;
+  with semantica.c_arbre; use semantica.c_arbre;
 	with kobal_tokens; use kobal_tokens;
 	package body a_lexic is
         
@@ -115,8 +120,12 @@ SEPARATOR [ \t\n]+
     begin
       Close_Input;
     end close;
+    procedure YYError(s: in String) is
+    begin
+      put(s);
+      end YYError;
 
-    function YYPos return d_atribut.posicio is
+    function YYPos return decls.d_atribut.posicio is
     begin
       return (tok_begin_line, tok_begin_col);
     end YYPos;

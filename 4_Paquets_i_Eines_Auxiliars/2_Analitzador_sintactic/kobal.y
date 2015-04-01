@@ -9,16 +9,20 @@
 %left S_prod S_quoci
 %left Pc_mod
 %right Pc_not
-%right Lit Identif
+%right Identif Lit
 %token Parentesi_t
-%right Parentesi_o -- aquest token tambe s'empra com a dummy per otorgar precedencia i associativitat a M1
+%right Parentesi_o 
 
-%with d_atribut;
+%with decls; 
+%with decls.d_atribut;
 { 
-subtype YYSType is d_atribut.atribut;
+subtype YYSType is decls.d_atribut.atribut;
 }
 
 %%
+PROC_PRIMA:
+  	 PROC									{rs_Root($1);} -- Proc principal
+    ;
 PROC:
 	 Pc_procedure C_PROC Pc_is
 	 	DECLS
@@ -34,17 +38,18 @@ DECLS:
 
 DECL:
 	 PROC															{rs_Decl($$,$1);}
+  |  DECL_CONST													{rs_Decl($$,$1);}
   |  DECL_VAR														{rs_Decl($$,$1);}
-  |  DECL_CONST														{rs_Decl($$,$1);}
   |  DECL_T															{rs_Decl($$,$1);}
   ;
 
-DECL_VAR:
-	 LID Dospunts Identif Punticoma									{rs_Decl_Var($$,$1,$3);}
+DECL_CONST:
+	 LID Dospuntsigual Pc_const Identif Dospuntsigual IDX Punticoma		{rs_Decl_Const($$,$1,$4,$6);}
   ;
 
-DECL_CONST:
-	 Identif Dospunts Pc_const Identif Dospunts IDX Punticoma		{rs_Decl_Const($$,$1,$4,$6);}
+
+DECL_VAR:
+	 LID Dospunts Identif Punticoma									{rs_Decl_Var($$,$1,$3);}
   ;
 
 DECL_T:
@@ -83,8 +88,8 @@ ARG:
   ;
 
 MODE:
-	 Pc_in															{rs_Mode($$,d_atribut.md_in);}
-  |  Pc_in_out														{rs_Mode($$,d_atribut.md_in_out);}
+	 Pc_in															{rs_Mode($$,decls.d_atribut.md_in);}
+  |  Pc_in_out														{rs_Mode($$,decls.d_atribut.md_in_out);}
   ;
 
 LID:
@@ -97,8 +102,8 @@ RANG:
   ;
   
 IDX:
-	 S_menys IDX_CONT												{rs_Idx($$,$2,decls_generals.negatiu);}
-  |  IDX_CONT														{rs_Idx($$,$1,decls_generals.positiu);}
+	 S_menys IDX_CONT												{rs_Idx($$,$2,decls.negatiu);}
+  |  IDX_CONT														{rs_Idx($$,$1,decls.positiu);}
   ;
 
 IDX_CONT:
@@ -112,8 +117,8 @@ SENTS:
   ;
 
 SENTS_NOB:
-	 SENTS_NOB SENT													{rs_Sents_Nob($$,$1,$2);}
-  |  SENT															{rs_Sents_Nob($$,$1);}
+	 SENTS_NOB SENT													{rs_Sent_Nob($$,$1,$2);}
+  |  SENT															{rs_Sent_Nob($$,$1);}
   ;
 
 SENT:
@@ -180,15 +185,14 @@ E1:
 
 -- Substituir per les corresponents subrutines, una per tipus d'operand
 E2:
-	 E2 Op_rel E3													{rs_E2($$,$1,d_atribut.o_rel,$3);}
-  |  E2 S_mes E3													{rs_E2($$,$1,d_atribut.sum,$3);}
-  |  E2 S_menys E3													{rs_E2($$,$1,d_atribut.res,$3);}
-  |  E2 S_prod E3													{rs_E2($$,$1,d_atribut.prod,$3);}
-  |  E2 S_quoci E3													{rs_E2($$,$1,d_atribut.quoci,$3);}
-  |  E2 Pc_mod E3													{rs_E2($$,$1,d_atribut.modul,$3);}
-  |	 M1 E3 S_prod S_prod E3											{rs_E2($$,$2,d_atribut.pot,$5);} 
-  |  Pc_not E3														{rs_E2($$,d_atribut.neg_log,$1);}
-  |	 S_menys E3														{rs_E2($$,d_atribut.neg_alg,$1);}
+	 E2 Op_rel E3													{rs_E2($$,$1,decls.d_atribut.o_rel,$3);}
+  |  E2 S_mes E3													{rs_E2($$,$1,decls.d_atribut.sum,$3);}
+  |  E2 S_menys E3													{rs_E2($$,$1,decls.d_atribut.res,$3);}
+  |  E2 S_prod E3													{rs_E2($$,$1,decls.d_atribut.prod,$3);}
+  |  E2 S_quoci E3													{rs_E2($$,$1,decls.d_atribut.quoci,$3);}
+  |  E2 Pc_mod E3													{rs_E2($$,$1,decls.d_atribut.modul,$3);}
+  |  Pc_not E3														{rs_E2($$,decls.d_atribut.neg_log,$1);}
+  |	 S_menys E3														{rs_E2($$,decls.d_atribut.neg_alg,$1);}
   |  E3																{rs_E2($$,$1);}
   ;
 
@@ -198,9 +202,6 @@ E3:
   |  Lit															{rs_E3($$,$1);}
   ;
 
-M1:
-     %prec Parentesi_o												{r_atom($$);}
-  ;
 
 LEXPR:
 	 LEXPR Coma EXPR												{rs_LExpr($$,$1,$3);}
@@ -212,8 +213,13 @@ LEXPR:
 		procedure YYParse;
 	end a_sintactic;
 
-	with d_atribut;
-	with c_arbre; use c_arbre;
+  with a_lexic, kobal_dfa, kobal_io, text_io, kobal_tokens, kobal_goto, kobal_shift_reduce; 
+  use  a_lexic, text_io, kobal_tokens, kobal_goto, kobal_io, kobal_shift_reduce; 
+  
+	with decls;
+  with decls.d_atribut;
+  with semantica; use semantica;
+	with semantica.c_arbre; use semantica.c_arbre;
 	package body a_sintactic is
 ##
 	end a_sintactic;

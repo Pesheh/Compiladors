@@ -1,3 +1,4 @@
+with semantica.missatges;
 package body semantica is
   
 	function nova_var return Num_var is
@@ -11,5 +12,10 @@ package body semantica is
 		np:= np+1;
 		return np;
 	end nou_proc;
+
+  procedure print_arbre is
+  begin
+    missatges.imprimir_arbre(root);
+  end print_arbre;
 
 end semantica;

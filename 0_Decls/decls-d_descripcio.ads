@@ -1,7 +1,4 @@
 package decls.d_descripcio is
-  type descripcio is limited private;
-  type descr_tipus is limited private;
-private
  type tipus_subjacent is (
     tsb_bool,
     tsb_car,

@@ -12,12 +12,12 @@ package decls.d_tsimbols is
 	  procedure empty(ts: out tsimbols);
     procedure put(ts: in out tsimbols; id: in id_nom; d: in descripcio; error: out boolean);
     function get(ts: in tsimbols; id: in id_nom) return descripcio;
+    procedure update(ts: in out tsimbols; id: in id_nom; d: in descripcio);
 
 
 	-- Operacions de record
     procedure put_camp(ts: in out tsimbols; idr,idc: in id_nom; dc: in descripcio; error: out boolean); --idr: id record , idc: id camp
     function get_camp(ts: in tsimbols; idr,idc: in id_nom) return descripcio;
-    procedure update(ts: in out tsimbols; id: in id_nom; d: in descripcio);
 
 
 	-- Operacions d'array
@@ -38,7 +38,7 @@ package decls.d_tsimbols is
 
 	-- Operacions del compilador! :)
     procedure enter_block(ts: in out tsimbols);
-    procedure exit_bock(ts: in out tsimbols);
+    procedure exit_block(ts: in out tsimbols);
 
 
     no_es_tipus, no_es_record, no_es_array, no_es_proc, mal_us: exception;
@@ -46,11 +46,14 @@ package decls.d_tsimbols is
 private
 
     type index_expansio is new integer range 0..max_id;
+    
+    --Sinceramente no se que maximo ponerle
+    type profunditat is new integer range -1..100;
 
     type te_item;
     type td_item is
         record
-            prof: id_nom;
+            prof: profunditat;
             d: descripcio;
             next: index_expansio;
         end record;
@@ -58,7 +61,7 @@ private
     type te_item is
         record
             id: id_nom;
-            prof: id_nom;
+            prof: profunditat;
             d: descripcio;
             next: index_expansio;
         end record;
@@ -66,38 +69,26 @@ private
     --!!!los rangos no estan bien puestos!!!
     type tdescripcio is array (id_nom) of td_item;
     type texpansio is array (index_expansio) of te_item;
-    type tblocks is array (id_nom) of index_expansio;
+    type tblocks is array (profunditat) of index_expansio;
 
     type tsimbols is
         record
-            prof: id_nom;
+            prof: profunditat;
             td: tdescripcio;
             te: texpansio;
             tb: tblocks;
         end record;
 
 
-    type iterador_index is new index_expansio;
-    type iterador_arg is new index_expansio;
+    type iterador_index is
+        record
+            ie: index_expansio;
+        end record;
 
-    -- BEGIN Xapussa
-    -- type index is new integer range 0..max_id;
-    -- type iterador_index is new index;
-    -- type iterador_arg is new index;
+    type iterador_arg is
+        record
+            ie: index_expansio;
+        end record;
 
-    -- type tipus_idx(tindex, titerador_index, titerador_arg);
-
-    -- type index_expansio(idx: tindex:= index) is
-    --  record
-    --    case idx is
-    --      when tindex =>
-    --        t_idx: index;
-    --      when titerador_index =>
-    --        t_itidx: iterador_index;
-    --      when titerador_arg =>
-    --        t_itarg: iterador_arg;
-    --    end case;
-    --  end record;
-    -- END Xapussa
 
 end decls.d_tsimbols;

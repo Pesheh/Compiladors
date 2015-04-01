@@ -1,3 +1,4 @@
+with decls.d_descripcio;
 package semantica.c_arbre is
 
   -- Rutina de control
@@ -6,7 +7,7 @@ package semantica.c_arbre is
   
   -- Rutines Fonamentals
   procedure rl_identifier(a: out atribut; pos: in posicio; text: in String);
-  procedure rl_literal(a: out atribut; pos: in posicio; text: in String);
+  procedure rl_literal(a: out atribut; pos: in posicio; text: in String; tipus: in decls.d_descripcio.tipus_subjacent); 
 
 
   -- Operadors relacionals
@@ -19,6 +20,7 @@ package semantica.c_arbre is
 
 
 	-- Procediment
+	procedure rs_Root(proc: in atribut);
 	procedure rs_Proc(proc: out atribut; cproc: in atribut; decls: in atribut; sents: in atribut);
   procedure rs_C_Proc(cproc: out atribut; proc_id: in atribut; args: in atribut);
   procedure rs_C_Proc(cproc: out atribut; proc_id: in atribut);
@@ -32,7 +34,7 @@ package semantica.c_arbre is
 	procedure rs_Decls(decls: out atribut; decls_seg: in atribut; decl: atribut);
   procedure rs_Decl(decl: out atribut; decl_real: in atribut); 
   procedure rs_Decl_Var(decl: out atribut; lista_id: in atribut; tipus: in atribut);
-  procedure rs_Decl_Const(decl: out atribut; id_const: in atribut; tipus: in atribut; valor: in atribut);
+  procedure rs_Decl_Const(decl: out atribut; lid_const: in atribut; tipus: in atribut; valor: in atribut);
   procedure rs_Idx(idx: out atribut; idx_cont: in atribut; signe: in tidx);
   procedure rs_Idx_Cont(idx_cont: out atribut; valor: in atribut);
   procedure rs_Decl_T(decl: out atribut; id_type: in atribut; decl_cont: in atribut);
@@ -69,9 +71,13 @@ package semantica.c_arbre is
 
 	-- Altres
 	procedure rs_Lid(lid: out atribut; id_seg: in atribut; id: in atribut);
+	procedure rs_Lid(lid: out atribut;  id: in atribut);
 	procedure rs_Ref(ref: out atribut; ref_id: in atribut; qs: in atribut);
 	procedure rs_Qs(qs: out atribut; qs_in: in atribut; q: in atribut);
   procedure rs_Q(q: out atribut; contingut: in atribut);
+  procedure rs_Rang(rang: out atribut;id_type: in atribut; linf: in atribut; lsup: in atribut);
+
+
 
   err,type_error,proc_error,arg_error,record_error,camp_error,array_error,var_error,const_error: exception;
 

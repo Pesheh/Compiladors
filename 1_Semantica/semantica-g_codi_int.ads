@@ -48,8 +48,8 @@ private
       nparam: natural;
     end record;
 
-  type taula_variables is array (num_var) of pe_tvar;
-  type taula_procediments is array (num_proc) of e_tproc;
+  type taula_variables is array (idx_num_var) of pe_tvar;
+  type taula_procediments is array (idx_num_proc) of e_tproc;
 
   -- Rang temporal 0..200
   type num_instr is new natural range 0..200;

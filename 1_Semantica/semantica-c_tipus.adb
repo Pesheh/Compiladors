@@ -1,4 +1,4 @@
-with semantica; use semantica;
+-- with semantica; use semantica;
 with semantica.g_codi_int; use semantica.g_codi_int;
 with decls; use decls;
 with decls.d_descripcio; use decls.d_descripcio;

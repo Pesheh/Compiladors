@@ -15,8 +15,13 @@ package decls is
     negatiu
   );
 
+  -- Els rangs estan per permetre indexat la TV i TP amb els respectius indexos. Si per el contrari emprassim naturals
+  -- el compilador de x86_64 fa un pataplaf ben gros ja que el tamany maxim d'arrays estatics permes es 2GB i be...
+  -- http://stackoverflow.com/questions/10486116/what-does-this-gcc-error-relocation-truncated-to-fit-mean
   type num_var is new natural;
+  subtype idx_num_var is num_var range 0..500;
   type num_proc is new natural;
+  subtype idx_num_proc is num_proc range 0..250;
 
 --private
   max_id: constant integer:=997;

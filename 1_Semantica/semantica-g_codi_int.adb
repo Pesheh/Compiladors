@@ -1,5 +1,4 @@
 with Ada.Text_IO;
-with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 with decls.d_tnoms;
 package body semantica.g_codi_int is
  
@@ -45,14 +44,14 @@ package body semantica.g_codi_int is
 
   function nova_var(np: num_proc; ocup: ocupacio; desp: despl) return num_var is
   begin
-		-- pendent
+		-- pendent d'ampliar
     nv:= nv+1;
 		return nv;
   end nova_var;
 
   function nova_var_const(val: valor; tsb: tipus_subjacent) return num_var is
   begin
-		-- pendent
+		-- pendent d'ampliar
     nv:= nv+1;
 		return nv;
   end nova_var_const;
@@ -70,22 +69,19 @@ package body semantica.g_codi_int is
   end nova_etiq;
 
   -- El format es temporal
-  procedure genera(t: in tinstruccio; a,b,c: in num_var ) is
+  procedure genera(t: in tinstruccio; a,b,c: in num_var) is
   begin
-    null;
-    -- Ada.Text_IO.Put_Line(tinstruccio'Image(t)&""&num_var'Image(a)&""&num_var'Image(b)&""&num_var'Image(c));
+    Ada.Text_IO.Put_Line(tinstruccio'Image(t)&""&num_var'Image(a)&""&num_var'Image(b)&""&num_var'Image(c));
   end genera;
 
-  procedure genera(t: in tinstruccio; a: in etiqueta; b,c: in num_var ) is
+  procedure genera(t: in tinstruccio; a: in etiqueta; b,c: in num_var) is
   begin
-    null;
-    -- Ada.Text_IO.Put_Line(tinstruccio'Image(t)&""&etiqueta'Image(a)&""&num_var'Image(b)&""&num_var'Image(c));
+    Ada.Text_IO.Put_Line(tinstruccio'Image(t)&""&etiqueta'Image(a)&""&num_var'Image(b)&""&num_var'Image(c));
   end genera;
 
-  procedure genera(t: in tinstruccio; a: in num_var; b: in String; c: in num_var ) is
+  procedure genera(t: in tinstruccio; a: in num_var; b: in String; c: in num_var) is
   begin
-    null;
-    -- Ada.Text_IO.Put_Line(tinstruccio'Image(t)&""&num_var'Image(a)&""&b&""&num_var'Image(c));
+    Ada.Text_IO.Put_Line(tinstruccio'Image(t)&""&num_var'Image(a)&""&b&""&num_var'Image(c));
   end genera;
 
   procedure desref(r: in num_var; d: in despl; t: out num_var) is
@@ -109,7 +105,7 @@ package body semantica.g_codi_int is
     p: pnode renames nd_proc;
   begin
     if p.proc_cproc /= null then
-      gc_cproc(p.proc_cproc);
+      gc_cproc(p.proc_cproc); -- realment no es gaire necessari aixo, de moment
     else
       null;
       -- error molt gros
@@ -128,8 +124,6 @@ package body semantica.g_codi_int is
     nargs: natural;
     e: etiqueta;
   begin
-    -- np:=np+1, prof:=prof+1; pproc(prof):=np
-    -- mirar si aixo es fa a la comprovacio de tipus
     nargs:= 0; -- usat a la taula de procediments
     if p.cproc_args /= null then
       gc_args(p.cproc_args, nargs);
@@ -241,7 +235,6 @@ package body semantica.g_codi_int is
     genera(call,num_var(d.np),0,0);
   end gc_scrida;
 
-  -- no es correcte, falta iterar sobre la llista d'expressions
   procedure gc_scrida_args(nd_qs: in pnode) is
     p: pnode renames nd_qs;
     r: num_var;
@@ -340,7 +333,7 @@ package body semantica.g_codi_int is
     end if;
     if p.qs_q.tn = nd_id then
       dca:= get_camp(ts,idt,p.qs_q.q_contingut.id_id);
-      idt:= dca.tcmp; -- no se si es aixo el que volem(pere)
+      idt:= dca.tcmp;
       dc:= dc + dca.dcmp;
     else -- p.qs_q.tn = nd_lexpr
       first(ts,idt,it);
@@ -391,9 +384,9 @@ package body semantica.g_codi_int is
     p: pnode renames nd_expr;
   begin
     case p.expr_e.tn is
-      when nd_and => -- actualment nd_e0, canviar-ho
+      when nd_and => 
         gc_and(p.expr_e,r,d);
-      when nd_or => -- actualment nd_e1, canviar-ho
+      when nd_or =>
         gc_or(p.expr_e,r,d);
       when nd_e2 => -- cercar un nom mes cool x)
         gc_e2(p.expr_e,r,d);

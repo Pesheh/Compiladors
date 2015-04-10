@@ -1,4 +1,5 @@
 with semantica; use semantica;
+with semantica.g_codi_int; use semantica.g_codi_int;
 with decls; use decls;
 with decls.d_descripcio; use decls.d_descripcio;
 with decls.d_tnoms; use decls.d_tnoms;
@@ -338,7 +339,8 @@ package body semantica.c_tipus is
   begin
     id_array:=nd_array.dt_id.id_id;
     id_tipus:=nd_array.dt_cont.dtcont_tipus.id_id;
-    desc_array:=(td=>dtipus,dt=> (tsb=>tsb_arr,ocup=>0,tcomp=>id_tipus));
+    -- El valor 0 de B del tipus array es temporal <<<< ALERTA
+    desc_array:=(td=>dtipus,dt=> (tsb=>tsb_arr,b=>0,ocup=>0,tcomp=>id_tipus));
     put(ts,id_array,desc_array,error);
     if error then null; end if; --posar missatge d'error
     ct_array_idx(nd_array.dt_cont.dtcont_idx,id_array,num_components);
@@ -347,7 +349,8 @@ package body semantica.c_tipus is
 
     --No estic segur si aquesta conversio es correcta!
     ocup:=despl'val(num_components)*desc_tipus.dt.ocup; 
-    desc_array:=(td=>dtipus,dt=> (tsb=>tsb_arr,ocup=>ocup,tcomp=>id_tipus));
+    -- El valor de B del tipus array es temporal <<<< ALERTA
+    desc_array:=(td=>dtipus,dt=> (tsb=>tsb_arr,b=>0,ocup=>ocup,tcomp=>id_tipus));
     update(ts,id_array,desc_array);
   end ct_array;
 

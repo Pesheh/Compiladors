@@ -293,43 +293,43 @@ package body semantica.missatges is
             when nd_expr =>
               i:=i+1;
               case p.expr_e.tn is
-                when nd_e0 =>
-                  put_line(graph,"nd_expr_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e0_"&Trim(i'img, Ada.Strings.Left));
-                when nd_e1 =>
-                  put_line(graph,"nd_expr_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e1_"&Trim(i'img, Ada.Strings.Left));
+                when nd_and =>
+                  put_line(graph,"nd_expr_"&Trim(j'img, Ada.Strings.Left)&" -> nd_and_"&Trim(i'img, Ada.Strings.Left));
+                when nd_or =>
+                  put_line(graph,"nd_expr_"&Trim(j'img, Ada.Strings.Left)&" -> nd_or_"&Trim(i'img, Ada.Strings.Left));
                 when nd_e2 =>
                   put_line(graph,"nd_expr_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
                 when others => null;
               end case;
               put(q,p.expr_e,i);
 
-            when nd_e0 =>
+            when nd_and =>
               i:=i+1;
               case p.e_ope.tn is
-                when nd_e0=>
-                  put_line(graph,"nd_e0_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e0_"&Trim(i'img, Ada.Strings.Left));
+                when nd_and=>
+                  put_line(graph,"nd_and_"&Trim(j'img, Ada.Strings.Left)&" -> nd_and_"&Trim(i'img, Ada.Strings.Left));
                 when nd_e2=>
-                  put_line(graph,"nd_e0_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
+                  put_line(graph,"nd_and_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
                 when others=> null;
               end case;
               put(q,p.e_ope,i);
               i:=i+1;
-              put_line(graph,"nd_e0_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
+              put_line(graph,"nd_and_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
               put(q,p.e_opd,i); 
 
 
-            when nd_e1 =>
+            when nd_or =>
               i:=i+1;
               case p.e_ope.tn is
-                when nd_e0=>
-                  put_line(graph,"nd_e1_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e1_"&Trim(i'img, Ada.Strings.Left));
+                when nd_and=>
+                  put_line(graph,"nd_or_"&Trim(j'img, Ada.Strings.Left)&" -> nd_or_"&Trim(i'img, Ada.Strings.Left));
                 when nd_e2=>
-                  put_line(graph,"nd_e1_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
+                  put_line(graph,"nd_or_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
                 when others=> null;
               end case;
               put(q,p.e_ope,i);
               i:=i+1;
-              put_line(graph,"nd_e1_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
+              put_line(graph,"nd_or_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
               put(q,p.e_opd,i); 
 
             when nd_e2 =>

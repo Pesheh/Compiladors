@@ -4,9 +4,11 @@ package decls.d_tsimbols is
 --    pragma pure;
 
     type tsimbols is limited private;
-
+    
     type iterador_index is private;
     type iterador_arg is private;
+
+    type profunditat is private;
 
     -- Operacions generals
 	  procedure empty(ts: out tsimbols);

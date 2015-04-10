@@ -39,8 +39,8 @@ package decls.d_atribut is
     nd_qs,
     nd_q,
     nd_expr,
-    nd_e0,
-    nd_e1,
+    nd_and,
+    nd_or,
     nd_e2,
     nd_e3,
     nd_lexpr,
@@ -49,14 +49,6 @@ package decls.d_atribut is
     nd_op_rel
   );
 
-  type trelacio is (
-    menor,
-    major,
-    menorigual,
-    majorigual,
-    igual,
-    diferent
-  );
 
   type tmode is (
     md_in,
@@ -208,7 +200,7 @@ package decls.d_atribut is
           sassign_expr: pnode;
 
         when nd_ref =>
-          ref_id: id_nom;
+          ref_id: pnode;
           ref_qs: pnode;
 
         when nd_qs =>
@@ -221,7 +213,7 @@ package decls.d_atribut is
         when nd_expr =>
           expr_e: pnode;
 
-        when nd_e0 | nd_e1 =>
+        when nd_and | nd_or =>
           e_ope: pnode;
           e_opd: pnode;
     

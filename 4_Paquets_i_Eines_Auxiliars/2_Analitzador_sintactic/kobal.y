@@ -168,31 +168,30 @@ Q:
   ;
 
 EXPR:
-	 E0																{rs_Expr($$,$1);}
-  |  E1																{rs_Expr($$,$1);}
+	   E_AND																{rs_Expr($$,$1);}
+  |  E_OR																{rs_Expr($$,$1);}
   |  E2																{rs_Expr($$,$1);}
   ;
 
-E0:
-	 E0 Pc_and E2													{rs_E0($$,$1,$3);}
-  |  E2 Pc_and E2													{rs_E0($$,$1,$3);}
+E_AND:
+	   E_AND Pc_and E2													{rs_EAnd($$,$1,$3);}
+  |  E2 Pc_and E2													{rs_EAnd($$,$1,$3);}
   ;
 
-E1:
-	 E1 Pc_or E2													{rs_E1($$,$1,$3);}
-  |  E2 Pc_or E2													{rs_E1($$,$1,$3);}
+E_OR:
+	   E_OR Pc_or E2													{rs_EOr($$,$1,$3);}
+  |  E2 Pc_or E2													{rs_EOr($$,$1,$3);}
   ;
 
--- Substituir per les corresponents subrutines, una per tipus d'operand
 E2:
-	 E2 Op_rel E3													{rs_E2($$,$1,decls.d_atribut.o_rel,$3);}
-  |  E2 S_mes E3													{rs_E2($$,$1,decls.d_atribut.sum,$3);}
-  |  E2 S_menys E3													{rs_E2($$,$1,decls.d_atribut.res,$3);}
-  |  E2 S_prod E3													{rs_E2($$,$1,decls.d_atribut.prod,$3);}
-  |  E2 S_quoci E3													{rs_E2($$,$1,decls.d_atribut.quoci,$3);}
-  |  E2 Pc_mod E3													{rs_E2($$,$1,decls.d_atribut.modul,$3);}
-  |  Pc_not E3														{rs_E2($$,decls.d_atribut.neg_log,$1);}
-  |	 S_menys E3														{rs_E2($$,decls.d_atribut.neg_alg,$1);}
+	 E2 Op_rel E3													{rs_E2o($$,$1,$3);}
+  |  E2 S_mes E3													{rs_E2s($$,$1,$3);}
+  |  E2 S_menys E3													{rs_E2r($$,$1,$3);}
+  |  E2 S_prod E3													{rs_E2p($$,$1,$3);}
+  |  E2 S_quoci E3													{rs_E2q($$,$1,$3);}
+  |  E2 Pc_mod E3													{rs_E2m($$,$1,$3);}
+  |  Pc_not E3														{rs_E2nl($$,$1);}
+  |	 S_menys E3														{rs_E2na($$,$1);}
   |  E3																{rs_E2($$,$1);}
   ;
 

@@ -14,8 +14,9 @@ package decls is
     positiu,
     negatiu
   );
-  type num_var is new natural; -- sols per compilar
-  type num_proc is new natural; -- sols per compilar
+
+  type num_var is new natural;
+  type num_proc is new natural;
 
 --private
   max_id: constant integer:=997;
@@ -26,10 +27,13 @@ package decls is
 
   null_id: constant id_nom:=0;
 
-
---type tidx is (
---  positiu,
---  negatiu
---);
+  type trelacio is (
+    menor,
+    major,
+    menorigual,
+    majorigual,
+    igual,
+    diferent
+  );
 
 end decls;

@@ -1,6 +1,10 @@
 with ada.text_io; use ada.text_io;
 with decls.d_descripcio;
+with decls.d_atribut;
+with d_stack; use d_stack;
 package body semantica.c_arbre is
+
+  st: stack;
 
   -- Rutina de control
  
@@ -33,48 +37,48 @@ package body semantica.c_arbre is
   procedure rl_op_menor(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-  -- Substituir atribut per atribut
     a.orel_tipus:= menor; a.orel_ope:= null; a.orel_opd:= null;
+    push(st,menor);
   end rl_op_menor;
   
 
   procedure rl_op_major(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-
     a.orel_tipus:= major; a.orel_ope:= null; a.orel_opd:= null;
-  end rl_op_major;
+    push(st,major);
+ end rl_op_major;
   
 
   procedure rl_op_menorigual(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-
     a.orel_tipus:= menorigual; a.orel_ope:= null; a.orel_opd:= null;
+    push(st,menorigual); 
   end rl_op_menorigual;
   
 
   procedure rl_op_majorigual(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-
     a.orel_tipus:= majorigual; a.orel_ope:= null; a.orel_opd:= null;
+    push(st,majorigual);
   end rl_op_majorigual;
   
 
   procedure rl_op_igual(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-
     a.orel_tipus:= igual; a.orel_ope:= null; a.orel_opd:= null;
+    push(st,igual);
   end rl_op_igual;
   
 
   procedure rl_op_diferent(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-
     a.orel_tipus:= diferent; a.orel_ope:= null; a.orel_opd:= null;
+    push(st,diferent);
   end rl_op_diferent;
 
 
@@ -349,43 +353,96 @@ package body semantica.c_arbre is
   end rs_Expr;
 
 
-  procedure rs_E0(expr: out atribut; ee: in atribut; ed: in atribut) is
+  procedure rs_EAnd(expr: out atribut; ee: in atribut; ed: in atribut) is
   begin
-    expr:= new node(nd_e0);
+    expr:= new node(nd_and);
     expr.e_ope:= ee;
     expr.e_opd:= ed;
-  end rs_E0;
+  end rs_EAnd;
 
 
-  procedure rs_E1(expr: out atribut; ee: in atribut; ed: in atribut) is
+  procedure rs_EOr(expr: out atribut; ee: in atribut; ed: in atribut) is
   begin
-    expr:= new node(nd_e1);
+    expr:= new node(nd_or);
     expr.e_ope:= ee;
     expr.e_opd:= ed;
-  end rs_E1;
+  end rs_EOr;
 
 
 	--Rutines semàntiques auxiliars 
 
-  procedure rs_E2(expr: out atribut; ee: in atribut; op: in operand; ed: in atribut) is
+  procedure rs_E2o(expr: out atribut; ee: in atribut; ed:in atribut) is
+  begin
+   expr:= new node(nd_op_rel);
+   expr.orel_tipus:= top(st); pop(st);
+   expr.orel_ope:= ee;
+   expr.orel_opd:= ed;
+  end rs_E2o;
+
+
+  procedure rs_E2s(expr: out atribut; ee: in atribut; ed: in atribut) is
   begin
     expr:= new node(nd_e2);
     expr.e2_ope:= ee;
     expr.e2_opd:= ed;
-    expr.e2_operand:= op;
-  end rs_E2;
+    expr.e2_operand:= decls.d_atribut.sum;
+  end rs_E2s;
 
 
-  procedure rs_E2(expr: out atribut; op:in operand; ed: in atribut) is
+  procedure rs_E2r(expr: out atribut; ee: in atribut; ed: in atribut) is
+  begin
+    expr:= new node(nd_e2);
+    expr.e2_ope:= ee;
+    expr.e2_opd:= ed;
+    expr.e2_operand:= decls.d_atribut.res;
+  end rs_E2r;
+  
+
+  procedure rs_E2p(expr: out atribut; ee: in atribut; ed: in atribut) is
+  begin
+    expr:= new node(nd_e2);
+    expr.e2_ope:= ee;
+    expr.e2_opd:= ed;
+    expr.e2_operand:= decls.d_atribut.prod;
+  end rs_E2p;
+
+
+  procedure rs_E2q(expr: out atribut; ee: in atribut; ed: in atribut) is
+  begin
+    expr:= new node(nd_e2);
+    expr.e2_ope:= ee;
+    expr.e2_opd:= ed;
+    expr.e2_operand:= decls.d_atribut.quoci;
+  end rs_E2q;
+
+
+  procedure rs_E2m(expr: out atribut; ee: in atribut; ed: in atribut) is
+  begin
+    expr:= new node(nd_e2);
+    expr.e2_ope:= ee;
+    expr.e2_opd:= ed;
+    expr.e2_operand:= decls.d_atribut.modul;
+  end rs_E2m;
+
+  
+  procedure rs_E2nl(expr: out atribut; ed: in atribut) is
   begin
     expr:= new node(nd_e2);
     expr.e2_ope:= null;
     expr.e2_opd:= ed;
-    expr.e2_operand:= op;
-  end rs_E2;
+    expr.e2_operand:= decls.d_atribut.neg_log;
+  end rs_E2nl;
+  
+  
+  procedure rs_E2na(expr: out atribut; ed: in atribut) is
+  begin
+    expr:= new node(nd_e2);
+    expr.e2_ope:= null;
+    expr.e2_opd:= ed;
+    expr.e2_operand:= decls.d_atribut.neg_alg;
+  end rs_E2na;
 
-
-  -- Arreglar!!
+  
   procedure rs_E2(expr: out atribut; ed: in atribut) is
   begin
     expr:= new node(nd_e2);
@@ -422,7 +479,7 @@ package body semantica.c_arbre is
   procedure rs_Ref(ref: out atribut; ref_id: in atribut; qs: in atribut) is
   begin
       ref:= new node(nd_ref);
-      ref.ref_id:= ref_id.id_id;
+      ref.ref_id:= ref_id;
       ref.ref_qs:= qs;
   end rs_Ref;
 

@@ -1,13 +1,10 @@
 project Make is
 
    for Languages use ("Ada");
-   for Source_Dirs use ("./","./0_Decls/**","./1_Semantica/**");
+   for Source_Dirs use ("./","./0_Decls/**","./1_Semantica/**","./4_Paquets_i_Eines_Auxiliars/3_Pila_ORels/**");
    for Object_Dir use "./2_Fitxers_Objecte";
    for Exec_Dir use "./3_Executables";
    for Main use ("main.adb");
-
---   for Excluded_Source_Dirs use ("./3_Executables",
---   "./2_Paquets_i_Eines_Auxiliars/**");
 
    package Compiler is
       -- El flag -gnatc checkea la semantica sin compilar, ya sabes petar

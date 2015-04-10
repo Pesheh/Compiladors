@@ -10,13 +10,14 @@ package decls.d_descripcio is
 
   type descr_tipus(tsb: tipus_subjacent:= tsb_nul) is
     record
-      ocup: despl;
+      ocup: despl; -- :)
       case tsb is
         when tsb_bool | tsb_car | tsb_ent	=>
           linf,lsup: valor;
         when tsb_arr 						=>
           tcomp: id_nom; -- tipus dels components de l'arry
           -- other gc stuff
+          b: natural; -- nombre de components a l'array
         when tsb_rec | tsb_nul 				=>
           null;
         end case;

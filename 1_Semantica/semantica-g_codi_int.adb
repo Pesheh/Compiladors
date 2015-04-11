@@ -11,8 +11,6 @@ package body semantica.g_codi_int is
 
   tv: taula_variables;
 
-  nv: num_var:= 0;
-  np: num_proc:= 0;
   ne: etiqueta:= 0;
 
   procedure gc_proc(nd_proc: in pnode);
@@ -36,11 +34,6 @@ package body semantica.g_codi_int is
   procedure gc_e2(nd_e2: in pnode; r: out num_var; d: out despl);
   procedure gc_e3(nd_e3: in pnode; r: out num_var; d: out despl);
 
-	function nova_var return Num_var is
-	begin
-		nv:= nv+1;
-		return nv;
-	end nova_var;
 
   function nova_var(np: num_proc; ocup: ocupacio; desp: despl) return num_var is
   begin
@@ -56,11 +49,6 @@ package body semantica.g_codi_int is
 		return nv;
   end nova_var_const;
 
-	function nou_proc return Num_proc is
-	begin
-		np:= np+1;
-		return np;
-	end nou_proc;
 
   function nova_etiq return etiqueta is
   begin

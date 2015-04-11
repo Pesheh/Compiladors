@@ -10,11 +10,9 @@ package semantica.g_codi_int is
   procedure g_codi_int;
 
   -- ha de formar part de l'especificacio?
-  function nova_var return num_var;
   function nova_var(np: num_proc; ocup: ocupacio; desp: despl) return num_var;
   -- variables constants
   function nova_var_const(val: valor; tsb: tipus_subjacent) return num_var;
-  function nou_proc return num_proc;
   function nova_etiq return etiqueta;
 
 private

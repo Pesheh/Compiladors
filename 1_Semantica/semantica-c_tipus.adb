@@ -1,5 +1,4 @@
--- with semantica; use semantica;
-with semantica.g_codi_int; use semantica.g_codi_int;
+with semantica; use semantica;
 with decls; use decls;
 with decls.d_descripcio; use decls.d_descripcio;
 with decls.d_tnoms; use decls.d_tnoms;
@@ -92,11 +91,14 @@ package body semantica.c_tipus is
     desc:=(td=>dproc,np=>nou_proc);
     put(ts,idstdio,desc,error);
     if error then null; end if; --posar missatge d'error
+  
+    --No se si directamente empezarlo aqui o no?
+    ct_decl_proc(root);
 
   end posa_entorn_standard;
 
-  
-  
+
+
   --Declaracions
 
   procedure ct_decls(nd_decls: in pnode) is
@@ -114,7 +116,8 @@ package body semantica.c_tipus is
       when others => null; --posar missatge d'error , no s'hauria d'arribar aqui!
     end case;
   end ct_decls;
- 
+
+
   procedure ct_decl_tipus(decl_tipus: in pnode) is
 
   begin 
@@ -125,10 +128,8 @@ package body semantica.c_tipus is
       when others => null; --posar missatge d'error, no s'hauria d'arribar aqui!
     end case;
   end ct_decl_tipus;
-  
-  
-  
-  
+
+
   procedure ct_decl_var(decl_var: in pnode) is 
     id_tipus: id_nom;
     d_tipus: descripcio;
@@ -176,6 +177,7 @@ package body semantica.c_tipus is
     desc:=(td=>dconst,tc=>id_tipus,vc=>v_valor);
     ct_lid_const(lid_const=>decl_const.dconst_lid,desc=> desc);
   end ct_decl_const;
+
 
   procedure ct_lid_const(lid_const: in pnode; desc: in descripcio) is
     id_const: id_nom;
@@ -267,6 +269,7 @@ package body semantica.c_tipus is
 
   end ct_valor;
 
+
   --RECORD: Primer s'afegeix el record a la ts comprovant que no hi existia, despres s'afegeixen els camps:
   --Per a cada camp es comprova que es un tipus i s'afegeixen un per un els ids de la lid
   procedure ct_record(nd_record: in pnode) is
@@ -296,6 +299,7 @@ package body semantica.c_tipus is
     ct_dcamp(nd_dcamps.dcamps_dcamp,idr,desp);
   end ct_dcamps;
 
+
   procedure ct_dcamp(nd_dcamp: in pnode;idr: in id_nom;desp: in out despl) is
     id_tipus: id_nom;
     desc_tipus: descripcio;
@@ -308,10 +312,6 @@ package body semantica.c_tipus is
 
 
   procedure ct_dcamp_lid(nd_lid: in pnode; idt,idr: in id_nom; desp: in out despl;ocup: in despl) is
-    --idt: identificador del tipus
-    --idr: identificador del record
-    --ocup: l'ocupacio de cada element del tipus
-    --desp: el desplacament del siguient camp
     id_camp: id_nom;
     desc_camp: descripcio;
     error: boolean;
@@ -339,8 +339,7 @@ package body semantica.c_tipus is
   begin
     id_array:=nd_array.dt_id.id_id;
     id_tipus:=nd_array.dt_cont.dtcont_tipus.id_id;
-    -- El valor 0 de B del tipus array es temporal <<<< ALERTA
-    desc_array:=(td=>dtipus,dt=> (tsb=>tsb_arr,b=>0,ocup=>0,tcomp=>id_tipus));
+    desc_array:=(td=>dtipus,dt=> (tsb=>tsb_arr,ocup=>0,tcomp=>id_tipus, b=>0));
     put(ts,id_array,desc_array,error);
     if error then null; end if; --posar missatge d'error
     ct_array_idx(nd_array.dt_cont.dtcont_idx,id_array,num_components);
@@ -348,11 +347,11 @@ package body semantica.c_tipus is
     if desc_tipus.td/=dtipus then null; end if; --posar missatge d'error
 
     --No estic segur si aquesta conversio es correcta!
-    ocup:=despl'val(num_components)*desc_tipus.dt.ocup; 
-    -- El valor de B del tipus array es temporal <<<< ALERTA
-    desc_array:=(td=>dtipus,dt=> (tsb=>tsb_arr,b=>0,ocup=>ocup,tcomp=>id_tipus));
+    ocup:=despl(num_components)*desc_tipus.dt.ocup; 
+    desc_array:=(td=>dtipus,dt=> (tsb=>tsb_arr,ocup=>ocup,tcomp=>id_tipus, b=>natural(num_components)));
     update(ts,id_array,desc_array);
   end ct_array;
+
 
   procedure ct_array_idx(nd_lidx: in pnode;id_array: in id_nom; num_comp: in out valor) is 
     desc_rang,desc_idx:descripcio;
@@ -385,11 +384,12 @@ package body semantica.c_tipus is
     end if;
     enter_block(ts);
     --!!!En els apunts tenc un comentari en el qual es fa un recorregut del arguments, pero no se perque!!!
-    
+    ct_decls(nd_procediment.proc_decls); 
 
     exit_block(ts); 
   end ct_decl_proc;
 
+  
   procedure ct_decl_args(nd_args: in pnode;id_proc: in id_nom) is
     id_tipus: id_nom;
     desc_tipus: descripcio;
@@ -405,6 +405,7 @@ package body semantica.c_tipus is
     ct_decl_arg(nd_args.args_arg.arg_lid, id_proc, id_tipus, nd_args.args_arg.arg_mode);
   end ct_decl_args;
 
+  
   procedure ct_decl_arg(nd_lid_arg: in pnode;id_proc,id_tipus: in id_nom;mode: in tmode) is
     id_arg: id_nom;
     desc_arg: descripcio;
@@ -421,5 +422,424 @@ package body semantica.c_tipus is
     put_arg(ts,id_proc,id_arg,desc_arg,error);
     if error then null; end if; --posar missatge d'error
   end ct_decl_arg;
+
+  --Sentencias
+
+
+  procedure ct_sents(nd_sents: in pnode) is
+  begin
+    if nd_sents.sents_cont.tn = nd_sents_nob then
+      ct_sents_nob(nd_sents.sents_cont);
+    elsif nd_sents.sents_cont.tn/=nd_null then 
+      null; --posar missatge d'error!
+    end if;
+  end ct_sents;
+
+  procedure ct_sents_nob(nd_sents_nob: in pnode) is
+  begin
+    if nd_sents_nob.snb_snb/=null then
+      ct_sents_nob(nd_sents_nob.snb_snb);
+    end if;
+    case nd_sents_nob.snb_sent.sent_sent.tn is
+      when nd_siter=>
+        ct_sent_iter(nd_sents_nob.snb_sent.sent_sent);
+      when nd_scond=>
+        ct_sent_cond(nd_sents_nob.snb_sent.sent_sent);
+      when nd_scrida=>
+        ct_sent_crida(nd_sents_nob.snb_sent.sent_sent);
+      when nd_sassign=>
+        ct_sent_assign(nd_sents_nob.snb_sent.sent_sent);
+      when others => null; --posar missatge d'error
+    end case;
+  end ct_sents_nob;
+
+
+  procedure ct_sent_iter(nd_sent: in pnode) is
+    id_texpr: id_nom;
+    tsb_expr: tipus_subjacent;
+    expr_esvar: boolean;
+  begin
+    ct_expr(nd_sent.siter_expr,id_texpr,tsb_expr,expr_esvar); 
+    if tsb_expr/=tsb_bool then null; end if; --posar missatge d'error
+
+    if nd_sent.siter_sents.tn/=nd_sents and nd_sent.siter_sents.tn/=nd_null then null; end if; --posar missatge d'error
+  end ct_sent_iter;
+
+
+  procedure ct_sent_cond(nd_sent: in pnode) is
+    id_texpr: id_nom;
+    tsb_expr: tipus_subjacent;
+    expr_esvar: boolean;
+  begin 
+    ct_expr(nd_sent.scond_expr,id_texpr,tsb_expr,expr_esvar); 
+    if tsb_expr/=tsb_bool then null; end if; --posar missatge d'error
+
+    if nd_sent.scond_sents.tn/=nd_sents and nd_sent.scond_sents.tn/=nd_null then null; end if; --posar missatge d'error
+
+    if nd_sent.scond_esents/=null then
+      if nd_sent.scond_esents.tn/=nd_sents and nd_sent.scond_esents.tn/=nd_null then null; end if; --posar missatge d'error
+    end if;
+  end ct_sent_cond;
+
+
+  procedure ct_sent_crida(nd_sent: in pnode) is
+    id_base, id_tipus: id_nom;
+  begin
+    ct_ref(nd_sent.scrida_ref, id_base, id_tipus);
+  end ct_sent_crida;
+
+  procedure ct_sent_assign(nd_sent: in pnode) is
+    id_ref, id_tipus_ref, id_texpr: id_nom;
+    desc_ref: descripcio;
+    tsb_expr: tipus_subjacent;
+    expr_esvar: boolean;
+  begin
+    ct_ref(nd_sent.sassign_ref,id_ref,id_tipus_ref);
+    desc_ref:= get(ts, id_ref);
+    if desc_ref.td/=dvar then null; end if; --posar missatge d'error
+    
+    ct_expr(nd_sent.sassign_expr,id_texpr,tsb_expr,expr_esvar); 
+    if id_texpr/=null_id then
+      --Comprovar que la referencia i l'expressio tenen el mateix tipus
+      if id_tipus_ref /= id_texpr then null; end if; -- posar missatge d'error
+    else 
+      if desc_ref.dt.tsb/=tsb_expr then null; end if; --posar missatge d'error
+    end if;
+
+    if tsb_expr>tsb_ent then null; end if; --posar missatge d'error
+  end ct_sent_assign;
+
+
+  procedure ct_ref(nd_ref: in pnode; id_base: out id_nom; id_tipus: out id_nom) is 
+    it: iterador_arg;
+    desc_ref: descripcio;
+  begin
+    id_base:=nd_ref.ref_id.id_id;
+    desc_ref:=get(ts,id_base);
+    case desc_ref.td is    
+      when dvar=>
+        if nd_ref.ref_qs/=null then
+          ct_qs(nd_ref.ref_qs,id_base,desc_ref.tv);
+        end if;
+        id_tipus:=desc_ref.tv;
+
+      when dconst=>
+        if nd_ref.ref_qs/=null then
+          ct_qs(nd_ref.ref_qs,id_base,desc_ref.tc);
+        end if;
+        id_tipus:=desc_ref.tc;
+
+      when dproc =>
+        --Comprovam si el procediment te arguments
+        first(ts, id_base,it);
+        if is_valid(it) then
+          if nd_ref.ref_qs=null then null; end if; --posar missatge d'error
+          ct_qs_proc(nd_ref.ref_qs,id_base);
+        else
+          if nd_ref.ref_qs/=null then null; end if; --posar missatge d'error
+        end if;
+        id_tipus:=null_id;
+
+      when others=> null; --posar missatge d'error    
+    end case; 
+  end ct_ref;
+
+
+  procedure ct_qs_proc(nd_qs: in pnode; id_base: in id_nom) is 
+    it: iterador_arg;
+  begin
+    if nd_qs.qs_qs/=null then null; end if; --posar missatge d'error => funcions amb multiples () o una crida a un camp
+
+    first(ts, id_base, it);
+    ct_lexpr_proc(nd_qs.qs_q.q_contingut, id_base, it);
+    if is_valid(it) then null; end if; --posar missatge d'error: Hi ha menys arguments que els prevists.
+
+  end ct_qs_proc;
+
+
+  procedure ct_lexpr_proc(nd_lexpr: in pnode; id_base: in id_nom;it: in out iterador_arg) is
+    desc_arg, desc_tipus_arg: descripcio;
+    tsb_expr: tipus_subjacent;
+    id_texpr, id_arg, id_tipus_arg: id_nom;
+    esvar: boolean;
+  begin
+    if nd_lexpr.lexpr_cont /= null then
+      ct_lexpr_proc(nd_lexpr.lexpr_cont, id_base, it);
+    end if;
+
+    ct_expr(nd_lexpr.lexpr_expr, id_texpr, tsb_expr, esvar); 
+    if not is_valid(it) then null; end if; --posar missatge d'error: Hi ha menys arguments que els prevists
+    get(ts, it, id_arg, desc_arg);
+
+    case desc_arg.td is
+      when dvar =>
+        if not esvar then null; end if; -- posar missatge d'error
+        id_tipus_arg:= desc_arg.tv;
+
+      when dargc =>
+        id_tipus_arg:= desc_arg.ta;
+
+      when others => 
+        null; --posar missatge d'error
+
+    end case;
+
+    if id_texpr = null_id then
+      desc_tipus_arg:= get(ts, id_tipus_arg);
+      if desc_tipus_arg.dt.tsb /= tsb_expr then null; end if; --posar missatge d'error
+    else
+      if id_tipus_arg /= id_texpr then null; end if; --posar missatge d'error
+    end if;
+
+    next(ts, it);
+
+  end ct_lexpr_proc;
+
+
+  procedure ct_qs(nd_qs: in pnode; id_base: in id_nom; id_tipus: in out id_nom) is
+  begin
+    if nd_qs.qs_qs/=null then
+      ct_qs(nd_qs.qs_qs,id_base,id_tipus);
+    end if;
+
+    ct_q(nd_qs.qs_q, id_base, id_tipus);
+
+  end ct_qs;
+
+
+  procedure ct_q(nd_q: in pnode; id_base: in id_nom; id_tipus: in out id_nom) is
+    desc_tipus, desc_camp: descripcio;
+    id_camp: id_nom;
+    it: iterador_index;
+  begin
+    desc_tipus:= get(ts, id_tipus);
+
+    case nd_q.q_contingut.tn is
+      when nd_id => --R.id
+        if desc_tipus.dt.tsb /= tsb_rec then null; end if; --posar missatge d'error
+
+        id_camp:= nd_q.q_contingut.id_id;
+        desc_camp:= get(ts, id_camp);
+        if desc_camp.td= dnula then null; end if; --posar missatge d'error: El record no te camp amb aquest id.
+        id_tipus:= desc_camp.tcmp;
+
+      when nd_lexpr => --R(E) 
+        if desc_tipus.dt.tsb /= tsb_arr then null; end if; --posar missatge d'error        
+        first(ts, id_tipus, it);
+        ct_lexpr_array(nd_q.q_contingut, id_base, id_tipus, it);
+
+        if is_valid(it) then null; end if; --posar missatge d'error: Hi ha menys indexos que els prevists.
+        id_tipus:= desc_tipus.dt.tcomp;
+
+      when others => null; --posar missatge d'error
+    end case;
+  end ct_q;
+
+
+  procedure ct_lexpr_array(nd_lexpr: in pnode; id_base: in id_nom; id_tipus: in out id_nom; it: in out iterador_index) is 
+    desc_index, desc_tipus_idx: descripcio;
+    tsb_expr: tipus_subjacent;
+    id_texpr: id_nom;
+    esvar: boolean;
+  begin
+
+    if nd_lexpr.lexpr_cont /= null then
+      ct_lexpr_array(nd_lexpr.lexpr_cont, id_base, id_tipus, it);
+    end if;
+
+    ct_expr(nd_lexpr.lexpr_expr, id_texpr, tsb_expr, esvar); 
+    if not is_valid(it) then null; end if; --posar missatge d'error
+    desc_index:= get(ts, it);
+    if id_texpr = null_id then 
+      desc_tipus_idx:= get(ts, desc_index.tind);
+      if desc_tipus_idx.dt.tsb /= tsb_expr then null; end if; --posar missatge d'error
+    else
+      if id_texpr /= desc_index.tind then null; end if; --posar missatge d'error
+    end if;
+
+    next(ts, it);
+
+  end ct_lexpr_array;
+
+
+  procedure ct_expr(nd_expr: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean) is
+  begin 
+    case nd_expr.expr_e.tn is
+      when nd_and | nd_or =>
+        ct_e(nd_expr.expr_e, id_texpr, tsb_expr, esvar);
+      
+      when nd_e2 =>
+        ct_e2(nd_expr.expr_e, id_texpr, tsb_expr, esvar);
+
+      when others => 
+        null; -- posar missatge d'error
+
+    end case;
+  end ct_expr;
+  
+
+  procedure ct_e(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out  boolean) is
+    id_tipus1, id_tipus2: id_nom;
+    tsb1, tsb2: tipus_subjacent;
+    esvar1, esvar2: boolean;
+  begin
+    if nd_e.e_ope.tn = nd_and or nd_e.e_ope.tn = nd_or then
+      ct_e(nd_e.e_ope, id_tipus1, tsb1, esvar1);
+    else 
+      ct_e2(nd_e.e_ope, id_tipus1, tsb1, esvar1);
+    end if;
+    ct_e2(nd_e.e_opd, id_tipus2, tsb2, esvar2);
+   
+    if tipus_compatible(id_tipus1, id_tipus2, tsb1, tsb2, id_texpr, tsb_expr) then null; end if; --posar missatge d'error
+
+    if tsb1 /= tsb_bool then null; end if; --posar missatge d'error
+  
+    esvar:= false;
+  end ct_e;
+
+
+  procedure ct_e2(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean) is
+  begin
+    case nd_e.operand is
+      when o_rel => 
+        ct_e2_op_rel(nd_e, id_texpr, tsb_expr, esvar);
+      
+      when sum | res | prod | quoci | modul =>
+        ct_e2_arit(nd_e, id_texpr, tsb_expr, esvar);
+
+      when neg_log =>
+        ct_e2_neg_log(nd_e, id_texpr, tsb_expr, esvar);
+   
+      when neg_alg =>
+        ct_e2_neg_arit(nd_e, id_texpr, tsb_expr, esvar);
+      
+      when others => null; --posar missatge d'error
+    end case;
+  end ct_e2;
+
+  
+  procedure ct_e2_op_rel(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean) is
+    id_tipus1, id_tipus2: id_nom;
+    tsb1, tsb2: tipus_subjacent;
+    esvar1, esvar2: boolean;
+  begin
+    ct_e2(nd_e.e2_ope, id_tipus1, tsb1, esvar1);
+    ct_e3(nd_e.e3_opd, id_tipus2, tsb2, esvar2);
+   
+    tipus_compatible(id_tipus1, id_tipus2, tsb1, tsb2, id_texpr, tsb_expr);
+    id_texpr:= null_id;
+    tsb_expr:=tsb_bool; 
+    esvar:= false;
+  end ct_e2_op_rel;
+  
+  
+  procedure ct_e2_arit(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean) is
+    id_tipus1, id_tipus2: id_nom;
+    tsb1, tsb2: tipus_subjacent;
+    esvar1, esvar2: boolean;
+  begin
+    ct_e2(nd_e.e2_ope, id_tipus1, tsb1, esvar1);
+    ct_e3(nd_e.e3_opd, id_tipus2, tsb2, esvar2);
+   
+    if tipus_compatible(id_tipus1, id_tipus2, tsb1, tsb2, id_texpr, tsb_expr) then null; end if; --posar missatge d'error
+    if tsb1 > tsb_ent then null; end if; --posar missatge d'error
+    esvar:=false; 
+  end ct_e2_arit;
+  
+  
+  procedure ct_e2_neg_log(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean) is
+    id_tipus id_nom;
+    tsb1: tipus_subjacent;
+    esvar1: boolean;
+  begin
+    ct_e3(nd_e.e3_opd, id_tipus1, tsb1, esvar1);
+    if tsb1 /= tsb_bool then null; end if; --posar missatge d'error
+    id_texpr:= id_tipus1;
+    tsb_expr:= tsb1;
+    esvar:=false; 
+  end ct_e2_neg_log;
+  
+  
+  procedure ct_e2_neg_arit(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean) is
+    id_tipus id_nom;
+    tsb1: tipus_subjacent;
+    esvar1: boolean;
+  begin
+    ct_e3(nd_e.e3_opd, id_tipus1, tsb1, esvar1);
+    if tsb1 /= tsb_ent then null; end if; --posar missatge d'error
+    id_texpr:= id_tipus1;
+    tsb_expr:= tsb1;
+    esvar:=false; 
+  end ct_e2_neg_log;
+
+  
+  procedure ct_e3(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out  boolean) is 
+  begin
+    case nd_e.e3_cont.tn is
+      when nd_ref => 
+        ct_e3_ref(nd_e.e3_cont, id_texpr, tsb_expr, esvar);
+
+      when nd_expr =>
+        ct_e(nd_e.e3_cont, id_texpr, tsb_expr, esvar);
+
+      when nd_lit => 
+        ct_e3_lit(nd_e.e3_cont, id_texpr, tsb_expr, esvar);
+
+      when others => null; --posar missatge d'error
+    end case;
+  end ct_e3;
+
+
+  procedure ct_e3_ref(nd_ref: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean) is 
+    id_ref, id_tipus_ref: id_nom;
+    desc_ref, desc_tipus_ref: descripcio;
+  begin
+    ct_ref(nd_ref, id_ref, id_tipus_ref); 
+
+    id_texpr:= id_tipus_ref;
+
+    desc_tipus_ref:= get(ts, id_tipus_ref);
+    tsb_expr:= desc_tipus_ref.dt.tsb;
+
+    desc_ref:= get(ts, id_ref);
+    case desc_ref.td is
+      when dvar => esvar:= false;
+      when dconst => esvar:= true;
+      when others => null; -- posar missatge d'error
+    end case;
+  end ct_e3_ref;
+
+  
+  procedure ct_e3_lit(nd_lit: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean) is 
+  begin
+    id_texpr:= null_id;
+    tsb_expr:= nd_lit.lit_tipus;
+    esvar:= false;
+  end ct_e3_lit;
+
+
+  function tipus_compatible(id_tipus1, id_tipus2: in id_nom; tsb1, tsb2: in tipus_subjacent; 
+                            id_texp: out id_nom; tsb_exp: out tipus_subjacent) return boolean is
+    error: boolean:=false;
+  begin
+    if id_tipus1 = null_id and id_tipus2 = null_id then
+      if tsb1 /= tsb2 then error:= true; end if;
+      id_texp:= null_id; tsb_exp:= tsb1;
+
+    elsif id_tipus1 /= null_id and id_tipus2 = null_id then
+      if tsb1 /= tsb2 then error:= true; end if;
+      id_texp:= id_tipus1; tsb_exp:= tsb1;
+
+    elsif id_tipus1 = null_id and id_tipus2 /= null_id then
+      if tsb1 /= tsb2 then error:= true; end if;
+      id_texp:= id_tipus2; tsb_exp:= tsb2;
+    
+    elsif id_tipus1 /= null_id and id_tipus2 /= null_id then
+      if tsb1 /= tsb2 then error:= true; end if;
+      id_texp:= id_tipus1; tsb_exp:= tsb1;
+    
+    end if;
+    return error;
+  end tipus_compatible;
 
 end semantica.c_tipus;

@@ -11,4 +11,7 @@ private
   tn: tnoms;
   ts: tsimbols;
   root: pnode;
+  nv: num_var;
+  np: num_proc;
+
 end semantica;

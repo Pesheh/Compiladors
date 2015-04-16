@@ -1,7 +1,10 @@
 project Make is
 
    for Languages use ("Ada");
-   for Source_Dirs use ("./","./0_Decls/**","./1_Semantica/**","./4_Paquets_i_Eines_Auxiliars/3_Pila_ORels/**");
+   for Source_Dirs use ("./","./0_Decls/**","./1_Semantica/**"
+   ,"./4_Paquets_i_Eines_Auxiliars/1_Analitzador_lexic/**"
+   ,"./4_Paquets_i_Eines_Auxiliars/2_Analitzador_sintactic/**"
+   ,"./4_Paquets_i_Eines_Auxiliars/3_Pila_ORels/**");
    for Object_Dir use "./2_Fitxers_Objecte";
    for Exec_Dir use "./3_Executables";
    for Main use ("main.adb");

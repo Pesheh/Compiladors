@@ -7,7 +7,7 @@ package semantica.g_codi_int is
   type etiqueta is private;
   type ocupacio is private;
 
-  procedure g_codi_int;
+  procedure gen_codi_int;
 
   -- ha de formar part de l'especificacio?
   function nova_var return num_var;

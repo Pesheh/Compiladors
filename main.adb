@@ -4,8 +4,15 @@ with decls.d_tsimbols; use decls.d_tsimbols;
 with semantica; use semantica;
 with semantica.c_arbre; use semantica.c_arbre;
 with semantica.c_tipus; use semantica.c_tipus;
-with semantica.g_codi_int; use semantica.g_codi_int; -- ja inclos a c_tipus. Mentre sigui per compilar, pot estar comentat
+with a_sintactic; use a_sintactic;
+with a_lexic; use a_lexic;
+
 procedure main is
-begin 
-  null;
+begin
+  open("file");
+  posa_entorn_standard;
+  YYParse;
+  close;
+  comprovacio_tipus;
+  semantica.print_arbre;
 end main;

@@ -75,10 +75,10 @@ private
 
     type tsimbols is
         record
-            prof: profunditat;
-            td: tdescripcio;
+            prof: profunditat:=1;
+            td: tdescripcio:=(others=>(0,(td => dnula),0));
             te: texpansio;
-            tb: tblocks;
+            tb: tblocks:=(others=>0);
         end record;
 
 

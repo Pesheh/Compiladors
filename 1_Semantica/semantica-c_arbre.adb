@@ -86,8 +86,6 @@ package body semantica.c_arbre is
   
   procedure rs_Root(proc: in atribut) is
   begin
-      empty(tn);
-      empty(ts);
       root:= new node(nd_root);
       root.p:=proc;
   end rs_Root;

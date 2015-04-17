@@ -1,3 +1,5 @@
+with semantica.missatges; use semantica.missatges;
+
 with Ada.Strings.Hash; use ada.Strings;
 
 package body decls.d_tnoms is
@@ -73,6 +75,7 @@ package body decls.d_tnoms is
             nid:= nid+1; tid(nid):= (td(i),nc);
             td(i):=nid; p:=nid;
         end if;
+        missatges_imprimir_id(p, nom);
         ident:= p;
     end put;
 

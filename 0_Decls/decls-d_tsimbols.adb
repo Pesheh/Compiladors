@@ -1,3 +1,5 @@
+with semantica; use semantica;
+with semantica.missatges; use semantica.missatges;
 package body decls.d_tsimbols is
 
   procedure empty(ts: out tsimbols) is
@@ -20,6 +22,8 @@ package body decls.d_tsimbols is
     prof: profunditat renames ts.prof;
     ie: index_expansio;
   begin
+    missatges_imprimir_desc(d, id, prof'img); 
+
     error:= false;
     if td(id).prof=prof then
       error:= true;
@@ -27,10 +31,11 @@ package body decls.d_tsimbols is
     if not error then
       ie:= tb(prof); ie:= ie+1; tb(prof):= ie;
       te(ie).prof:= td(id).prof; te(ie).d:= td(id).d;
+      td(id).d:=d;
       te(ie).id:= id; te(ie).next:= 0;
     end if;
   end put;
-
+    
 
   function get(ts: in tsimbols; id: in id_nom) return descripcio is
     td: tdescripcio renames ts.td;

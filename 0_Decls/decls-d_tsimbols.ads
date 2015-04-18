@@ -55,9 +55,9 @@ private
     type te_item;
     type td_item is
         record
-            prof: profunditat;
-            d: descripcio;
-            next: index_expansio;
+            prof: profunditat:= 0;
+            d: descripcio:= (td => dnula);
+            next: index_expansio:= 0;
         end record;
 
     type te_item is
@@ -75,10 +75,10 @@ private
 
     type tsimbols is
         record
-            prof: profunditat;
+            prof: profunditat:= 1;
             td: tdescripcio;
             te: texpansio;
-            tb: tblocks;
+            tb: tblocks:=(others => 0);
         end record;
 
 

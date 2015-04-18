@@ -1,7 +1,8 @@
 with Ada.Text_IO;
 with decls.d_tnoms;
 package body semantica.g_codi_int is
- 
+  DEBUG: constant boolean:= false;
+
   fals: constant num_var:= 0;
 
   ti: taula_instruccions;
@@ -22,23 +23,18 @@ package body semantica.g_codi_int is
   procedure gc_siter(nd_siter: in pnode);
   procedure gc_scond(nd_scond: in pnode);
   procedure gc_scrida(nd_cproc: in pnode);
-  procedure gc_scrida_args(nd_qs: in pnode);
+  procedure gc_scrida_args(nod_lexpr: in pnode);
   procedure gc_sassign(nd_sassign: in pnode);
   procedure gc_ref(nd_ref: in pnode; r: out num_var; d: out despl);
   procedure gc_ref_id(nd_id: in pnode; r: out num_var; idt: out id_nom; dc: out despl; dv: out num_var);
   procedure gc_ref_qs(nd_qs: in pnode; idt: in out id_nom; dc: in out despl; dv: in out num_var);
   procedure gc_ref_lexpr(nd_lexpr: in pnode; desp: in out despl; it: in out iterador_index);
   procedure gc_expressio(nd_expr: in pnode; r: out num_var; d: out despl);
-  procedure gc_and(n_and: in pnode; r: out num_var; d: out despl);
-  procedure gc_or(n_or: in pnode; r: out num_var; d: out despl);
+  procedure gc_and(nod_and: in pnode; r: out num_var; d: out despl);
+  procedure gc_or(nod_or: in pnode; r: out num_var; d: out despl);
   procedure gc_e2(nd_e2: in pnode; r: out num_var; d: out despl);
   procedure gc_e3(nd_e3: in pnode; r: out num_var; d: out despl);
 
-	function nova_var return Num_var is
-	begin
-		nv:= nv+1;
-		return nv;
-	end nova_var;
 
   function nova_var(np: num_proc; ocup: ocupacio; desp: despl) return num_var is
   begin
@@ -54,11 +50,6 @@ package body semantica.g_codi_int is
 		return nv;
   end nova_var_const;
 
-	function nou_proc return Num_proc is
-	begin
-		np:= np+1;
-		return np;
-	end nou_proc;
 
   function nova_etiq return etiqueta is
   begin
@@ -69,22 +60,38 @@ package body semantica.g_codi_int is
   -- El format es temporal
   procedure genera(t: in tinstruccio; a,b,c: in num_var) is
   begin
-    Ada.Text_IO.Put_Line(tinstruccio'Image(t)&""&num_var'Image(a)&""&num_var'Image(b)&""&num_var'Image(c));
+    if b = nil_nv then
+      Ada.Text_IO.Put_Line("g_codi_int:genera::"&tinstruccio'Image(t)&""&num_var'Image(a)&" - -");
+    elsif c = nil_nv then
+      Ada.Text_IO.Put_Line("g_codi_int:genera::"&tinstruccio'Image(t)&""&num_var'Image(a)&""&num_var'Image(b)&" -");
+    else
+      Ada.Text_IO.Put_Line("g_codi_int:genera::"&tinstruccio'Image(t)&""&num_var'Image(a)&""&num_var'Image(b)&""&num_var'Image(c));
+    end if;
   end genera;
 
   procedure genera(t: in tinstruccio; a: in etiqueta; b,c: in num_var) is
   begin
-    Ada.Text_IO.Put_Line(tinstruccio'Image(t)&""&etiqueta'Image(a)&""&num_var'Image(b)&""&num_var'Image(c));
+    if b = nil_nv then
+      Ada.Text_IO.Put_Line("g_codi_int:genera::"&tinstruccio'Image(t)&""&etiqueta'Image(a)&" - -");
+    elsif c = nil_nv then
+      Ada.Text_IO.Put_Line("g_codi_int:genera::"&tinstruccio'Image(t)&""&etiqueta'Image(a)&""&num_var'Image(b)&" -");
+    else
+      Ada.Text_IO.Put_Line("g_codi_int:genera::"&tinstruccio'Image(t)&""&etiqueta'Image(a)&""&num_var'Image(b)&""&num_var'Image(c));
+    end if;
   end genera;
 
   procedure genera(t: in tinstruccio; a: in num_var; b: in String; c: in num_var) is
   begin
-    Ada.Text_IO.Put_Line(tinstruccio'Image(t)&""&num_var'Image(a)&""&b&""&num_var'Image(c));
+    if c = nil_nv then
+      Ada.Text_IO.Put_Line("g_codi_int:genera::"&tinstruccio'Image(t)&""&num_var'Image(a)&" "&b&" -");
+    else
+      Ada.Text_IO.Put_Line("g_codi_int:genera::"&tinstruccio'Image(t)&""&num_var'Image(a)&" "&b&""&num_var'Image(c));
+    end if;
   end genera;
 
   procedure desref(r: in num_var; d: in despl; t: out num_var) is
   begin
-    if d=0 then
+    if d = 0 then
      t:= r;
     else
      t:= nova_var;
@@ -94,7 +101,7 @@ package body semantica.g_codi_int is
 
   procedure gen_codi_int is
   begin
-    if root.p /= null then
+    if root.p.tn /= nd_null then
       gc_proc(root.p);
     end if;
   end gen_codi_int;
@@ -102,19 +109,16 @@ package body semantica.g_codi_int is
   procedure gc_proc(nd_proc: in pnode) is
     p: pnode renames nd_proc;
   begin
-    if p.proc_cproc /= null then
-      gc_cproc(p.proc_cproc); -- realment no es gaire necessari aixo(excepte la generacio del pmb i la etiq inicial), de moment
-    else
-      null;
-      -- error molt gros
+    enter_block(ts); -- <<< !?
+    if p.proc_cproc.tn /= nd_null then
+      gc_cproc(p.proc_cproc);
     end if;
-    if p.proc_decls /= null then
+    if p.proc_decls.tn /= nd_null then
       gc_decls(p.proc_decls);
     end if;
-    if p.proc_sents /= null then
-      gc_sents(p.proc_sents);
-    end if;
-    genera(rtn, num_var(p.proc_cproc.cproc_id.id_id), 0, 0);
+    gc_sents(p.proc_sents);
+    genera(rtn, num_var(p.proc_cproc.cproc_id.id_id), nil_nv, nil_nv);
+    exit_block(ts); -- <<< !?
   end gc_proc;
 
   procedure gc_cproc(nd_cproc: in pnode) is
@@ -123,16 +127,16 @@ package body semantica.g_codi_int is
     e: etiqueta;
   begin
     nargs:= 0; -- usat a la taula de procediments
-    if p.cproc_args /= null then
+    if p.cproc_args.tn /= nd_null then
       gc_args(p.cproc_args, nargs);
     end if;
-    e:= nova_etiq; genera(etiq, e, 0, 0); genera(pmb, num_var(np), 0, 0);
+    e:= nova_etiq; genera(etiq, e,nil_nv, nil_nv); genera(pmb, num_var(np), nil_nv, nil_nv);
   end gc_cproc;
 
   procedure gc_args(nd_args: in pnode; nargs: out natural) is
     p: pnode renames nd_args;
   begin
-    if p.args_args /= null then
+    if p.args_args.tn /= nd_null then
       gc_args(p.args_args, nargs);
     end if;
     nargs:= nargs+1;
@@ -141,19 +145,37 @@ package body semantica.g_codi_int is
   procedure gc_decls(nd_decls: in pnode) is
     p: pnode renames nd_decls;
   begin
-    null; -- cal generar codi intermitg per a les declaracions?
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:gc_decls::"
+      &tnode'Image(p.tn)&"::"
+      &tnode'Image(p.decls_decls.tn)&"::"
+      &tnode'Image(p.decls_decl.tn));
+    end if;
+    if p.decls_decls.tn /= nd_null then
+      gc_decls(p.decls_decls);
+    end if;
+    if p.decls_decl.decl_real.tn = nd_proc then
+      np:= nou_proc; -- <<< TEMPORAL, consular-lo a la ts?
+      gc_proc(p.decls_decl.decl_real);
+    end if;
   end gc_decls;
 
   procedure gc_sents(nd_sents: in pnode) is
   begin
-    gc_sent(nd_sents.sents_cont);
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:gc_sents::"
+      &tnode'Image(nd_sents.tn));
+    end if;
+    if nd_sents.tn /= nd_null then
+      gc_sent(nd_sents.sents_cont);
+    end if;
   end gc_sents;
 
   procedure gc_sent(nd_sent: in pnode) is
     p: pnode;
   begin
     p:= nd_sent;
-    if p.snb_snb /= null then
+    if p.snb_snb.tn /= nd_null then
       gc_sent(p.snb_snb);
     end if;
     p:= p.snb_sent.sent_sent;
@@ -178,15 +200,17 @@ package body semantica.g_codi_int is
     r,t: num_var;
     d: despl;
   begin
-    ei:= nova_etiq;
-    genera(etiq, ei, 0, 0);
-    gc_expressio(p.siter_expr, r, d);
-    desref(r, d, t);
-    ef:= nova_etiq;
-    genera(eq, ef, t, fals);
-    gc_sents(p.siter_sents);
-    genera(go_to, ei, 0, 0);
-    genera(etiq, ef, 0, 0);
+    if p.siter_sents.tn /= nd_null then
+      ei:= nova_etiq;
+      genera(etiq, ei, nil_nv, nil_nv);
+      gc_expressio(p.siter_expr, r, d);
+      desref(r, d, t);
+      ef:= nova_etiq;
+      genera(ieq_goto, ef, t, fals);
+      gc_sents(p.siter_sents);
+      genera(go_to, ei, nil_nv, nil_nv);
+      genera(etiq, ef, nil_nv, nil_nv);
+    end if;
   end gc_siter;
 
   procedure gc_scond(nd_scond: in pnode) is
@@ -195,59 +219,83 @@ package body semantica.g_codi_int is
     r,t: num_var;
     d: despl;
   begin
-    gc_expressio(p.scond_expr, r, d);
-    desref(r, d, t);
-    ef:= nova_etiq;
-    genera(eq, ef, t, fals);
-    gc_sents(p.scond_sents);
-    if p.scond_esents /= null then
-      efi:= nova_etiq;
-      genera(go_to, efi, 0, 0);
-      genera(etiq, ef, 0, 0);
-      gc_sents(p.scond_esents);
-      -- codi esperat:
-      -- if t=fals goto efals
-      --  sents_if
-      --  goto efi
-      -- efals: skip
-      --  sents_else
-      -- efi: skip
-    else 
-      efi:= ef; 
-      -- codi esperat:
-      -- if t=fals goto efi
-      --  sents_if
-      -- efi: skip
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:gc_scond::"
+      &"if "&tnode'Image(p.scond_sents.tn)
+      &"else "&tnode'Image(p.scond_esents.tn));
     end if;
-    genera(etiq, efi, 0, 0);
+    if p.scond_sents.tn /= nd_null or p.scond_esents.tn /= nd_null then
+      gc_expressio(p.scond_expr, r, d);
+      desref(r, d, t);
+      ef:= nova_etiq;
+      genera(ieq_goto, ef, t, fals);
+      gc_sents(p.scond_sents);
+      if p.scond_esents.tn /= nd_null then
+        efi:= nova_etiq;
+        genera(go_to, efi, nil_nv, nil_nv);
+        genera(etiq, ef, nil_nv, nil_nv);
+        gc_sents(p.scond_esents);
+        -- codi esperat:
+        -- if t=fals goto efals
+        --  sents_if
+        --  goto efi
+        -- efals: skip
+        --  sents_else
+        -- efi: skip
+      else 
+        efi:= ef; 
+        -- codi esperat:
+        -- if t=fals goto efi
+        --  sents_if
+        -- efi: skip
+      end if;
+      genera(etiq, efi, nil_nv, nil_nv);
+    end if;
   end gc_scond;
 
   procedure gc_scrida(nd_cproc: in pnode) is
-    p: pnode renames nd_cproc;
+    p: pnode;
     d: descripcio;
   begin
-    d:= get(ts, p.ref_id.id_id);
-    if p.ref_qs /= null then
-      gc_scrida_args(p.ref_qs);
+    p:= nd_cproc.scrida_ref;
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:gc_scrida::"&tnode'Image(p.tn));
     end if;
-    genera(call, num_var(d.np), 0, 0);
+    d:= get(ts, p.ref_id.id_id);
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:gc_scrida::"&tipus_descr'Image(d.td));
+    end if;
+    if p.ref_qs.tn /= nd_null then
+      gc_scrida_args(p.ref_qs.qs_q.q_contingut);
+    end if;
+    genera(call, num_var(d.np), nil_nv, nil_nv);
   end gc_scrida;
 
-  procedure gc_scrida_args(nd_qs: in pnode) is
-    p: pnode renames nd_qs;
+  procedure gc_scrida_args(nod_lexpr: in pnode) is
+    p: pnode renames nod_lexpr;
     r: num_var;
     d: despl;
   begin
-    if p.qs_qs /= null then
-      gc_scrida_args(p.ref_qs);
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:gc_scrida_args::"&tnode'Image(p.tn));
     end if;
-    gc_expressio(p.qs_q.q_contingut, r, d);
+    if p.lexpr_cont.tn /= nd_null then
+      gc_scrida_args(p.lexpr_cont);
+    end if;
+    gc_expressio(p.lexpr_expr, r, d);
+
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:gc_scrida_args::r="&num_var'Image(r)&"::"
+      &"d="&despl'Image(d));
+    end if;
+
     if d = 0 then
-      genera(params, r, 0, 0);
+      genera(params, r, nil_nv, nil_nv);
     else
-      genera(paramc, r, num_var(d), 0);
+      genera(paramc, r, num_var(d), nil_nv);
     end if;
   end gc_scrida_args;
+
 
   procedure gc_sassign(nd_sassign: in pnode) is
     p: pnode renames nd_sassign;
@@ -258,7 +306,7 @@ package body semantica.g_codi_int is
     gc_expressio(p.sassign_expr, r1, d1);
     if d = 0 then
       if d1 = 0 then
-        genera(cp, r, r1, 0);
+        genera(cp, r, r1, nil_nv);
         -- r:= r1
       else
         genera(cons_idx, r, r1, num_var(d1));
@@ -284,7 +332,7 @@ package body semantica.g_codi_int is
     idt: id_nom;
   begin
     gc_ref_id(p.ref_id, r, idt, dc, dv);
-    if p.ref_qs /= null then
+    if p.ref_qs.tn /= nd_null then
       gc_ref_qs(p.ref_qs, idt, dc, dv);
     end if;
     if dc = 0 and then dv = 0 then
@@ -311,7 +359,9 @@ package body semantica.g_codi_int is
     d: descripcio;
   begin
     d:= get(ts, p.id_id);
-    Ada.Text_IO.Put_Line(tipus_descr'Image(d.td)&"::"&id_nom'Image(p.id_id));
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:gc_ref_id::"&tipus_descr'Image(d.td)&"::"&id_nom'Image(p.id_id));
+    end if;
     r:= d.nv;
     idt:= d.tv;
     dc:= 0; -- var nul·la
@@ -327,7 +377,7 @@ package body semantica.g_codi_int is
     desp: despl:= 0;
     dt,dtc,dca: descripcio;
   begin
-    if p.qs_qs /= null then
+    if p.qs_qs.tn /= nd_null then
       gc_ref_qs(p.qs_qs, idt, dc, dv);
     end if;
     if p.qs_q.tn = nd_id then
@@ -364,7 +414,7 @@ package body semantica.g_codi_int is
     r,t,t1,te,tu: num_var;
     d: despl;
   begin
-    if p.lexpr_cont /= null then
+    if p.lexpr_cont.tn /= nd_null then
       gc_ref_lexpr(p.lexpr_cont, desp, it);
     end if;
     dindx:= get(ts, it); next(ts, it);
@@ -382,12 +432,15 @@ package body semantica.g_codi_int is
   procedure gc_expressio(nd_expr: in pnode; r: out num_var; d: out despl) is
     p: pnode renames nd_expr;
   begin
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:gc_expressio::"&tnode'Image(p.tn)&"::"&tnode'Image(p.expr_e.tn));
+    end if;
     case p.expr_e.tn is
       when nd_and => 
         gc_and(p.expr_e, r, d);
       when nd_or =>
         gc_or(p.expr_e, r, d);
-      when nd_e2 => -- cercar un nom mes cool x)
+      when nd_e2 | nd_op_rel => -- cercar un nom mes cool x)
         gc_e2(p.expr_e, r, d);
       when others =>
         -- Comprovacio de tipus...
@@ -395,12 +448,15 @@ package body semantica.g_codi_int is
     end case;
   end gc_expressio;
 
-  procedure gc_and(n_and: in pnode; r: out num_var; d: out despl) is
-    p: pnode renames n_and;
+  procedure gc_and(nod_and: in pnode; r: out num_var; d: out despl) is
+    p: pnode renames nod_and;
     t,t1,t2: num_var;
     r1: num_var;
     d1: despl;
   begin
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:gc_and::"&tnode'Image(p.tn));
+    end if;
     if p.e_ope.tn = nd_and then
       gc_and(p.e_ope, r1, d1);
     else 
@@ -415,14 +471,17 @@ package body semantica.g_codi_int is
     d:= 0;
   end gc_and;
 
-  procedure gc_or(n_or: in pnode; r: out num_var; d: out despl) is
-    p: pnode renames n_or;
+  procedure gc_or(nod_or: in pnode; r: out num_var; d: out despl) is
+    p: pnode renames nod_or;
     t,t1,t2: num_var;
     r1: num_var;
     d1: despl;
   begin
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:or::"&tnode'Image(p.tn));
+    end if;
     if p.e_ope.tn = nd_or then
-      gc_and(p.e_ope, r1, d1);
+      gc_or(p.e_ope, r1, d1);
     else
       gc_e2(p.e_ope, r1, d1);
     end if;
@@ -441,13 +500,28 @@ package body semantica.g_codi_int is
     r1: num_var;
     d1: despl;
   begin
-    if p.tn = nd_op_rel then
-      gc_e2(p.orel_ope, r1, d1);
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:gc_e2::"&tnode'Image(p.tn));
+    end if;
+    if p.e2_operand = nul then
+      gc_e3(p.e2_opd, r, d);
+    elsif p.e2_operand = neg_alg or p.e2_operand = neg_log then
+      gc_e3(p.e2_opd, r1, d1);
+      desref(r1, d1, t); 
+      if p.e2_operand = neg_alg then
+        genera(neg, t, nil_nv, nil_nv);
+      else
+        genera(op_not, t, nil_nv, nil_nv);
+      end if;
+      r:= t; 
+      d:= 0;
+    else
+      gc_e2(p.e2_ope, r1, d1);
       desref(r1, d1, t1);
-      gc_e3(p.orel_opd, r1, d1);
+      gc_e3(p.e2_opd, r1, d1);
       desref(r1, d1, t2);
       t:= nova_var;
-      case p.orel_tipus is
+      case p.e2_operand is
         when major =>
           genera(gt, t, t1, t2);
         when majorigual =>
@@ -457,48 +531,24 @@ package body semantica.g_codi_int is
         when diferent =>
           genera(neq, t, t1, t2);
         when menorigual =>
-          genera(le, t, t1, t2);
+          genera(le, t, t1,  t2);
         when menor =>
           genera(lt, t, t1, t2);
+        when sum =>
+          genera(sum, t, t1, t2);
+        when res =>
+          genera(res, t, t1, t2);
+        when prod =>
+          genera(mul, t, t1, t2);
+        when quoci =>
+          genera(div, t, t1, t2);
+        when modul =>
+          genera(modul, t, t1, t2);
+        when others =>
+          null;
       end case;
       r:= t;
       d:= 0;
-    else
-      if p.e2_operand = nul then
-          gc_e3(p.e2_opd, r1, d1);
-      elsif p.e2_operand = neg_alg or p.e2_operand = neg_log then
-          gc_e3(p.e2_opd, r1, d1);
-          desref(r1, d1, t); -- es necessari?
-          if p.e2_operand = neg_alg then
-            genera(neg, t, 0, 0);
-          else
-            genera(op_not, t, 0, 0);
-          end if;
-          r:= t; -- si el desref es necessari, aixo tmb ho es
-          d:= 0;
-      else
-          gc_e2(p.e2_ope, r1, d1);
-          desref(r1, d1, t1);
-          gc_e3(p.e2_opd, r1, d1);
-          desref(r1, d1, t2);
-          t:= nova_var;
-          case p.e2_operand is
-            when sum =>
-              genera(sum, t, t1, t2);
-            when res =>
-              genera(res, t, t1, t2);
-            when prod =>
-              genera(mul, t, t1, t2);
-            when quoci =>
-              genera(div, t, t1, t2);
-            when modul =>
-              genera(modul, t, t1, t2);
-            when others =>
-              null;
-          end case;
-          r:= t;
-          d:= 0;
-      end if;
     end if;
   end gc_e2;
 
@@ -506,6 +556,11 @@ package body semantica.g_codi_int is
     p: pnode renames nd_e3;
     t: num_var;
   begin
+    if DEBUG then
+      Ada.Text_IO.Put_Line("g_codi_int:gc_e3::"
+      &tnode'Image(p.tn)&"=>"
+      &tnode'Image(p.e3_cont.tn));
+    end if;
     case p.e3_cont.tn is
       when nd_ref =>
         gc_ref(p.e3_cont, r, d);
@@ -513,7 +568,12 @@ package body semantica.g_codi_int is
         gc_expressio(p.e3_cont, r, d);
       when nd_lit =>
         t:= nova_var;
-        genera(cp, t, decls.d_tnoms.get(tn, p.e3_cont.lit_ids), 0);
+        if DEBUG then
+          Ada.Text_IO.Put_Line("g_codi_int:gc_e3::"
+          &tipus_subjacent'Image(p.e3_cont.lit_tipus)&"::"
+          &id_str'Image(p.e3_cont.lit_ids));
+        end if;
+        genera(cp, t, decls.d_tnoms.get(tn, p.e3_cont.lit_ids), nil_nv);
         r:= t;
         d:= 0;
       when others =>

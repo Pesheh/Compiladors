@@ -112,7 +112,7 @@ package body decls.d_tnoms is
         ns: id_str renames tn.ns;--number of stored strings
         i,j: integer;
     begin
-        if ids=0 or ids>ns then raise bad_use; end if;
+        if ids>ns then raise bad_use; end if;
         j:= ts(ids-1)-1; i:= ts(ids);
         return tc(i..j);
     end get;

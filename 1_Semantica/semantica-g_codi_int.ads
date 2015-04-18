@@ -10,11 +10,9 @@ package semantica.g_codi_int is
   procedure gen_codi_int;
 
   -- ha de formar part de l'especificacio?
-  function nova_var return num_var;
   function nova_var(np: num_proc; ocup: ocupacio; desp: despl) return num_var;
   -- variables constants
   function nova_var_const(val: valor; tsb: tipus_subjacent) return num_var;
-  function nou_proc return num_proc;
   function nova_etiq return etiqueta;
 
 private
@@ -48,8 +46,8 @@ private
       nparam: natural;
     end record;
 
-  type taula_variables is array (idx_num_var) of pe_tvar;
-  type taula_procediments is array (idx_num_proc) of e_tproc;
+  type taula_variables is array (num_var) of pe_tvar;
+  type taula_procediments is array (num_proc) of e_tproc;
 
   -- Rang temporal 0..200
   type num_instr is new natural range 0..200;
@@ -69,6 +67,7 @@ private
     op_or,
     etiq,
     go_to,
+    ieq_goto,
     gt,
     ge,
     eq,

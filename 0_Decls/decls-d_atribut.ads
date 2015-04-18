@@ -65,7 +65,12 @@ package decls.d_atribut is
 
 	type operand is (
     nul,
-    o_rel,
+    menor,
+    major,
+    menorigual,
+    majorigual,
+    igual,
+    diferent,
     sum,
     res,
     prod,
@@ -95,9 +100,7 @@ package decls.d_atribut is
           lit_tipus: decls.d_descripcio.tipus_subjacent;
 
         when nd_op_rel =>     
-          orel_tipus: trelacio;
-          orel_ope:pnode;
-          orel_opd: pnode; 
+          orel_tipus: operand;
 
         when nd_lid =>
           lid_seg: pnode;

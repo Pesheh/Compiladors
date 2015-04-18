@@ -1,16 +1,13 @@
-with ada.text_io; use ada.text_io;
 with decls.d_descripcio;
 with decls.d_atribut;
-with d_stack; use d_stack;
 package body semantica.c_arbre is
 
-  st: stack;
 
   -- Rutina de control
  
   procedure r_atom(a: out atribut) is
   begin
-   a:= new node(nd_null); 
+    a:= new node(nd_null); 
   end r_atom;
 
   -- Rutines lèxiques 
@@ -26,6 +23,7 @@ package body semantica.c_arbre is
 
   procedure rl_literal(a: out atribut; pos: in posicio; text: in String; tipus: in decls.d_descripcio.tipus_subjacent) is 
     ids: id_str;
+    b: atribut;
   begin
     put(tn,text,ids);
     a:= new node(nd_lit);
@@ -37,48 +35,42 @@ package body semantica.c_arbre is
   procedure rl_op_menor(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-    a.orel_tipus:= menor; a.orel_ope:= null; a.orel_opd:= null;
-    push(st,menor);
+    a.orel_tipus:= menor; 
   end rl_op_menor;
   
 
   procedure rl_op_major(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-    a.orel_tipus:= major; a.orel_ope:= null; a.orel_opd:= null;
-    push(st,major);
+    a.orel_tipus:= major;
  end rl_op_major;
   
 
   procedure rl_op_menorigual(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-    a.orel_tipus:= menorigual; a.orel_ope:= null; a.orel_opd:= null;
-    push(st,menorigual); 
+    a.orel_tipus:= menorigual; 
   end rl_op_menorigual;
   
 
   procedure rl_op_majorigual(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-    a.orel_tipus:= majorigual; a.orel_ope:= null; a.orel_opd:= null;
-    push(st,majorigual);
+    a.orel_tipus:= majorigual;
   end rl_op_majorigual;
   
 
   procedure rl_op_igual(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-    a.orel_tipus:= igual; a.orel_ope:= null; a.orel_opd:= null;
-    push(st,igual);
+    a.orel_tipus:= igual;
   end rl_op_igual;
   
 
   procedure rl_op_diferent(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-    a.orel_tipus:= diferent; a.orel_ope:= null; a.orel_opd:= null;
-    push(st,diferent);
+    a.orel_tipus:= diferent;
   end rl_op_diferent;
 
 
@@ -86,8 +78,6 @@ package body semantica.c_arbre is
   
   procedure rs_Root(proc: in atribut) is
   begin
-      empty(tn);
-      empty(ts);
       root:= new node(nd_root);
       root.p:=proc;
   end rs_Root;
@@ -113,7 +103,7 @@ package body semantica.c_arbre is
   begin
       cproc:= new node(nd_c_proc);
       cproc.cproc_id:= proc_id;
-      cproc.cproc_args:= null;
+      cproc.cproc_args:= new node(nd_null);
   end rs_C_Proc;
 
 
@@ -128,7 +118,7 @@ package body semantica.c_arbre is
   procedure rs_Args(args: out atribut; arg: in atribut) is
   begin
       args:= new node(nd_args);
-      args.args_args:= null;
+      args.args_args:= new node(nd_null);
       args.args_arg:= arg;
   end rs_Args;
 
@@ -242,7 +232,7 @@ package body semantica.c_arbre is
   procedure rs_DCamps(camps: out atribut; camp: in atribut) is
   begin
     camps:= new node(nd_dcamps);
-    camps.dcamps_dcamps:= null;
+    camps.dcamps_dcamps:= new node(nd_null);
     camps.dcamps_dcamp:= camp;
   end rs_DCamps;
 
@@ -275,7 +265,7 @@ package body semantica.c_arbre is
   procedure rs_Sent_Nob(sents: out atribut; sent: in atribut) is 
   begin
     sents:= new node(nd_sents_nob);
-    sents.snb_snb:= null;
+    sents.snb_snb:= new node(nd_null);
     sents.snb_sent:= sent;
   end rs_Sent_Nob;
 
@@ -300,7 +290,7 @@ package body semantica.c_arbre is
     sent:= new node(nd_scond);
     sent.scond_expr:= expr;
     sent.scond_sents:= sents;
-    sent.scond_esents:= null;
+    sent.scond_esents:= new node(nd_null);
   end rs_SCond;
   
 
@@ -341,7 +331,7 @@ package body semantica.c_arbre is
   procedure rs_LExpr(lexpr: out atribut; expr: in atribut) is
   begin
     lexpr:= new node(nd_lexpr);
-    lexpr.lexpr_cont:= null;
+    lexpr.lexpr_cont:= new node(nd_null);
     lexpr.lexpr_expr:= expr;
   end rs_LExpr;
 
@@ -371,12 +361,12 @@ package body semantica.c_arbre is
 
 	--Rutines semàntiques auxiliars 
 
-  procedure rs_E2o(expr: out atribut; ee: in atribut; ed:in atribut) is
+  procedure rs_E2o(expr: out atribut; ee: in atribut; ed: in atribut; op: in atribut) is
   begin
-   expr:= new node(nd_op_rel);
-   expr.orel_tipus:= top(st); pop(st);
-   expr.orel_ope:= ee;
-   expr.orel_opd:= ed;
+    expr:= new node(nd_e2);
+    expr.e2_ope:= ee;
+    expr.e2_opd:= ed;
+    expr.e2_operand:= op.orel_tipus;
   end rs_E2o;
 
 
@@ -428,7 +418,7 @@ package body semantica.c_arbre is
   procedure rs_E2nl(expr: out atribut; ed: in atribut) is
   begin
     expr:= new node(nd_e2);
-    expr.e2_ope:= null;
+    expr.e2_ope:= new node(nd_null);
     expr.e2_opd:= ed;
     expr.e2_operand:= decls.d_atribut.neg_log;
   end rs_E2nl;
@@ -437,7 +427,7 @@ package body semantica.c_arbre is
   procedure rs_E2na(expr: out atribut; ed: in atribut) is
   begin
     expr:= new node(nd_e2);
-    expr.e2_ope:= null;
+    expr.e2_ope:= new node(nd_null);
     expr.e2_opd:= ed;
     expr.e2_operand:= decls.d_atribut.neg_alg;
   end rs_E2na;
@@ -446,7 +436,7 @@ package body semantica.c_arbre is
   procedure rs_E2(expr: out atribut; ed: in atribut) is
   begin
     expr:= new node(nd_e2);
-    expr.e2_ope:= null;
+    expr.e2_ope:= new node(nd_null);
     expr.e2_opd:= ed;
     expr.e2_operand:= nul;
   end rs_E2;
@@ -471,7 +461,7 @@ package body semantica.c_arbre is
   procedure rs_Lid(lid: out atribut;  id: in atribut) is
   begin
     lid:= new node(nd_lid);
-    lid.lid_seg:= null;
+    lid.lid_seg:= new node(nd_null);
     lid.lid_id:= id;
   end rs_Lid;
 

@@ -63,7 +63,7 @@ package semantica.c_arbre is
 	procedure rs_Expr(expr: out atribut; cont: in atribut);
   procedure rs_EAnd(expr: out atribut; ee: in atribut; ed: in atribut);
   procedure rs_EOr(expr: out atribut; ee: in atribut; ed: in atribut);
-  procedure rs_E2o(expr: out atribut; ee: in atribut; ed:in atribut);
+  procedure rs_E2o(expr: out atribut; ee: in atribut; ed: in atribut; op: in atribut);
   procedure rs_E2s(expr: out atribut; ee: in atribut; ed: in atribut);
   procedure rs_E2r(expr: out atribut; ee: in atribut; ed: in atribut);
   procedure rs_E2p(expr: out atribut; ee: in atribut; ed: in atribut);

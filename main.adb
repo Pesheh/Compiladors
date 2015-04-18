@@ -6,13 +6,16 @@ with decls.d_tsimbols; use decls.d_tsimbols;
 with semantica; use semantica;
 with semantica.c_arbre; use semantica.c_arbre;
 with semantica.c_tipus; use semantica.c_tipus;
-with semantica.g_codi_int; use semantica.g_codi_int; -- ja inclos a c_tipus. Mentre sigui per compilar, pot estar comentat
+with a_sintactic; use a_sintactic;
+with a_lexic; use a_lexic;
+
 procedure main is
-begin 
-  Open("cp.kb");
-  yyparse;
-  Close;
-  print_arbre;
+begin
+  Open("file");
   posa_entorn_standard;
+  YYParse;
+  Close;
+  comprovacio_tipus;
+  semantica.print_arbre;
   gen_codi_int;
 end main;

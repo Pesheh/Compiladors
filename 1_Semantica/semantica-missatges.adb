@@ -1,10 +1,287 @@
 with d_queue; use d_queue;
 with decls; use decls;
+with decls.d_descripcio; use decls.d_descripcio;
+with decls.d_tsimbols; use decls.d_tsimbols;
+
+
 with Ada.text_io; use Ada.text_IO;
 with Ada.Integer_Text_IO;
 with Ada.Strings.Fixed;
 use Ada.Strings.Fixed;
+
 package body semantica.missatges is
+  
+    --Podria ser que pondremos el fichero en que se ha producido el error
+  procedure missatges_desc_no_es_tipus(pos: in posicio; id: in id_nom) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": """&get(tn, id)&""" no es un tipus.");
+  end missatges_desc_no_es_tipus;
+  
+  
+  procedure missatges_conflictes_declaracio(pos: in posicio; id: in id_nom) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": """&get(tn, id)&""" esta en conflicte amb altra declaracio.");
+  end missatges_conflictes_declaracio;
+  
+  procedure missatges_operacio_amb_escalar(pos: in posicio) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": Operacio illegal=> Aquesta assignacio nomes es pot fer amb un tipus escalar.");
+  end missatges_operacio_amb_escalar;
+
+  procedure missatges_tipus_incosistent_lit(pos: in posicio; id_tipus: in id_nom;tsb_found: in tipus_subjacent) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": Tipus esperat """&get(tn,id_tipus)&"""");
+    put(pos.fila'img&":"&pos.columna'img&":");
+    case tsb_found is
+      when tsb_bool=>
+        put_line("S'ha trobat un tipus boolea.");
+
+      when tsb_car=>
+        put_line("S'ha trobat un tipus caracter.");
+
+      when tsb_ent=>
+        put_line("S'ha trobat un tipus enter.");
+
+      when tsb_arr=>
+        put_line("S'ha trobat un tipus array.");
+
+      when tsb_rec=>
+        put_line("S'ha trobat un tipus record.");
+
+      when others=> null;
+    end case;
+  end missatges_tipus_incosistent_lit;
+  
+  procedure missatges_tipus_incosistent_id(pos: in posicio; id_expected, id_found: in id_nom) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": Tipus esperat """&get(tn,id_expected)&""".");
+    put_line(pos.fila'img&":"&pos.columna'img&": Tipus trobat """&get(tn,id_found)&""".");
+  end missatges_tipus_incosistent_id;
+  
+ 
+  procedure missatges_valor_fora_rang(pos: in posicio; id_tipus: in id_nom) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": Valor fora del rang del tipus """&get(tn, id_tipus)&""".");
+  end missatges_valor_fora_rang;
+  
+  
+  procedure missatges_rang_incorrecte(pos: in posicio) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": Rang incorrecte=> El limit inferior ha de ser mes petit que el limit superior.");
+  end missatges_rang_incorrecte;
+
+  
+  procedure missatges_assignacio_incorrecta(pos: in posicio) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": Assignacio illegal=> ");
+  end missatges_assignacio_incorrecta;
+
+  
+  procedure missatges_operador_tipus(pos: in posicio; tsb_tipus: in tipus_subjacent; op: in operand) is
+  begin
+    case op is
+      when o_rel=>
+        put(pos.fila'img&":"&pos.columna'img&": Els operadors relacionals no son definits ");
+     
+      when sum=>
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""+"" no esta definit ");
+      
+      when res=>
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""-"" no esta definit ");
+      
+      when prod=>
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""*"" no esta definit ");
+      
+      when quoci=>
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""/"" no esta definit ");
+      
+      when modul=>
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""mod"" no esta definit ");
+
+      when neg_log=>
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""not"" no esta definit ");
+      
+      when neg_alg=>
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""-"" no esta definit ");
+      
+      when others=> null;
+    end case;
+      
+    case tsb_tipus is
+      when tsb_bool=>
+        put_line("per un tipus boolea.");
+
+      when tsb_car=>
+        put_line("per un tipus caracter.");
+
+      when tsb_ent=>
+        put_line("per un tipus enter.");
+
+      when tsb_arr=>
+        put_line("per un tipus array.");
+
+      when tsb_rec=>
+        put_line("per un tipus record.");
+
+      when others=> null;
+    end case;
+  end missatges_operador_tipus;
+  
+  procedure missatges_log_operador(pos: in posicio; tsb: in tipus_subjacent) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": Els operadors llogics or/and no son definits ");
+
+    case tsb is
+      when tsb_bool=>
+        put_line("per un tipus boolea.");
+
+      when tsb_car=>
+        put_line("per un tipus caracter.");
+
+      when tsb_ent=>
+        put_line("per un tipus enter.");
+
+      when tsb_arr=>
+        put_line("per un tipus array.");
+
+      when tsb_rec=>
+        put_line("per un tipus record.");
+
+      when others=> null;
+    end case;
+  end missatges_log_operador;
+  
+  procedure missatges_sent_buida is
+  begin
+      --Pobablemente se tendria que cambiar para tener en cuenta la posicion!
+    put("Sentencia esperada.");
+  end missatges_sent_buida;
+
+  procedure missatges_expressions_incompatibles(pos: in posicio; id_tipus1, id_tipus2: in id_nom) is
+  begin
+
+    put_line(pos.fila'img&":"&pos.columna'img&": El tipus  """&get(tn, id_tipus1)&""" no es compatible amb el tipus """ &get(tn, id_tipus2)&""".");
+    
+  end missatges_expressions_incompatibles;
+
+
+  procedure missatges_menys_indexos_array(pos: in posicio; id_array: in id_nom) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": Nombre insuficient d'indexos per l'array """&get(tn, id_array)&""".");
+  end missatges_menys_indexos_array;
+
+
+  procedure missatges_massa_indexos_array(pos: in posicio; id_array: in id_nom) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": Nombre major d'indexos que els necessaris per l'array """&get(tn, id_array)&""".");
+  end missatges_massa_indexos_array;
+
+  
+  procedure missatges_no_record(pos: in posicio; id: in id_nom) is
+  begin
+      put_line(pos.fila'img&":"&pos.columna'img&": El tipus """&get(tn, id)&""" no es un record.");
+  end missatges_no_record;
+
+procedure missatges_camp_no_record(pos: in posicio; id_rec, id_camp: in id_nom) is
+begin
+   put_line(pos.fila'img&":"&pos.columna'img&": El record """&get(tn, id_rec)&""" no te camp amb el nom """&get(tn, id_camp)&""".");
+end missatges_camp_no_record;
+
+  procedure missatges_no_array(pos: in posicio; id: in id_nom) is
+  begin
+      put_line(pos.fila'img&":"&pos.columna'img&": El tipus """&get(tn, id)&""" no es un array.");
+  end missatges_no_array;
+
+ procedure missatges_menys_arguments_proc(pos: in posicio; id_proc: in id_nom) is
+ begin
+    put_line(pos.fila'img&":"&pos.columna'img&": Nombre insuficient d'arguments pel procediment """&get(tn, id_proc)&""".");
+ end missatges_menys_arguments_proc;
+ 
+ procedure missatges_massa_arguments_proc(pos: in posicio; id_proc: in id_nom) is
+ begin
+    put_line(pos.fila'img&":"&pos.columna'img&": Nombre d'arguments que els necessaris pel procediment """&get(tn, id_proc)&""".");
+
+ end missatges_massa_arguments_proc;
+
+
+  procedure missatge_arg_mode(pos: in posicio; id: in id_nom) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": L'argument """&get(tn,id)&" no compleix amb el seu mode");
+  end missatge_arg_mode;
+
+  procedure missatge_proc_mult_parentesis(pos: in posicio) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": No es permeten procediments amb multiples dimensions.");
+    --No estoy seguro si son multiples dimensiones u otra cosa 
+  end missatge_proc_mult_parentesis;
+
+  procedure missatge_cond_bool(pos: in posicio; tsb: in tipus_subjacent) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": Tipus esperat ""Boolean""");
+    put(pos.fila'img&":"&pos.columna'img&":");
+    case tsb is
+      when tsb_bool=>
+        put_line("S'ha trobat un tipus boolea.");
+
+      when tsb_car=>
+        put_line("S'ha trobat un tipus caracter.");
+
+      when tsb_ent=>
+        put_line("S'ha trobat un tipus enter.");
+
+      when tsb_arr=>
+        put_line("S'ha trobat un tipus array.");
+
+      when tsb_rec=>
+        put_line("S'ha trobat un tipus record.");
+
+      when others=> null;
+    end case;
+  end missatge_cond_bool;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  --Missatges de debugging
+  procedure missatges_ct_error_intern(pos: in posicio; proc: in String) is
+  begin
+    if DEBUG then
+      put_line("c_tipus.adb:"&proc&"::"&pos.fila'img&":"&pos.columna'img&": S'ha produit un error intern del compilador.");
+    end if;
+  end missatges_ct_error_intern;  
+  
+
+  procedure missatges_imprimir_desc(proc: in String; d: in descripcio; id: in id_nom; p: in String) is
+  begin
+    if DEBUG then
+    put_line("d_tsimbols:"&proc&"::   ID:"&id'img&"   TD: "&d.td'img&"   PROF:"&p);
+    end if;
+  end missatges_imprimir_desc;
+
+  
+  procedure missatges_imprimir_id(proc: in String; id: in id_nom; nom: in String ) is
+  begin
+    if DEBUG then
+    put_line("d_tnom:"&proc&"::   ID:"&id'img&"   Nom: "&nom);
+    end if;
+  end missatges_imprimir_id;
+
+  
   procedure imprimir_arbre(root: in pnode) is
     q:queue;
     p: pnode;

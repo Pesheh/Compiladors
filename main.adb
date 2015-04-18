@@ -12,6 +12,7 @@ begin
   Open("cp.kb");
   yyparse;
   Close;
+  print_arbre;
   posa_entorn_standard;
   gen_codi_int;
 end main;

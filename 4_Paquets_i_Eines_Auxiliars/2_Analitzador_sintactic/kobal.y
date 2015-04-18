@@ -184,7 +184,7 @@ E_OR:
   ;
 
 E2:
-	 E2 Op_rel E3													{rs_E2o($$,$1,$3);}
+	 E2 Op_rel E3													{rs_E2o($$,$1,$3,$2);}
   |  E2 S_mes E3													{rs_E2s($$,$1,$3);}
   |  E2 S_menys E3													{rs_E2r($$,$1,$3);}
   |  E2 S_prod E3													{rs_E2p($$,$1,$3);}

@@ -5,6 +5,7 @@ with decls.d_tnoms; use decls.d_tnoms;
 with decls.d_tsimbols; use decls.d_tsimbols;
 with semantica.missatges; use semantica.missatges;
 
+with ada.text_io; use ada.text_io;
 package body semantica.c_tipus is
 
   --DEFINICIONS 
@@ -17,7 +18,7 @@ package body semantica.c_tipus is
   
   procedure ct_decl_const(decl_const: in pnode);
   procedure ct_lid_const(lid_const: in pnode; desc: in decls.d_descripcio.descripcio);
-  procedure ct_valor(nd_idx: in pnode; id_tipus: out id_nom; tsb: out decls.d_descripcio.tipus_subjacent; v: out valor; pos: out posicio);
+  procedure ct_valor(nd_idx: in pnode; id_tipus: out id_nom; tsb: out decls.d_descripcio.tipus_subjacent; v: out valor; pos: in out posicio);
   
   procedure ct_rang(decl_rang: in pnode);
   
@@ -42,32 +43,31 @@ package body semantica.c_tipus is
   procedure ct_sent_assign(nd_sent: in pnode);
   
   --Referencias
-  procedure ct_ref(nd_ref: in pnode; id_base: out id_nom; id_tipus: out id_nom; pos: out posicio);
-  procedure ct_qs(nd_qs: in pnode; id_base: in id_nom; id_tipus: in out id_nom; pos: out posicio);
-  procedure ct_q(nd_q: in pnode; id_base: in id_nom; id_tipus: in out id_nom; pos: out posicio);
-  procedure ct_qs_proc(nd_qs: in pnode; id_base: in id_nom; pos: out posicio);
+  procedure ct_ref(nd_ref: in pnode; id_base: out id_nom; id_tipus: out id_nom; pos: in out posicio);
+  procedure ct_qs(nd_qs: in pnode; id_base: in id_nom; id_tipus: in out id_nom; pos: in out posicio);
+  procedure ct_q(nd_q: in pnode; id_base: in id_nom; id_tipus: in out id_nom; pos: in out posicio);
+  procedure ct_qs_proc(nd_qs: in pnode; id_base: in id_nom; pos: in out posicio);
 
-  procedure ct_lexpr_proc(nd_lexpr: in pnode; id_base: in id_nom;it: in out iterador_arg; pos: out posicio);
-  procedure ct_lexpr_array(nd_lexpr: in pnode; id_base: in id_nom; id_tipus: in out id_nom; it: in out iterador_index; pos: out posicio);
-  procedure ct_expr(nd_expr: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio);
+  procedure ct_lexpr_proc(nd_lexpr: in pnode; id_base: in id_nom;it: in out iterador_arg; pos: in out posicio);
+  procedure ct_lexpr_array(nd_lexpr: in pnode; id_base: in id_nom; id_tipus: in out id_nom; it: in out iterador_index; pos: in out posicio);
+  procedure ct_expr(nd_expr: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio);
 
   --Expressions
-  procedure ct_e(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio);
+  procedure ct_e(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio);
   
-  procedure ct_e2(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio);
-  procedure ct_e2_op_rel(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio);
-  procedure ct_e2_arit(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio; op: in operand );
-  procedure ct_e2_neg_log(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio);
-  procedure ct_e2_neg_arit(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio);
+  procedure ct_e2(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio);
+  procedure ct_e2_op_rel(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio);
+  procedure ct_e2_arit(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio; op: in operand );
+  procedure ct_e2_neg_log(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio);
+  procedure ct_e2_neg_arit(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio);
 
-  procedure ct_e3(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out  boolean; pos: out posicio);
-  procedure ct_e3_lit(nd_lit: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio);
-  procedure ct_e3_ref(nd_ref: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio);
+  procedure ct_e3(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out  boolean; pos: in out posicio);
+  procedure ct_e3_lit(nd_lit: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio);
+  procedure ct_e3_ref(nd_ref: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio);
 
   --Auxiliar 
   function tipus_compatible(id_tipus1, id_tipus2: in id_nom; tsb1, tsb2: in tipus_subjacent; id_texp: out id_nom; tsb_exp: out tipus_subjacent) return boolean;
   
-  ERROR: boolean;
   
   
   
@@ -86,15 +86,17 @@ package body semantica.c_tipus is
   
   
   
+  ERROR: boolean:=false;
   
   
   
   procedure comprovacio_tipus is
   begin
-    ERROR:=false;
   --  posa_entorn_standard;
     ct_decl_proc(root.p);
-    if ERROR then null; end if; --Acabar la compilacion  
+    if ERROR then
+      null;
+    end if; --Acabar la compilacion  
   end comprovacio_tipus;
   
   
@@ -310,7 +312,7 @@ package body semantica.c_tipus is
     id_valor: id_nom;
     v_valor: valor;
     tsb_valor: tipus_subjacent;
-    pos_valor: posicio;
+    pos_valor: posicio:=(0,0);
   begin 
     id_tipus:=decl_const.dconst_tipus.id_id;
     d_tipus:=get(ts,id_tipus);
@@ -371,7 +373,7 @@ package body semantica.c_tipus is
     id_valor1,id_valor2: id_nom;
     v_valor1,v_valor2: valor;
     tsb_valor1,tsb_valor2: tipus_subjacent;
-    pos_valor1, pos_valor2: posicio;
+    pos_valor1, pos_valor2: posicio:=(0,0);
 
     desc:descripcio;
     nd_rang: pnode;
@@ -458,7 +460,7 @@ package body semantica.c_tipus is
   end ct_rang;
 
 
-  procedure ct_valor(nd_idx: in pnode; id_tipus: out id_nom; tsb: out decls.d_descripcio.tipus_subjacent; v: out valor; pos: out posicio) is
+  procedure ct_valor(nd_idx: in pnode; id_tipus: out id_nom; tsb: out decls.d_descripcio.tipus_subjacent; v: out valor; pos: in out posicio) is
     desc,d_tipus: descripcio;
     p: pnode;
   begin
@@ -656,8 +658,12 @@ package body semantica.c_tipus is
     end if;
     enter_block(ts);
     --!!!En els apunts tenc un comentari en el qual es fa un recorregut del arguments, pero no se perque!!!
+    if nd_procediment.proc_decls.tn/=nd_null then
     ct_decls(nd_procediment.proc_decls); 
-
+  end if;
+    if nd_procediment.proc_sents.tn/=nd_null then
+      ct_sents(nd_procediment.proc_sents);
+    end if;
     exit_block(ts); 
   end ct_decl_proc;
 
@@ -741,7 +747,7 @@ package body semantica.c_tipus is
     id_texpr: id_nom;
     tsb_expr: tipus_subjacent;
     expr_esvar: boolean;
-    pos_exp: posicio;
+    pos_exp: posicio:=(0,0);
   begin
     ct_expr(nd_sent.siter_expr,id_texpr,tsb_expr,expr_esvar, pos_exp); 
     if tsb_expr/=tsb_bool then 
@@ -760,7 +766,7 @@ package body semantica.c_tipus is
     id_texpr: id_nom;
     tsb_expr: tipus_subjacent;
     expr_esvar: boolean;
-    pos_exp: posicio;
+    pos_exp: posicio:=(0,0);
   begin 
     ct_expr(nd_sent.scond_expr,id_texpr,tsb_expr,expr_esvar, pos_exp); 
     if tsb_expr/=tsb_bool then 
@@ -784,7 +790,7 @@ package body semantica.c_tipus is
 
   procedure ct_sent_crida(nd_sent: in pnode) is
     id_base, id_tipus: id_nom;
-    pos_ref: posicio;
+    pos_ref: posicio:=(0,0);
   begin
     ct_ref(nd_sent.scrida_ref, id_base, id_tipus, pos_ref);
   end ct_sent_crida;
@@ -792,10 +798,10 @@ package body semantica.c_tipus is
 
   procedure ct_sent_assign(nd_sent: in pnode) is
     id_ref, id_tipus_ref, id_texpr: id_nom;
-    desc_ref: descripcio;
+    desc_ref, desc_tipus_ref: descripcio;
     tsb_expr: tipus_subjacent;
     expr_esvar: boolean;
-    pos_ref, pos_exp: posicio;
+    pos_ref, pos_exp: posicio:=(0,0);
   begin
     ct_ref(nd_sent.sassign_ref,id_ref,id_tipus_ref, pos_ref);
     desc_ref:= get(ts, id_ref);
@@ -805,14 +811,16 @@ package body semantica.c_tipus is
     end if;
     
     ct_expr(nd_sent.sassign_expr,id_texpr,tsb_expr,expr_esvar,pos_exp); 
+    
     if id_texpr/=null_id then
       --Comprovar que la referencia i l'expressio tenen el mateix tipus
       if id_tipus_ref /= id_texpr then
         ERROR:=true;
         missatges_tipus_incosistent_id(pos_exp, id_tipus_ref, id_texpr);
       end if;
-    else 
-      if desc_ref.dt.tsb/=tsb_expr then
+    else
+      desc_tipus_ref:=get(ts, id_tipus_ref); 
+      if desc_tipus_ref.dt.tsb/=tsb_expr then
         ERROR:=true;
         missatges_tipus_incosistent_lit(pos_exp, id_tipus_ref, tsb_expr);
       end if;
@@ -825,7 +833,7 @@ package body semantica.c_tipus is
   end ct_sent_assign;
 
 
-  procedure ct_ref(nd_ref: in pnode; id_base: out id_nom; id_tipus: out id_nom; pos: out posicio) is 
+  procedure ct_ref(nd_ref: in pnode; id_base: out id_nom; id_tipus: out id_nom; pos: in out posicio) is 
     it: iterador_arg;
     desc_ref: descripcio;
   begin
@@ -834,13 +842,13 @@ package body semantica.c_tipus is
     desc_ref:=get(ts,id_base);
     case desc_ref.td is    
       when dvar=>
-        if nd_ref.ref_qs/=null then
+        if nd_ref.ref_qs.tn/=nd_null then
           ct_qs(nd_ref.ref_qs,id_base,desc_ref.tv,pos);
         end if;
         id_tipus:=desc_ref.tv;
 
       when dconst=>
-        if nd_ref.ref_qs/=null then
+        if nd_ref.ref_qs.tn/=nd_null then
           ct_qs(nd_ref.ref_qs,id_base,desc_ref.tc,pos);
         end if;
         id_tipus:=desc_ref.tc;
@@ -849,13 +857,13 @@ package body semantica.c_tipus is
         --Comprovam si el procediment te arguments
         first(ts, id_base,it);
         if is_valid(it) then
-          if nd_ref.ref_qs=null then 
+          if nd_ref.ref_qs.tn=nd_null then 
             ERROR:=true;
             missatges_menys_arguments_proc(pos, id_base);
           end if; 
           ct_qs_proc(nd_ref.ref_qs,id_base, pos);
         else
-          if nd_ref.ref_qs/=null then
+          if nd_ref.ref_qs.tn/=nd_null then
             ERROR:=true;
             missatges_massa_arguments_proc(pos, id_base);
           end if;
@@ -869,10 +877,10 @@ package body semantica.c_tipus is
   end ct_ref;
 
 
-  procedure ct_qs_proc(nd_qs: in pnode; id_base: in id_nom; pos: out posicio) is 
+  procedure ct_qs_proc(nd_qs: in pnode; id_base: in id_nom; pos: in out posicio) is 
     it: iterador_arg;
   begin
-    if nd_qs.qs_qs/=null then
+    if nd_qs.qs_qs.tn/=nd_null then
       ERROR:=true;
       missatge_proc_mult_parentesis(pos);
     end if;
@@ -887,7 +895,7 @@ package body semantica.c_tipus is
   end ct_qs_proc;
 
 
-  procedure ct_lexpr_proc(nd_lexpr: in pnode; id_base: in id_nom;it: in out iterador_arg; pos: out posicio) is
+  procedure ct_lexpr_proc(nd_lexpr: in pnode; id_base: in id_nom;it: in out iterador_arg; pos: in out posicio) is
     desc_arg, desc_tipus_arg: descripcio;
     tsb_expr: tipus_subjacent;
     id_texpr, id_arg, id_tipus_arg: id_nom;
@@ -938,18 +946,17 @@ package body semantica.c_tipus is
   end ct_lexpr_proc;
 
 
-  procedure ct_qs(nd_qs: in pnode; id_base: in id_nom; id_tipus: in out id_nom; pos: out posicio) is
+  procedure ct_qs(nd_qs: in pnode; id_base: in id_nom; id_tipus: in out id_nom; pos: in out posicio) is
   begin
-    if nd_qs.qs_qs/=null then
-      ct_qs(nd_qs.qs_qs,id_base,id_tipus, pos);
-    end if;
+      if nd_qs.qs_qs.tn/=nd_null then
+        ct_qs(nd_qs.qs_qs,id_base,id_tipus, pos);
+      end if;
 
-    ct_q(nd_qs.qs_q, id_base, id_tipus, pos);
-
+      ct_q(nd_qs.qs_q, id_base, id_tipus, pos);
   end ct_qs;
 
 
-  procedure ct_q(nd_q: in pnode; id_base: in id_nom; id_tipus: in out id_nom; pos: out posicio) is
+  procedure ct_q(nd_q: in pnode; id_base: in id_nom; id_tipus: in out id_nom; pos: in out posicio) is
     desc_tipus, desc_camp: descripcio;
     id_camp: id_nom;
     it: iterador_index;
@@ -993,7 +1000,7 @@ package body semantica.c_tipus is
   end ct_q;
 
 
-  procedure ct_lexpr_array(nd_lexpr: in pnode; id_base: in id_nom; id_tipus: in out id_nom; it: in out iterador_index; pos: out posicio) is 
+  procedure ct_lexpr_array(nd_lexpr: in pnode; id_base: in id_nom; id_tipus: in out id_nom; it: in out iterador_index; pos: in out posicio) is 
     desc_index, desc_tipus_idx: descripcio;
     tsb_expr: tipus_subjacent;
     id_texpr: id_nom;
@@ -1031,7 +1038,7 @@ package body semantica.c_tipus is
   end ct_lexpr_array;
 
 
-  procedure ct_expr(nd_expr: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio) is
+  procedure ct_expr(nd_expr: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio) is
   begin 
     case nd_expr.expr_e.tn is
       when nd_and | nd_or =>
@@ -1048,13 +1055,14 @@ package body semantica.c_tipus is
   end ct_expr;
   
 
-  procedure ct_e(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out  boolean; pos: out posicio) is
+  procedure ct_e(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out  boolean; pos: in out posicio) is
     id_tipus1, id_tipus2: id_nom;
     tsb1, tsb2: tipus_subjacent;
     esvar1, esvar2: boolean;
-    pos1, pos2: posicio;
+    pos1, pos2: posicio:=(0,0);
   begin
-    if nd_e.e_ope.tn = nd_and or nd_e.e_ope.tn = nd_or then
+    put_line(nd_e.tn'img);
+    if nd_e.e_ope.tn = nd_and or else nd_e.e_ope.tn = nd_or then
       ct_e(nd_e.e_ope, id_tipus1, tsb1, esvar1, pos1);
     else 
       ct_e2(nd_e.e_ope, id_tipus1, tsb1, esvar1, pos1);
@@ -1076,7 +1084,7 @@ package body semantica.c_tipus is
   end ct_e;
 
 
-  procedure ct_e2(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio) is
+  procedure ct_e2(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio) is
   begin
     case nd_e.e2_operand is
       when o_rel => 
@@ -1090,7 +1098,10 @@ package body semantica.c_tipus is
    
       when neg_alg =>
         ct_e2_neg_arit(nd_e, id_texpr, tsb_expr, esvar, pos);
-      
+     
+      when nul =>
+        ct_e3(nd_e.e2_opd, id_texpr, tsb_expr, esvar, pos);
+
       when others => 
         ERROR:=true;
         missatges_ct_error_intern((fila=>1016, columna=>20), "ct_e2");
@@ -1098,11 +1109,11 @@ package body semantica.c_tipus is
   end ct_e2;
 
   
-  procedure ct_e2_op_rel(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio) is
+  procedure ct_e2_op_rel(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio) is
     id_tipus1, id_tipus2: id_nom;
     tsb1, tsb2: tipus_subjacent;
     esvar1, esvar2: boolean;
-    pos1, pos2: posicio;
+    pos1, pos2: posicio:=(0,0);
     error: boolean;
   begin
     ct_e2(nd_e.e2_ope, id_tipus1, tsb1, esvar1, pos1);
@@ -1124,11 +1135,11 @@ package body semantica.c_tipus is
   end ct_e2_op_rel;
   
   
-  procedure ct_e2_arit(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio; op: in operand ) is
+  procedure ct_e2_arit(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio; op: in operand ) is
     id_tipus1, id_tipus2: id_nom;
     tsb1, tsb2: tipus_subjacent;
     esvar1, esvar2: boolean;
-    pos1, pos2: posicio;
+    pos1, pos2: posicio:=(0,0);
   begin
     ct_e2(nd_e.e2_ope, id_tipus1, tsb1, esvar1, pos1);
     ct_e3(nd_e.e2_opd, id_tipus2, tsb2, esvar2, pos2);
@@ -1148,7 +1159,7 @@ package body semantica.c_tipus is
   end ct_e2_arit;
   
   
-  procedure ct_e2_neg_log(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio) is
+  procedure ct_e2_neg_log(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio) is
     id_tipus: id_nom;
     tsb: tipus_subjacent;
     esvar1: boolean;
@@ -1164,7 +1175,7 @@ package body semantica.c_tipus is
   end ct_e2_neg_log;
   
   
-  procedure ct_e2_neg_arit(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio) is
+  procedure ct_e2_neg_arit(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio) is
     id_tipus: id_nom;
     tsb: tipus_subjacent;
     esvar1: boolean;
@@ -1180,14 +1191,14 @@ package body semantica.c_tipus is
   end ct_e2_neg_arit;
 
   
-  procedure ct_e3(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out  boolean; pos: out posicio) is 
+  procedure ct_e3(nd_e: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out  boolean; pos: in out posicio) is 
   begin
     case nd_e.e3_cont.tn is
       when nd_ref => 
         ct_e3_ref(nd_e.e3_cont, id_texpr, tsb_expr, esvar, pos);
 
       when nd_expr =>
-        ct_e(nd_e.e3_cont, id_texpr, tsb_expr, esvar, pos);
+        ct_expr(nd_e.e3_cont, id_texpr, tsb_expr, esvar, pos);
 
       when nd_lit => 
         ct_e3_lit(nd_e.e3_cont, id_texpr, tsb_expr, esvar, pos);
@@ -1199,7 +1210,7 @@ package body semantica.c_tipus is
   end ct_e3;  
 
 
-  procedure ct_e3_ref(nd_ref: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio) is 
+  procedure ct_e3_ref(nd_ref: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio) is 
     id_ref, id_tipus_ref: id_nom;
     desc_ref, desc_tipus_ref: descripcio;
   begin
@@ -1221,7 +1232,7 @@ package body semantica.c_tipus is
   end ct_e3_ref;
 
   
-  procedure ct_e3_lit(nd_lit: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: out posicio) is 
+  procedure ct_e3_lit(nd_lit: in pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio) is 
   begin
     id_texpr:= null_id;
     pos:= nd_lit.lit_pos;

@@ -22,7 +22,7 @@ package body decls.d_tsimbols is
     prof: profunditat renames ts.prof;
     ie: index_expansio;
   begin
-    missatges_imprimir_desc(d, id, prof'img); 
+    missatges_imprimir_desc("put",d, id, prof'img); 
 
     error:= false;
     if td(id).prof=prof then
@@ -40,6 +40,7 @@ package body decls.d_tsimbols is
   function get(ts: in tsimbols; id: in id_nom) return descripcio is
     td: tdescripcio renames ts.td;
   begin
+    missatges_imprimir_desc("get",td(id).d, id, ts.prof'img); 
     return td(id).d;
   end get;
 

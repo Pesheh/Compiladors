@@ -38,8 +38,9 @@ package semantica.missatges is
 
   --Missatges de debugging
   procedure missatges_ct_error_intern(pos: in posicio; proc: in String);
-  procedure missatges_imprimir_desc(d: in descripcio; id: in id_nom; p: in String);
-  procedure missatges_imprimir_id(id: in id_nom; nom: in String); 
+  procedure missatges_imprimir_desc(proc: in String; d: in descripcio; id: in id_nom; p: in String);
+  procedure missatges_imprimir_id(proc: in String; id: in id_nom; nom: in String );
+
     
   procedure imprimir_arbre(root: in pnode);
 end semantica.missatges;

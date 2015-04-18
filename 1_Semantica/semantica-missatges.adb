@@ -266,18 +266,18 @@ end missatges_camp_no_record;
   end missatges_ct_error_intern;  
   
 
-  procedure missatges_imprimir_desc(d: in descripcio; id: in id_nom; p: in String) is
+  procedure missatges_imprimir_desc(proc: in String; d: in descripcio; id: in id_nom; p: in String) is
   begin
     if DEBUG then
-    put_line("d_tsimbols::   ID:"&id'img&"   TD: "&d.td'img&"   PROF:"&p);
+    put_line("d_tsimbols:"&proc&"::   ID:"&id'img&"   TD: "&d.td'img&"   PROF:"&p);
     end if;
   end missatges_imprimir_desc;
 
   
-  procedure missatges_imprimir_id(id: in id_nom; nom: in String ) is
+  procedure missatges_imprimir_id(proc: in String; id: in id_nom; nom: in String ) is
   begin
     if DEBUG then
-    put_line("d_dtnom::   ID:"&id'img&"   Nom: "&nom);
+    put_line("d_tnom:"&proc&"::   ID:"&id'img&"   Nom: "&nom);
     end if;
   end missatges_imprimir_id;
 

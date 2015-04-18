@@ -2,7 +2,6 @@ with ada.text_io; use ada.text_io;
 with decls.d_descripcio;
 with decls.d_atribut;
 with d_stack; use d_stack;
-with semantica.c_tipus;
 package body semantica.c_arbre is
 
   st: stack;
@@ -89,7 +88,6 @@ package body semantica.c_arbre is
   begin
       root:= new node(nd_root);
       root.p:=proc;
-      semantica.c_tipus.comprovacio_tipus;
   end rs_Root;
   
   procedure rs_Proc(proc: out atribut; cproc: in atribut; decls: in atribut; sents: in atribut) is

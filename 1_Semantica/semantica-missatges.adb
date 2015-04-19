@@ -264,12 +264,25 @@ end missatges_camp_no_record;
       put_line("c_tipus.adb:"&proc&"::"&pos.fila'img&":"&pos.columna'img&": S'ha produit un error intern del compilador.");
     end if;
   end missatges_ct_error_intern;  
+
+  procedure missatges_ct_debugging(proc,msg: in String) is
+  begin
+    if DEBUG then
+      put_line("c_tipus.adb:"&proc&"::"&msg);
+    end if;
+  end missatges_ct_debugging;
   
+  procedure missatges_gc_debugging(proc,msg: in String) is
+  begin
+    if DEBUG then
+      put_line("g_codi_int.adb:"&proc&"::"&msg);
+    end if;
+  end missatges_gc_debugging;
 
   procedure missatges_imprimir_desc(proc: in String; d: in descripcio; id: in id_nom; p: in String) is
   begin
     if DEBUG then
-    put_line("d_tsimbols:"&proc&"::   ID:"&id'img&"   TD: "&d.td'img&"   PROF:"&p);
+      put_line("d_tsimbols.adb:"&proc&"::   ID:"&id'img&"   TD: "&d.td'img&"   PROF:"&p);
     end if;
   end missatges_imprimir_desc;
 
@@ -277,7 +290,7 @@ end missatges_camp_no_record;
   procedure missatges_imprimir_id(proc: in String; id: in id_nom; nom: in String ) is
   begin
     if DEBUG then
-    put_line("d_tnom:"&proc&"::   ID:"&id'img&"   Nom: "&nom);
+      put_line("d_tnom:"&proc&"::   ID:"&id'img&"   Nom: "&nom);
     end if;
   end missatges_imprimir_id;
 

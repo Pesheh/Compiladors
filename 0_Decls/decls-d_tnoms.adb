@@ -1,7 +1,6 @@
-with semantica.missatges; use semantica.missatges;
-
 with Ada.Strings.Hash; use ada.Strings;
-
+with Ada.Characters.Handling; use Ada.Characters.Handling;
+with semantica.missatges; use semantica.missatges;
 package body decls.d_tnoms is
 
   --Auxiliar operations:
@@ -63,19 +62,20 @@ package body decls.d_tnoms is
     ncs: integer renames tn.ncs;
     i: hash_type;
     p: id_nom;
+    nm: String:= To_Lower(nom);
   begin
-    i:= hash(nom) mod b; p:= td(i);
+    i:= hash(nm) mod b; p:= td(i);
     while p/=null_id and then not equal(nom,tn,p) loop 
       p:= tid(p).psh; 
     end loop;
     if p=null_id then
       if nid=maxid then raise space_overflow; end if;
       if nc+nom'Length>ncs then raise space_overflow; end if;
-      save_name(tc, nom, nc);
+      save_name(tc, nm, nc);
       nid:= nid+1; tid(nid):= (td(i),nc);
       td(i):=nid; p:=nid;
     end if;
-    missatges_imprimir_id("put",p, nom);
+    missatges_imprimir_id("put",p, nm);
     ident:= p;
   end put;
 

@@ -36,8 +36,13 @@ package decls.d_atribut is
     nd_scrida,
     nd_sassign,
     nd_ref,
+    nd_iproc,
+    nd_var,
     nd_qs,
     nd_q,
+    nd_arry,
+    nd_rec,
+    nd_lexpr_arry,
     nd_expr,
     nd_and,
     nd_or,
@@ -63,8 +68,11 @@ package decls.d_atribut is
     end record;
 
 
+  -- L'operand o_rel segueix aqui per compatibilitat.
+  -- en posteriors commits s'hauria d'eliminar
 	type operand is (
     nul,
+    o_rel,
     menor,
     major,
     menorigual,
@@ -102,6 +110,10 @@ package decls.d_atribut is
         when nd_op_rel =>     
           orel_tipus: operand;
 
+        when nd_var =>
+          var_nv: num_var;
+          var_tv: id_nom;
+
         when nd_lid =>
           lid_seg: pnode;
           lid_id: pnode;
@@ -111,12 +123,16 @@ package decls.d_atribut is
           
         when nd_c_proc =>
           cproc_id: pnode;
+          cproc_np: num_proc;
           cproc_args: pnode;
           
         when nd_proc =>
           proc_cproc: pnode;
           proc_decls: pnode;
           proc_sents: pnode;
+
+        when nd_iproc =>
+          iproc_np: num_proc;
 
         when nd_args =>
           args_args: pnode;
@@ -212,6 +228,23 @@ package decls.d_atribut is
 
         when nd_q =>
           q_contingut: pnode;
+
+        when nd_arry =>
+          arry_lexpr: pnode;
+          -- constants de despl calc per el compilador
+          arry_tb: num_var; 
+          arry_tw: num_var;
+
+        when nd_lexpr_arry =>
+          lexpra_cont: pnode;
+          lexpra_expr: pnode;
+          -- constant del compilador (lsup-linf+1)
+          lexpra_tu: num_var;
+
+        when nd_rec =>
+          -- despl constant del camp. Mentre no hi hagi re
+          -- a la TV, aixo no funcionara
+          rec_td: num_var;
 
         when nd_expr =>
           expr_e: pnode;

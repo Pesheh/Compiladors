@@ -28,7 +28,7 @@ PROC:
 	 	DECLS
 	 Pc_begin
 	 	SENTS
-	 Pc_end Pc_procedure Punticoma									{rs_Proc($$,$2,$4,$6);} -- Aquí podem afegir un surt_block
+	 Pc_end Pc_procedure Punticoma									{rs_Proc($$,$2,$4,$6);}
   ;
 
 DECLS:
@@ -44,7 +44,7 @@ DECL:
   ;
 
 DECL_CONST:
-	 LID Dospuntsigual Pc_const Identif Dospuntsigual IDX Punticoma		{rs_Decl_Const($$,$1,$4,$6);}
+	 LID Dospunts Pc_const Identif Dospuntsigual IDX Punticoma		{rs_Decl_Const($$,$1,$4,$6);}
   ;
 
 
@@ -184,14 +184,14 @@ E_OR:
   ;
 
 E2:
-	 E2 Op_rel E3													{rs_E2o($$,$1,$3,$2);}
-  |  E2 S_mes E3													{rs_E2s($$,$1,$3);}
-  |  E2 S_menys E3													{rs_E2r($$,$1,$3);}
-  |  E2 S_prod E3													{rs_E2p($$,$1,$3);}
-  |  E2 S_quoci E3													{rs_E2q($$,$1,$3);}
-  |  E2 Pc_mod E3													{rs_E2m($$,$1,$3);}
-  |  Pc_not E3														{rs_E2nl($$,$1);}
-  |	 S_menys E3														{rs_E2na($$,$1);}
+	   E2 Op_rel E2													{rs_E2o($$,$1,$3,$2);}
+  |  E2 S_mes E2													{rs_E2s($$,$1,$3);}
+  |  E2 S_menys E2													{rs_E2r($$,$1,$3);}
+  |  E2 S_prod E2													{rs_E2p($$,$1,$3);}
+  |  E2 S_quoci E2													{rs_E2q($$,$1,$3);}
+  |  E2 Pc_mod E2													{rs_E2m($$,$1,$3);}
+  |  Pc_not E3														{rs_E2nl($$,$2);}
+  |	 S_menys E3														{rs_E2na($$,$2);}
   |  E3																{rs_E2($$,$1);}
   ;
 

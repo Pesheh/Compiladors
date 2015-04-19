@@ -3,7 +3,7 @@ with decls.d_descripcio; use decls.d_descripcio;
 with decls.d_tsimbols; use decls.d_tsimbols;
 
 package semantica.missatges is
-  DEBUG: constant boolean:=true;
+  DEBUG: constant boolean:= true;
   
   procedure missatges_desc_no_es_tipus(pos: in posicio; id: in id_nom);
   procedure missatges_conflictes_declaracio(pos: in posicio; id: in id_nom);
@@ -38,6 +38,8 @@ package semantica.missatges is
 
   --Missatges de debugging
   procedure missatges_ct_error_intern(pos: in posicio; proc: in String);
+  procedure missatges_ct_debugging(proc,msg: in String);
+  procedure missatges_gc_debugging(proc,msg: in String);
   procedure missatges_imprimir_desc(proc: in String; d: in descripcio; id: in id_nom; p: in String);
   procedure missatges_imprimir_id(proc: in String; id: in id_nom; nom: in String );
 

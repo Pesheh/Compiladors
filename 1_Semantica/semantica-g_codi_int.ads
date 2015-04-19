@@ -5,21 +5,13 @@ with decls.d_tsimbols; use decls.d_tsimbols;
 package semantica.g_codi_int is
   
   type etiqueta is private;
-  type ocupacio is private;
 
   procedure gen_codi_int;
-
-  -- ha de formar part de l'especificacio?
-  function nova_var(np: num_proc; ocup: ocupacio; desp: despl) return num_var;
-  -- variables constants
-  function nova_var_const(val: valor; tsb: tipus_subjacent) return num_var;
   function nova_etiq return etiqueta;
 
 private
-  
 
   type etiqueta is new num_var;
-  type ocupacio is new natural;
 
   esvar: constant boolean:=true;
   type e_tvar (e: boolean) is 

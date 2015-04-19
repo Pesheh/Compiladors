@@ -23,7 +23,6 @@ package body semantica.c_arbre is
 
   procedure rl_literal(a: out atribut; pos: in posicio; text: in String; tipus: in decls.d_descripcio.tipus_subjacent) is 
     ids: id_str;
-    b: atribut;
   begin
     put(tn,text,ids);
     a:= new node(nd_lit);

@@ -1,5 +1,5 @@
 package decls.d_descripcio is
- type tipus_subjacent is (
+  type tipus_subjacent is (
     tsb_bool,
     tsb_car,
     tsb_ent,
@@ -16,8 +16,7 @@ package decls.d_descripcio is
           linf,lsup: valor;
         when tsb_arr 						=>
           tcomp: id_nom; -- tipus dels components de l'arry
-          -- other gc stuff
-          b: natural; -- nombre de components a l'array
+          b: valor; -- constant del compilador
         when tsb_rec | tsb_nul 				=>
           null;
         end case;

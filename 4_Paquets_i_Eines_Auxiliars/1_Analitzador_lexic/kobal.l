@@ -14,7 +14,7 @@ D [0-9]
 NZD [1-9]
 
 -- numbers like x_yyy, xy_yyy, xyy_yyy, xyy(_yyy)+ where x != 0
-NUM_WITH_LOWERBAR (({D}|{NZD}{D}|{NZD}{D}{D})(_{D}{D}{D})+)
+NUM_WITH_LOWERBAR (({NZD}{D}|{NZD}{D}{D})(_{D}{D}{D})+)
 
 -- numbers not starting with 0
 NUM_WITHOUT_LOWERBAR ({NZD}{D}*)
@@ -22,7 +22,7 @@ NUM_WITHOUT_LOWERBAR ({NZD}{D}*)
 -- inner element of a string, it may be a graphic character (without the double quote) or a double double quote.
 STRING_BODY (\"\"|{GC_NON_Q}+)*
 
-NUMBER {NUM_WITH_LOWERBAR}|{NUM_WITHOUT_LOWERBAR}
+NUMBER {D}|{NUM_WITH_LOWERBAR}|{NUM_WITHOUT_LOWERBAR}
 
 STRING \"{STRING_BODY}\"
 
@@ -37,9 +37,11 @@ SEPARATOR [ \t\n]+
 %%
 
 "procedure"													{r_atom(YYLVal); RETURN Pc_procedure;}
+"proc"                              {r_atom(YYLVal); RETURN Pc_procedure;}
 "is"																{r_atom(YYLVal); RETURN Pc_is;}
 "begin"															{r_atom(YYLVal); RETURN Pc_begin;}
 "end"																{r_atom(YYLVal); RETURN Pc_end;}
+"constant"															{r_atom(YYLVal); RETURN Pc_const;}
 "const"															{r_atom(YYLVal); RETURN Pc_const;}
 "new"																{r_atom(YYLVal); RETURN Pc_new;}
 "type"															{r_atom(YYLVal); RETURN Pc_type;}

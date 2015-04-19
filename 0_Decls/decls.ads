@@ -15,12 +15,6 @@ package decls is
     negatiu
   );
 
-  -- Els rangs estan per permetre indexat la TV i TP amb els respectius indexos. Si per el contrari emprassim naturals
-  -- el compilador de x86_64 fa un pataplaf ben gros ja que el tamany maxim d'arrays estatics permes es 2GB i be...
-  -- http://stackoverflow.com/questions/10486116/what-does-this-gcc-error-relocation-truncated-to-fit-mean
-  type num_var is new natural range 0..501;
-  type num_proc is new natural range 0..250;
-  nil_nv: constant num_var:= 501;
 
 --private
   max_id: constant integer:=997;
@@ -30,5 +24,16 @@ package decls is
   type id_str is new integer range 0..max_str;
 
   null_id: constant id_nom:=0;
+
+  -- El rang de Num_var HA de ser major o igual al de
+  -- num_proc, sino tots els castings fets al codi 
+  -- poden fallar.
+  -- Es llogic pero que hi hagi mes variables que procediments
+  -- a un codi minimament normal i, per tant, l'actitut
+  -- adoptada no es descabellada.
+  type num_var is new natural range 0..max_id;
+  type num_proc is new natural range 0..(max_id/2);
+  
+  null_nv: constant num_var:= num_var'Last;
 
 end decls;

@@ -8,7 +8,7 @@
 |     CONS_IDX      |       arg1**:=** arg2**[**arg3**]**         |
 |     SUM           |       arg1**:=** arg2 **+** arg3        |
 |     RES           |       arg1**:=** arg2 **-** arg3        |
-|     MUL           |       arg1**:=** arg2 *** arg3        |
+|     MUL           |       arg1**:=** arg2 * arg3        |
 |     DIV           |       arg1**:=** arg2 **/** arg3        |
 |     MODUL         |       arg1**:=** arg2 **mod** arg3      |
 |     NEG           |       arg1**:=     -**arg2              |

@@ -41,7 +41,8 @@ package body semantica is
 		if DEBUG then
       Ada.Text_IO.Put_Line("nova_var_const:nvc::"
       &num_var'Image(nv)&"::"
-      &valor'Image(val));
+      &valor'Image(val)&"::"
+      &tipus_subjacent'Image(tsb));
     end if;
 		return nv;
   end nova_var_const;

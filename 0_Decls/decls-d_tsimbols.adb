@@ -170,11 +170,17 @@ else te(iep).next:= ie;
       ie:= tb(prof); ie:= ie+1; tb(prof):= ie;
       te(ie).id:= ida; te(ie).d:= da; te(ie).prof:= -1;
       if iep = 0 then td(idp).next:= ie;
-    else te(iep).next:= ie;
-  end if;
-  te(ie).next:= 0;
-end if;
-    end put_arg;
+      else te(iep).next:= ie;
+      end if;
+      te(ie).next:= 0;
+    end if;
+    if DEBUG then
+      missatges_ct_debugging("put_arg",da.td'Img
+      &"::PROCID: "&idp'img
+      &"::ID: "&ida'img
+      &"::PROF: "&prof'img); 
+    end if;
+  end put_arg;
 
 
 procedure first(ts: in tsimbols; idp: in id_nom; it: out iterador_arg) is

@@ -480,9 +480,9 @@ package body semantica.c_tipus is
             missatges_operador_tipus(p.id_pos, d_tipus.dt.tsb, neg_alg);
           end if;
 
-          v:= -d_tipus.vc;
+          v:= -desc.vc;
         else 
-          v:= d_tipus.vc;
+          v:= desc.vc;
         end if;
 
         id_tipus:= desc.tc;
@@ -499,10 +499,14 @@ package body semantica.c_tipus is
           end if;
           v:= -valor'Value(get(tn, p.lit_ids)); --No he comprobado que este tipo de casting funciona!!!
         else
-          v:= valor'Value(get(tn, p.lit_ids));
+          if tsb=tsb_ent then
+            v:= valor'Value(get(tn, p.lit_ids));
+          else
+            v:=valor(Character'pos(get(tn, p.lit_ids)(get(tn, p.lit_ids)'First)));
+          end if;
         end if;
         pos:= p.lit_pos;
-    
+
       when others =>
         ERROR:= true;
         missatges_ct_error_intern((fila=>506, columna=>5), "ct_valor");
@@ -638,8 +642,6 @@ package body semantica.c_tipus is
     
     linf:= desc_rang.dt.linf;
     lnc:= desc_rang.dt.lsup - linf + 1;
-    if lnc < 0 then lnc:= -lnc; end if;
-    if linf < 0 then linf:= -linf; end if;
     b:= b * lnc + linf;
 
     desc_idx:= (td=>dindx, tind=>id_rang);
@@ -649,9 +651,10 @@ package body semantica.c_tipus is
 
 
   procedure ct_decl_proc(nd_procediment: in out pnode) is
-    id_proc: id_nom;
-    desc_proc: descripcio;
+    id_proc, id_arg: id_nom;
+    desc_proc,desc_arg: descripcio;
     error:boolean;
+    it: iterador_arg;
   begin
     id_proc:= nd_procediment.proc_cproc.cproc_id.id_id;
     desc_proc:= (td=>dproc, np=>nou_proc);
@@ -664,19 +667,24 @@ package body semantica.c_tipus is
     if nd_procediment.proc_cproc.cproc_args.tn /= nd_null then
       ct_decl_args(nd_procediment.proc_cproc.cproc_args, id_proc);
     end if;
+
     -- Per simplificar la GC
     nd_procediment.proc_cproc.cproc_np:= desc_proc.np;
 
     enter_block(ts);
-    --!!!En els apunts tenc un comentari en el qual es fa un recorregut del arguments, pero no se perque!!!
+    first(ts, id_proc, it);
+    while is_valid(it) loop 
+      get(ts, it, id_arg, desc_arg);
+      put(ts, id_arg, desc_arg, error);
+      next(ts, it);
+    end loop;
+
     if nd_procediment.proc_decls.tn /= nd_null then
       ct_decls(nd_procediment.proc_decls); 
     end if;
     if nd_procediment.proc_sents.tn /= nd_null then
       ct_sents(nd_procediment.proc_sents);
     end if;
-
-    
     exit_block(ts); 
   end ct_decl_proc;
 
@@ -713,6 +721,11 @@ package body semantica.c_tipus is
       when md_in_out => desc_arg:= (td=>dvar, tv=>id_tipus, nv=>nova_var);
       when md_in => desc_arg:= (td=>dargc, ta=>id_tipus, na=>nova_var);
     end case;
+    if DEBUG then
+      missatges_ct_debugging("ct_decl_arg",tmode'Image(mode)&"::"
+      &tipus_descr'Image(desc_arg.td)&"::"
+      &id_nom'Image(id_tipus));
+    end if;
     id_arg:= nd_lid_arg.lid_id.id_id;
     put_arg(ts, id_proc, id_arg, desc_arg, error);
     
@@ -867,7 +880,7 @@ package body semantica.c_tipus is
 
   procedure ct_ref(nd_ref: in out pnode; id_base: out id_nom; id_tipus: out id_nom; pos: in out posicio) is 
     it: iterador_arg;
-    desc_ref: descripcio;
+    desc_ref, desc_ref_aux: descripcio;
     p: pnode;
   begin
     id_base:= nd_ref.ref_id.id_id;
@@ -892,7 +905,8 @@ package body semantica.c_tipus is
           ct_qs(nd_ref.ref_qs, id_base, desc_ref.tc, pos);
         end if;
         id_tipus:= desc_ref.tc;
-  
+        desc_ref_aux:= desc_ref;
+
         desc_ref:= get(ts, desc_ref.tc);
         if desc_ref.td /= dtipus then 
           ERROR:= true;
@@ -908,9 +922,12 @@ package body semantica.c_tipus is
         -- Si discriminam constants i variables a la TV no caldra discriminar entre nd_var i nd_const. Com que ho farem a la
         -- proxima etapa, ja no ens escarrassam massa
         if not ERROR then
+          if DEBUG then
+            missatges_ct_debugging("ct_ref",tipus_descr'Image(desc_ref_aux.td));
+          end if;
           p:= new node(nd_var); 
-          p.var_tv:= desc_ref.tc;
-          p.var_nv:= nova_var_const(desc_ref.vc, desc_ref.dt.tsb);
+          p.var_tv:= desc_ref_aux.tc;
+          p.var_nv:= nova_var_const(desc_ref_aux.vc, desc_ref.dt.tsb);
           if DEBUG then
             missatges_ct_debugging("ct_ref","invc:"&num_var'Image(p.var_nv));
           end if;
@@ -939,7 +956,10 @@ package body semantica.c_tipus is
           p.iproc_np:= desc_ref.np;
         end if;
 
-      when others=> 
+      when others=> -- aham, no es error interno, una llamada a un proc que no existe tmb llega aqui petar
+        if DEBUG then
+          missatges_ct_debugging("ct_ref",tipus_descr'Image(desc_ref.td));
+        end if;
         ERROR:= true;
         missatges_ct_error_intern((fila=>899, columna=>20), "ct_ref");
     end case; 
@@ -1359,8 +1379,8 @@ package body semantica.c_tipus is
 
     desc_ref:= get(ts, id_ref);
     case desc_ref.td is
-      when dvar => esvar:= false;
-      when dconst => esvar:= true;
+      when dvar => esvar:= true;
+      when dconst => esvar:= false;
       when others => 
         ERROR:= true;
         missatges_ct_error_intern((fila=>1100, columna=>16), "ct_e3_ref");

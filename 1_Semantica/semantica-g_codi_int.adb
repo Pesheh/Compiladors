@@ -3,7 +3,7 @@ with decls.d_tnoms;
 with semantica.missatges; use semantica.missatges; -- <<< TMP per debuguejar 
 package body semantica.g_codi_int is
 
-  DEBUG: constant boolean:= true;
+  DEBUG: constant boolean:= false;
 
   fals: constant num_var:= 0;
 

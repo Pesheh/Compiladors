@@ -24,10 +24,10 @@ package semantica.missatges is
  procedure missatges_massa_indexos_array(pos: in posicio; id_array: in id_nom); 
  procedure missatges_menys_arguments_proc(pos: in posicio; id_proc: in id_nom); 
  procedure missatges_massa_arguments_proc(pos: in posicio; id_proc: in id_nom); 
-  procedure missatge_arg_mode(pos: in posicio; id: in id_nom);
-  procedure missatge_proc_mult_parentesis(pos: in posicio);
-  procedure missatge_cond_bool(pos: in posicio; tsb: in tipus_subjacent);
-
+  procedure missatges_arg_mode(pos: in posicio; id: in id_nom);
+  procedure missatges_proc_mult_parentesis(pos: in posicio);
+  procedure missatges_cond_bool(pos: in posicio; tsb: in tipus_subjacent);
+  procedure missatges_no_definida(pos: in posicio; id: in id_nom); 
 
 
 

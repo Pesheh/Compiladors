@@ -1,0 +1,51 @@
+procedure main is
+  type rang is new integer range 1..20;
+  type un_array is array(rang) of integer;
+  input: un_array;
+  
+  procedure quicksort(left: in out rang; right: in rang) is
+    pivot: rang; 
+    left,right: rang;
+
+    procedure swap(left, right: in out rang) is
+    temp: integer;
+    begin
+      temp:=input(left);
+      input(left):=input(right);
+      input(right):=temp;
+    end procedure;
+
+    procedure partition(left, right: in out rang; pivot: in out rang) is
+      pivotVal: integer;
+      i: rang;
+    begin
+      pivot:= (left+right)/2;
+      pivotVal:=input(pivot);
+      swap(pivot,right);
+      i:=left;
+      while i< right loop
+        if input(i) < pivotVal then
+          swap(i,left);
+          left:=left+1;
+        end if;
+        i:=i+1;
+      end loop;
+      swap(left,right);
+      pivot:=left;
+    end procedure;
+
+  begin
+    if left < right then
+      partition(left,right,pivot);
+      quicksort(left, pivot-1);
+      quicksort(pivot,right);
+    end if;
+  end procedure;
+
+  left, right: rang;
+
+begin
+  left:=1; 
+  right:=20;
+  quicksort(left, right);
+end procedure;

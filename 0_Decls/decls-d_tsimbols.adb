@@ -40,7 +40,6 @@ package body decls.d_tsimbols is
   function get(ts: in tsimbols; id: in id_nom) return descripcio is
     td: tdescripcio renames ts.td;
   begin
-    missatges_imprimir_desc("get",td(id).d, id, ts.prof'img); 
     return td(id).d;
   end get;
 
@@ -173,12 +172,6 @@ else te(iep).next:= ie;
       else te(iep).next:= ie;
       end if;
       te(ie).next:= 0;
-    end if;
-    if DEBUG then
-      missatges_ct_debugging("put_arg",da.td'Img
-      &"::PROCID: "&idp'img
-      &"::ID: "&ida'img
-      &"::PROF: "&prof'img); 
     end if;
   end put_arg;
 

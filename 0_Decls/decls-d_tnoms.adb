@@ -65,7 +65,7 @@ package body decls.d_tnoms is
     nm: String:= To_Lower(nom);
   begin
     i:= hash(nm) mod b; p:= td(i);
-    while p/=null_id and then not equal(nom,tn,p) loop 
+    while p/=null_id and then not equal(nm,tn,p) loop 
       p:= tid(p).psh; 
     end loop;
     if p=null_id then

@@ -204,18 +204,18 @@ end missatges_camp_no_record;
  end missatges_massa_arguments_proc;
 
 
-  procedure missatge_arg_mode(pos: in posicio; id: in id_nom) is
+  procedure missatges_arg_mode(pos: in posicio; id: in id_nom) is
   begin
     put_line(pos.fila'img&":"&pos.columna'img&": L'argument """&get(tn,id)&" no compleix amb el seu mode");
-  end missatge_arg_mode;
+  end missatges_arg_mode;
 
-  procedure missatge_proc_mult_parentesis(pos: in posicio) is
+  procedure missatges_proc_mult_parentesis(pos: in posicio) is
   begin
     put_line(pos.fila'img&":"&pos.columna'img&": No es permeten procediments amb multiples dimensions.");
     --No estoy seguro si son multiples dimensiones u otra cosa 
-  end missatge_proc_mult_parentesis;
+  end missatges_proc_mult_parentesis;
 
-  procedure missatge_cond_bool(pos: in posicio; tsb: in tipus_subjacent) is
+  procedure missatges_cond_bool(pos: in posicio; tsb: in tipus_subjacent) is
   begin
     put_line(pos.fila'img&":"&pos.columna'img&": Tipus esperat ""Boolean""");
     put(pos.fila'img&":"&pos.columna'img&":");
@@ -237,8 +237,13 @@ end missatges_camp_no_record;
 
       when others=> null;
     end case;
-  end missatge_cond_bool;
+  end missatges_cond_bool;
 
+  procedure missatges_no_definida(pos: in posicio; id: in id_nom) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": La entitat """&get(tn, id)&""" no esta definida.");
+
+  end missatges_no_definida;
 
 
 

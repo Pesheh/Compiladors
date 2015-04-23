@@ -8,7 +8,7 @@ with semantica.missatges; use semantica.missatges;
 with ada.text_io; use ada.text_io;
 package body semantica.c_tipus is
 
-  DEBUG: constant boolean:= true;
+  DEBUG: constant boolean:= false;
 
   --DEFINICIONS 
   --Declaracions
@@ -104,10 +104,10 @@ package body semantica.c_tipus is
   --i els procediments d'entrada/sortida
 
   procedure posa_entorn_standard is
-    idb,idtr,idf:id_nom;
+    idb,idtr,idf, id_arg:id_nom;
     idint,idchar: id_nom;
     idstdio: id_nom;
-    desc: descripcio;
+    desc, desc_arg: descripcio;
     error: boolean;
   begin
 
@@ -165,7 +165,12 @@ package body semantica.c_tipus is
       ERROR:= true;
       missatges_ct_error_intern((fila=>161, columna=>5), "posa_entorn_standart");
     end if; 
-
+    
+    put(tn, "c", id_arg); 
+    desc_arg:=(td=>dargc, ta=> idchar, na=> nova_var);
+    put_arg(ts, idstdio, id_arg, desc_arg, error);
+    
+    
     --puti
     put(tn, "puti", idstdio);
     desc:= (td=>dproc, np=>nou_proc);
@@ -175,6 +180,12 @@ package body semantica.c_tipus is
       missatges_ct_error_intern((fila=>170, columna=>5), "posa_entorn_standart");
     end if;
 
+    put(tn, "n", id_arg); 
+    desc_arg:=(td=>dargc, ta=> idint, na=> nova_var);
+    put_arg(ts, idstdio, id_arg, desc_arg, error);
+    
+        
+    
     --puts
     put(tn, "puts", idstdio);
     desc:= (td=>dproc, np=>nou_proc);
@@ -183,6 +194,10 @@ package body semantica.c_tipus is
       ERROR:= true;
       missatges_ct_error_intern((fila=>179, columna=>5), "posa_entorn_standart");
     end if;
+    
+    put(tn, "s", id_arg); 
+    desc_arg:=(td=>dargc, ta=> null_id, na=> nova_var); --cuando no tiene tipus es un string
+    put_arg(ts, idstdio, id_arg, desc_arg, error);
 
     --newline
     put(tn, "newline", idstdio);
@@ -201,6 +216,10 @@ package body semantica.c_tipus is
       ERROR:= true;
       missatges_ct_error_intern((fila=>197, columna=>5), "posa_entorn_standart");
     end if;
+    
+    put(tn, "n", id_arg); 
+    desc_arg:=(td=>dvar, tv=> idint, nv=> nova_var);
+    put_arg(ts, idstdio, id_arg, desc_arg, error);
 
     --getc -> per caracters de 4 bytes(com es el nostre cas)
     put(tn, "getc", idstdio);
@@ -210,6 +229,10 @@ package body semantica.c_tipus is
       ERROR:= true;
       missatges_ct_error_intern((fila=>206, columna=>5), "posa_entorn_standart");
     end if;
+    
+    put(tn, "c", id_arg); 
+    desc_arg:=(td=>dvar, tv=> idchar, nv=> nova_var);
+    put_arg(ts, idstdio, id_arg, desc_arg, error);
 
     --getcc -> per caracters de 1 byte( en cas que lo necessitem)
     put(tn, "getcc", idstdio);
@@ -219,6 +242,10 @@ package body semantica.c_tipus is
       ERROR:= true;
       missatges_ct_error_intern((fila=>215, columna=>5), "posa_entorn_standart");
     end if;
+    
+    put(tn, "c", id_arg); 
+    desc_arg:=(td=>dvar, tv=> idchar, nv=> nova_var);
+    put_arg(ts, idstdio, id_arg, desc_arg, error);
 
   end posa_entorn_standard;
 
@@ -781,7 +808,7 @@ package body semantica.c_tipus is
     ct_expr(nd_sent.siter_expr, id_texpr, tsb_expr, expr_esvar, pos_exp); 
     if tsb_expr /= tsb_bool then 
       ERROR:= true;
-      missatge_cond_bool(pos_exp, tsb_expr);
+      missatges_cond_bool(pos_exp, tsb_expr);
     end if;
 
     if nd_sent.siter_sents.tn /= nd_sents and nd_sent.siter_sents.tn /= nd_null then
@@ -805,14 +832,13 @@ package body semantica.c_tipus is
     ct_expr(nd_sent.scond_expr, id_texpr, tsb_expr, expr_esvar, pos_exp); 
     if tsb_expr /= tsb_bool then 
       ERROR:= true;
-      missatge_cond_bool(pos_exp, tsb_expr); 
+      missatges_cond_bool(pos_exp, tsb_expr); 
     end if; 
 
     if nd_sent.scond_sents.tn /= nd_sents and nd_sent.scond_sents.tn /= nd_null then
       ERROR:= true;
       missatges_sent_buida;
     end if;
-
     if nd_sent.scond_sents.tn = nd_sents then
       ct_sents(nd_sent.scond_sents);
     end if;
@@ -824,7 +850,7 @@ package body semantica.c_tipus is
       end if;
     end if;
 
-    if nd_sent.scond_sents.tn = nd_sents then
+    if nd_sent.scond_esents.tn = nd_sents then
       ct_sents(nd_sent.scond_esents);
     end if;
   end ct_sent_cond;
@@ -887,6 +913,30 @@ package body semantica.c_tipus is
     pos:= nd_ref.ref_id.id_pos;
     desc_ref:= get(ts, id_base);
     case desc_ref.td is    
+      when dargc=>
+        if nd_ref.ref_qs.tn /= nd_null then
+          ct_qs(nd_ref.ref_qs, id_base, desc_ref.ta, pos);
+        end if;
+        id_tipus:= desc_ref.ta;
+        desc_ref_aux:= desc_ref;
+
+        desc_ref:= get(ts, desc_ref.ta);
+        if desc_ref.td /= dtipus then 
+          ERROR:= true;
+          missatges_ct_error_intern((fila=>868, columna=>20), "ct_ref::una cosa que ha pasat el test com a tipus, ara ja no ho es");
+        end if;
+
+        if desc_ref.dt.tsb > tsb_ent then
+          ERROR:= true;
+          missatges_ct_error_intern((fila=>873, columna=>20), "ct_ref::una cosa que ha pasat el test de constant, ara ja no ho es");
+        end if;
+
+        if not ERROR then 
+          p:= new node(nd_var);
+          p.var_nv:= desc_ref_aux.na;
+          p.var_tv:= desc_ref_aux.ta;
+        end if;
+
       when dvar=>
         if nd_ref.ref_qs.tn /= nd_null then
           ct_qs(nd_ref.ref_qs, id_base, desc_ref.tv, pos);
@@ -956,12 +1006,14 @@ package body semantica.c_tipus is
           p.iproc_np:= desc_ref.np;
         end if;
 
-      when others=> -- aham, no es error interno, una llamada a un proc que no existe tmb llega aqui petar
+        
+      
+      when others=>
         if DEBUG then
           missatges_ct_debugging("ct_ref",tipus_descr'Image(desc_ref.td));
         end if;
         ERROR:= true;
-        missatges_ct_error_intern((fila=>899, columna=>20), "ct_ref");
+        missatges_no_definida(pos, id_base); 
     end case; 
 
     -- Per simplificar la GC
@@ -980,7 +1032,7 @@ package body semantica.c_tipus is
   begin
     if nd_qs.qs_qs.tn /= nd_null then
       ERROR:= true;
-      missatge_proc_mult_parentesis(pos);
+      missatges_proc_mult_parentesis(pos);
     end if;
 
     first(ts, id_base, it);
@@ -1013,7 +1065,7 @@ package body semantica.c_tipus is
       when dvar =>
         if not esvar then 
           ERROR:= true;
-          missatge_arg_mode(pos, id_arg);
+          missatges_arg_mode(pos, id_arg);
         end if;
         id_tipus_arg:= desc_arg.tv;
 
@@ -1208,7 +1260,6 @@ package body semantica.c_tipus is
     esvar1, esvar2: boolean;
     pos1, pos2: posicio:= (0, 0);
   begin
-    put_line(nd_e.tn'img);
     if nd_e.e_ope.tn = nd_and or else nd_e.e_ope.tn = nd_or then
       ct_e(nd_e.e_ope, id_tipus1, tsb1, esvar1, pos1);
     else 
@@ -1381,6 +1432,7 @@ package body semantica.c_tipus is
     case desc_ref.td is
       when dvar => esvar:= true;
       when dconst => esvar:= false;
+      when dargc => esvar:= false;
       when others => 
         ERROR:= true;
         missatges_ct_error_intern((fila=>1100, columna=>16), "ct_e3_ref");

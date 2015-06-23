@@ -1,28 +1,35 @@
 with decls; use decls;
 with decls.d_tnoms; use decls.d_tnoms;
 with decls.d_tsimbols; use decls.d_tsimbols;
-with decls.d_atribut; use decls.d_atribut;
-with decls.d_descripcio; use decls.d_descripcio;
+with decls.d_arbre; use decls.d_arbre;
+with decls.d_c3a; use decls.d_c3a;
+with d_pila;
 
 package semantica is
 
-  type ocupacio is private;
-
-  procedure print_arbre;
-	function nova_var return Num_var;
-  function nou_proc return Num_proc;
-  function nova_var(np: num_proc; ocup: ocupacio; desp: despl) return num_var;
-  -- variables constants
-  function nova_var_const(val: valor; tsb: tipus_subjacent) return num_var;
+  procedure prepara_analisi(nomf: in String);
+  procedure conclou_analisi;
 
 private
-  type ocupacio is new natural;
-  
+
   tn: tnoms;
   ts: tsimbols;
+
   root: pnode;
 
-  nv: num_var:= 0;
-  np: num_proc:= 0;
+  nv: num_var;
+  np: num_proc;
+  ne: num_etiq;
 
+  tv: tvariables;
+  tp: tprocediments;
+
+  ERROR: boolean;
+
+  -- Això no em sembla gaire correcte ja que sols la ct i la gc (intermitj
+  -- i assemblador) requereixen aquesta pila, però l'alternativa es
+  -- reinstanciar cada cop el paquet, cosa encara pitjor.
+  package Pila_Procediments is new D_Pila(max_proc, elem => num_proc);
+
+  pproc: Pila_Procediments.pila;
 end semantica;

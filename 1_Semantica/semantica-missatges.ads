@@ -3,8 +3,7 @@ with decls.d_descripcio; use decls.d_descripcio;
 with decls.d_tsimbols; use decls.d_tsimbols;
 
 package semantica.missatges is
-  DEBUG: constant boolean:= true;
-  
+
   procedure missatges_desc_no_es_tipus(pos: in posicio; id: in id_nom);
   procedure missatges_conflictes_declaracio(pos: in posicio; id: in id_nom);
   procedure missatges_operacio_amb_escalar(pos: in posicio);
@@ -20,14 +19,14 @@ package semantica.missatges is
   procedure missatges_no_record(pos: in posicio; id: in id_nom);
   procedure missatges_camp_no_record(pos: in posicio; id_rec, id_camp: in id_nom);
   procedure missatges_no_array(pos: in posicio; id: in id_nom);
- procedure missatges_menys_indexos_array(pos: in posicio; id_array: in id_nom); 
- procedure missatges_massa_indexos_array(pos: in posicio; id_array: in id_nom); 
- procedure missatges_menys_arguments_proc(pos: in posicio; id_proc: in id_nom); 
- procedure missatges_massa_arguments_proc(pos: in posicio; id_proc: in id_nom); 
+  procedure missatges_menys_indexos_array(pos: in posicio; id_array: in id_nom);
+  procedure missatges_massa_indexos_array(pos: in posicio; id_array: in id_nom);
+  procedure missatges_menys_arguments_proc(pos: in posicio; id_proc: in id_nom);
+  procedure missatges_massa_arguments_proc(pos: in posicio; id_proc: in id_nom);
   procedure missatges_arg_mode(pos: in posicio; id: in id_nom);
   procedure missatges_proc_mult_parentesis(pos: in posicio);
   procedure missatges_cond_bool(pos: in posicio; tsb: in tipus_subjacent);
-  procedure missatges_no_definida(pos: in posicio; id: in id_nom); 
+  procedure missatges_no_definida(pos: in posicio; id: in id_nom);
 
 
 
@@ -43,6 +42,6 @@ package semantica.missatges is
   procedure missatges_imprimir_desc(proc: in String; d: in descripcio; id: in id_nom; p: in String);
   procedure missatges_imprimir_id(proc: in String; id: in id_nom; nom: in String );
 
-    
+
   procedure imprimir_arbre(root: in pnode);
 end semantica.missatges;

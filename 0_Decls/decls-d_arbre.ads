@@ -1,23 +1,21 @@
 with decls.d_descripcio;
-package decls.d_atribut is
-  --pragma pure;
+package decls.d_arbre is
 
---private
   type node;
   type pnode is access node;
-	subtype atribut is pnode;
-	type tnode is (
+  subtype atribut is pnode;
+  type tnode is (
     nd_null,
     nd_root,
-		nd_proc,
-	  nd_decls,
-		nd_decl,
-		nd_decl_var,
-		nd_decl_const,
-		nd_decl_t,
-		nd_decl_t_cont_type,
-		nd_decl_t_cont_record,
-		nd_decl_t_cont_arry,
+    nd_proc,
+    nd_decls,
+    nd_decl,
+    nd_decl_var,
+    nd_decl_const,
+    nd_decl_t,
+    nd_decl_t_cont_type,
+    nd_decl_t_cont_record,
+    nd_decl_t_cont_arry,
     nd_dcamps,
     nd_dcamp,
     nd_rang,
@@ -46,8 +44,8 @@ package decls.d_atribut is
     nd_expr,
     nd_and,
     nd_or,
-    nd_e2,
-    nd_e3,
+    nd_eop,
+    nd_et,
     nd_lexpr,
     nd_id,
     nd_lit,
@@ -59,7 +57,7 @@ package decls.d_atribut is
     md_in,
     md_in_out
   );
-  
+
 
   type posicio is
     record
@@ -68,11 +66,8 @@ package decls.d_atribut is
     end record;
 
 
-  -- L'operand o_rel segueix aqui per compatibilitat.
-  -- en posteriors commits s'hauria d'eliminar
-	type operand is (
+  type operand is (
     nul,
-    o_rel,
     menor,
     major,
     menorigual,
@@ -92,40 +87,40 @@ package decls.d_atribut is
   type node(tn: tnode:= nd_null) is
     record
       case tn is
-        when nd_null => 
+        when nd_null =>
           null;
 
         when nd_root =>
           p: pnode;
 
-        when nd_id => 
-          id_id: id_nom; 
-          id_pos: posicio;    
+        when nd_id =>
+          id_id: id_nom;
+          id_pos: posicio;
 
         when nd_lit =>
-          lit_ids: id_str; 
+          lit_val: valor;
           lit_pos: posicio;
           lit_tipus: decls.d_descripcio.tipus_subjacent;
 
-        when nd_op_rel =>     
+        when nd_op_rel =>
           orel_tipus: operand;
 
         when nd_var =>
           var_nv: num_var;
-          var_tv: id_nom;
+          var_ocup: despl;
 
         when nd_lid =>
           lid_seg: pnode;
           lid_id: pnode;
-          
+
         when nd_mode =>
           mode_tipus: tmode;
-          
+
         when nd_c_proc =>
           cproc_id: pnode;
           cproc_np: num_proc;
           cproc_args: pnode;
-          
+
         when nd_proc =>
           proc_cproc: pnode;
           proc_decls: pnode;
@@ -137,7 +132,7 @@ package decls.d_atribut is
         when nd_args =>
           args_args: pnode;
           args_arg: pnode;
-        
+
         when nd_arg =>
           arg_tipus: pnode;
           arg_lid: pnode;
@@ -155,7 +150,7 @@ package decls.d_atribut is
           dcamps_dcamp: pnode;
 
         when nd_dcamp =>
-          dcamp_decl: pnode;	
+          dcamp_decl: pnode;
 
         when nd_decl_var =>
           dvar_lid: pnode;
@@ -179,11 +174,11 @@ package decls.d_atribut is
         when nd_decl_t_cont_arry =>
           dtcont_idx: pnode;
           dtcont_tipus: pnode;
-        
+
         when nd_rang =>
-	        rang_id: id_nom;
-			    rang_linf: pnode;
-			    rang_lsup: pnode;
+          rang_id: id_nom;
+          rang_linf: pnode;
+          rang_lsup: pnode;
 
         when nd_idx =>
           idx_tipus: tidx;
@@ -192,14 +187,14 @@ package decls.d_atribut is
         when nd_idx_cont =>
           idxc_valor: pnode;
 
-        when nd_sents	=>
+        when nd_sents  =>
           sents_cont: pnode;
 
-        when nd_sents_nob	=>
+        when nd_sents_nob  =>
           snb_snb: pnode;
           snb_sent: pnode;
 
-        when nd_sent =>	
+        when nd_sent =>
           sent_sent: pnode;
 
         when nd_siter =>
@@ -232,7 +227,7 @@ package decls.d_atribut is
         when nd_arry =>
           arry_lexpr: pnode;
           -- constants de despl calc per el compilador
-          arry_tb: num_var; 
+          arry_tb: num_var;
           arry_tw: num_var;
 
         when nd_lexpr_arry =>
@@ -242,8 +237,7 @@ package decls.d_atribut is
           lexpra_tu: num_var;
 
         when nd_rec =>
-          -- despl constant del camp. Mentre no hi hagi re
-          -- a la TV, aixo no funcionara
+          -- despl constant del camp.
           rec_td: num_var;
 
         when nd_expr =>
@@ -252,14 +246,14 @@ package decls.d_atribut is
         when nd_and | nd_or =>
           e_ope: pnode;
           e_opd: pnode;
-    
-        when nd_e2 =>
-          e2_ope: pnode;
-          e2_opd: pnode;
-          e2_operand: operand;
 
-        when nd_e3 =>
-          e3_cont: pnode;
+        when nd_eop =>
+          eop_ope: pnode;
+          eop_opd: pnode;
+          eop_operand: operand;
+
+        when nd_et =>
+          et_cont: pnode;
 
         when nd_lexpr =>
           lexpr_cont: pnode;
@@ -268,4 +262,4 @@ package decls.d_atribut is
       end case;
     end record;
 
-end decls.d_atribut;
+end decls.d_arbre;

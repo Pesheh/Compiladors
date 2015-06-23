@@ -12,12 +12,12 @@ package decls.d_descripcio is
     record
       ocup: despl; -- :)
       case tsb is
-        when tsb_bool | tsb_car | tsb_ent	=>
+        when tsb_bool | tsb_car | tsb_ent  =>
           linf,lsup: valor;
-        when tsb_arr 						=>
+        when tsb_arr             =>
           tcomp: id_nom; -- tipus dels components de l'arry
           b: valor; -- constant del compilador
-        when tsb_rec | tsb_nul 				=>
+        when tsb_rec | tsb_nul         =>
           null;
         end case;
       end record;

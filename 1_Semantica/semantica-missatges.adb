@@ -10,19 +10,19 @@ with Ada.Strings.Fixed;
 use Ada.Strings.Fixed;
 
 package body semantica.missatges is
-  
+
     --Podria ser que pondremos el fichero en que se ha producido el error
   procedure missatges_desc_no_es_tipus(pos: in posicio; id: in id_nom) is
   begin
     put_line(pos.fila'img&":"&pos.columna'img&": """&get(tn, id)&""" no es un tipus.");
   end missatges_desc_no_es_tipus;
-  
-  
+
+
   procedure missatges_conflictes_declaracio(pos: in posicio; id: in id_nom) is
   begin
     put_line(pos.fila'img&":"&pos.columna'img&": """&get(tn, id)&""" esta en conflicte amb altra declaracio.");
   end missatges_conflictes_declaracio;
-  
+
   procedure missatges_operacio_amb_escalar(pos: in posicio) is
   begin
     put_line(pos.fila'img&":"&pos.columna'img&": Operacio illegal=> Aquesta assignacio nomes es pot fer amb un tipus escalar.");
@@ -51,62 +51,62 @@ package body semantica.missatges is
       when others=> null;
     end case;
   end missatges_tipus_incosistent_lit;
-  
+
   procedure missatges_tipus_incosistent_id(pos: in posicio; id_expected, id_found: in id_nom) is
   begin
     put_line(pos.fila'img&":"&pos.columna'img&": Tipus esperat """&get(tn,id_expected)&""".");
     put_line(pos.fila'img&":"&pos.columna'img&": Tipus trobat """&get(tn,id_found)&""".");
   end missatges_tipus_incosistent_id;
-  
- 
+
+
   procedure missatges_valor_fora_rang(pos: in posicio; id_tipus: in id_nom) is
   begin
     put_line(pos.fila'img&":"&pos.columna'img&": Valor fora del rang del tipus """&get(tn, id_tipus)&""".");
   end missatges_valor_fora_rang;
-  
-  
+
+
   procedure missatges_rang_incorrecte(pos: in posicio) is
   begin
     put_line(pos.fila'img&":"&pos.columna'img&": Rang incorrecte=> El limit inferior ha de ser mes petit que el limit superior.");
   end missatges_rang_incorrecte;
 
-  
+
   procedure missatges_assignacio_incorrecta(pos: in posicio) is
   begin
     put_line(pos.fila'img&":"&pos.columna'img&": Assignacio illegal=> ");
   end missatges_assignacio_incorrecta;
 
-  
+
   procedure missatges_operador_tipus(pos: in posicio; tsb_tipus: in tipus_subjacent; op: in operand) is
   begin
     case op is
-      when o_rel=>
+      when major | majorigual | igual | diferent | menorigual | menor=>
         put(pos.fila'img&":"&pos.columna'img&": Els operadors relacionals no son definits ");
-     
+
       when sum=>
         put(pos.fila'img&":"&pos.columna'img&": L'operador ""+"" no esta definit ");
-      
+
       when res=>
         put(pos.fila'img&":"&pos.columna'img&": L'operador ""-"" no esta definit ");
-      
+
       when prod=>
         put(pos.fila'img&":"&pos.columna'img&": L'operador ""*"" no esta definit ");
-      
+
       when quoci=>
         put(pos.fila'img&":"&pos.columna'img&": L'operador ""/"" no esta definit ");
-      
+
       when modul=>
         put(pos.fila'img&":"&pos.columna'img&": L'operador ""mod"" no esta definit ");
 
       when neg_log=>
         put(pos.fila'img&":"&pos.columna'img&": L'operador ""not"" no esta definit ");
-      
+
       when neg_alg=>
         put(pos.fila'img&":"&pos.columna'img&": L'operador ""-"" no esta definit ");
-      
+
       when others=> null;
     end case;
-      
+
     case tsb_tipus is
       when tsb_bool=>
         put_line("per un tipus boolea.");
@@ -126,7 +126,7 @@ package body semantica.missatges is
       when others=> null;
     end case;
   end missatges_operador_tipus;
-  
+
   procedure missatges_log_operador(pos: in posicio; tsb: in tipus_subjacent) is
   begin
     put_line(pos.fila'img&":"&pos.columna'img&": Els operadors llogics or/and no son definits ");
@@ -150,7 +150,7 @@ package body semantica.missatges is
       when others=> null;
     end case;
   end missatges_log_operador;
-  
+
   procedure missatges_sent_buida is
   begin
       --Pobablemente se tendria que cambiar para tener en cuenta la posicion!
@@ -161,7 +161,7 @@ package body semantica.missatges is
   begin
 
     put_line(pos.fila'img&":"&pos.columna'img&": El tipus  """&get(tn, id_tipus1)&""" no es compatible amb el tipus """ &get(tn, id_tipus2)&""".");
-    
+
   end missatges_expressions_incompatibles;
 
 
@@ -176,7 +176,7 @@ package body semantica.missatges is
     put_line(pos.fila'img&":"&pos.columna'img&": Nombre major d'indexos que els necessaris per l'array """&get(tn, id_array)&""".");
   end missatges_massa_indexos_array;
 
-  
+
   procedure missatges_no_record(pos: in posicio; id: in id_nom) is
   begin
       put_line(pos.fila'img&":"&pos.columna'img&": El tipus """&get(tn, id)&""" no es un record.");
@@ -196,7 +196,7 @@ end missatges_camp_no_record;
  begin
     put_line(pos.fila'img&":"&pos.columna'img&": Nombre insuficient d'arguments pel procediment """&get(tn, id_proc)&""".");
  end missatges_menys_arguments_proc;
- 
+
  procedure missatges_massa_arguments_proc(pos: in posicio; id_proc: in id_nom) is
  begin
     put_line(pos.fila'img&":"&pos.columna'img&": Nombre d'arguments que els necessaris pel procediment """&get(tn, id_proc)&""".");
@@ -212,7 +212,7 @@ end missatges_camp_no_record;
   procedure missatges_proc_mult_parentesis(pos: in posicio) is
   begin
     put_line(pos.fila'img&":"&pos.columna'img&": No es permeten procediments amb multiples dimensions.");
-    --No estoy seguro si son multiples dimensiones u otra cosa 
+    --No estoy seguro si son multiples dimensiones u otra cosa
   end missatges_proc_mult_parentesis;
 
   procedure missatges_cond_bool(pos: in posicio; tsb: in tipus_subjacent) is
@@ -261,14 +261,14 @@ end missatges_camp_no_record;
 
 
 
-  
+
   --Missatges de debugging
   procedure missatges_ct_error_intern(pos: in posicio; proc: in String) is
   begin
     if DEBUG then
       put_line("c_tipus.adb:"&proc&"::"&pos.fila'img&":"&pos.columna'img&": S'ha produit un error intern del compilador.");
     end if;
-  end missatges_ct_error_intern;  
+  end missatges_ct_error_intern;
 
   procedure missatges_ct_debugging(proc,msg: in String) is
   begin
@@ -276,7 +276,7 @@ end missatges_camp_no_record;
       put_line("c_tipus.adb:"&proc&"::"&msg);
     end if;
   end missatges_ct_debugging;
-  
+
   procedure missatges_gc_debugging(proc,msg: in String) is
   begin
     if DEBUG then
@@ -291,7 +291,7 @@ end missatges_camp_no_record;
     end if;
   end missatges_imprimir_desc;
 
-  
+
   procedure missatges_imprimir_id(proc: in String; id: in id_nom; nom: in String ) is
   begin
     if DEBUG then
@@ -299,7 +299,7 @@ end missatges_camp_no_record;
     end if;
   end missatges_imprimir_id;
 
-  
+
   procedure imprimir_arbre(root: in pnode) is
     q:queue;
     p: pnode;
@@ -314,10 +314,10 @@ end missatges_camp_no_record;
       empty(q);
       put(q,root,i);
       while not is_empty(q) loop
-        pop(q,p,j);  
-        if p/=null then 
+        pop(q,p,j);
+        if p/=null then
           case p.tn is
-            when nd_null => 
+            when nd_null =>
               null;
 
             when nd_root =>
@@ -333,7 +333,7 @@ end missatges_camp_no_record;
               i:=i+1;
               put_line(graph,"nd_lit_"&Trim(j'img, Ada.Strings.Left)&" -> lit_"&Trim(i'img, Ada.Strings.Left));
 
-              --      when nd_op_rel =>     
+              --      when nd_op_rel =>
 
             when nd_lid =>
               if p.lid_seg/=null then
@@ -429,7 +429,7 @@ end missatges_camp_no_record;
               put(q,p.dcamp_decl,i);
 
             when nd_decl_var =>
-              if p.dvar_lid/=null then              
+              if p.dvar_lid/=null then
                 i:=i+1;
                 put_line(graph,"nd_decl_var_"&Trim(j'img, Ada.Strings.Left)&" -> nd_lid_"&Trim(i'img, Ada.Strings.Left));
                 put(q,p.dvar_lid,i);
@@ -439,7 +439,7 @@ end missatges_camp_no_record;
               put(q,p.dvar_tipus,i);
 
             when nd_decl_const =>
-              null; --No esta completo aun!!!  
+              null; --No esta completo aun!!!
 
             when nd_decl_t =>
               i:=i+1;
@@ -494,13 +494,13 @@ end missatges_camp_no_record;
               end if;
               put(q,p.idxc_valor,i);
 
-            when nd_sents	=>
+            when nd_sents  =>
               i:=i+1;
               put_line(graph,"nd_sents_"&Trim(j'img, Ada.Strings.Left)&" -> nd_sents_nob_"&Trim(i'img, Ada.Strings.Left));
               put(q,p.sents_cont,i);
 
 
-            when nd_sents_nob	=>
+            when nd_sents_nob  =>
               if p.snb_snb/=null then
                 i:=i+1;
                 put_line(graph,"nd_sents_nob_"&Trim(j'img, Ada.Strings.Left)&" -> nd_sents_nob_"&Trim(i'img, Ada.Strings.Left));
@@ -510,7 +510,7 @@ end missatges_camp_no_record;
               put_line(graph,"nd_sents_nob_"&Trim(j'img, Ada.Strings.Left)&" -> nd_sent_"&Trim(i'img, Ada.Strings.Left));
               put(q,p.snb_sent,i);
 
-            when nd_sent =>	
+            when nd_sent =>
               i:=i+1;
               case p.sent_sent.tn is
                 when nd_siter =>
@@ -592,8 +592,8 @@ end missatges_camp_no_record;
                   put_line(graph,"nd_expr_"&Trim(j'img, Ada.Strings.Left)&" -> nd_and_"&Trim(i'img, Ada.Strings.Left));
                 when nd_or =>
                   put_line(graph,"nd_expr_"&Trim(j'img, Ada.Strings.Left)&" -> nd_or_"&Trim(i'img, Ada.Strings.Left));
-                when nd_e2 =>
-                  put_line(graph,"nd_expr_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
+                when nd_eop =>
+                  put_line(graph,"nd_expr_"&Trim(j'img, Ada.Strings.Left)&" -> nd_eop_"&Trim(i'img, Ada.Strings.Left));
                 when others => null;
               end case;
               put(q,p.expr_e,i);
@@ -603,14 +603,14 @@ end missatges_camp_no_record;
               case p.e_ope.tn is
                 when nd_and=>
                   put_line(graph,"nd_and_"&Trim(j'img, Ada.Strings.Left)&" -> nd_and_"&Trim(i'img, Ada.Strings.Left));
-                when nd_e2=>
-                  put_line(graph,"nd_and_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
+                when nd_eop=>
+                  put_line(graph,"nd_and_"&Trim(j'img, Ada.Strings.Left)&" -> nd_eop_"&Trim(i'img, Ada.Strings.Left));
                 when others=> null;
               end case;
               put(q,p.e_ope,i);
               i:=i+1;
-              put_line(graph,"nd_and_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
-              put(q,p.e_opd,i); 
+              put_line(graph,"nd_and_"&Trim(j'img, Ada.Strings.Left)&" -> nd_eop_"&Trim(i'img, Ada.Strings.Left));
+              put(q,p.e_opd,i);
 
 
             when nd_or =>
@@ -618,42 +618,42 @@ end missatges_camp_no_record;
               case p.e_ope.tn is
                 when nd_and=>
                   put_line(graph,"nd_or_"&Trim(j'img, Ada.Strings.Left)&" -> nd_or_"&Trim(i'img, Ada.Strings.Left));
-                when nd_e2=>
-                  put_line(graph,"nd_or_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
+                when nd_eop=>
+                  put_line(graph,"nd_or_"&Trim(j'img, Ada.Strings.Left)&" -> nd_eop_"&Trim(i'img, Ada.Strings.Left));
                 when others=> null;
               end case;
               put(q,p.e_ope,i);
               i:=i+1;
-              put_line(graph,"nd_or_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
-              put(q,p.e_opd,i); 
+              put_line(graph,"nd_or_"&Trim(j'img, Ada.Strings.Left)&" -> nd_eop_"&Trim(i'img, Ada.Strings.Left));
+              put(q,p.e_opd,i);
 
-            when nd_e2 =>
-              if p.e2_ope/=null then
+            when nd_eop =>
+              if p.eop_ope/=null then
                 i:=i+1;
-                put_line(graph,"nd_e2_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e2_"&Trim(i'img, Ada.Strings.Left));
-                put(q,p.e2_ope,i); 
+                put_line(graph,"nd_eop_"&Trim(j'img, Ada.Strings.Left)&" -> nd_eop_"&Trim(i'img, Ada.Strings.Left));
+                put(q,p.eop_ope,i);
               end if;
-              if p.e2_operand/=nul then
+              if p.eop_operand/=nul then
                 i:=i+1;
-                put_line(graph,"nd_e2_"&Trim(j'img, Ada.Strings.Left)&" -> nd_op_"&p.e2_operand'img&"_"&Trim(i'img, Ada.Strings.Left));
+                put_line(graph,"nd_eop_"&Trim(j'img, Ada.Strings.Left)&" -> nd_op_"&p.eop_operand'img&"_"&Trim(i'img, Ada.Strings.Left));
               end if;
               i:=i+1;
-              put_line(graph,"nd_e2_"&Trim(j'img, Ada.Strings.Left)&" -> nd_e3_"&Trim(i'img, Ada.Strings.Left));
-              put(q,p.e2_opd,i); 
+              put_line(graph,"nd_eop_"&Trim(j'img, Ada.Strings.Left)&" -> nd_et_"&Trim(i'img, Ada.Strings.Left));
+              put(q,p.eop_opd,i);
 
 
-            when nd_e3 =>
+            when nd_et =>
               i:=i+1;
-              case p.e3_cont.tn is
+              case p.et_cont.tn is
                 when nd_ref =>
-                  put_line(graph,"nd_e3_"&Trim(j'img, Ada.Strings.Left)&" -> nd_ref_"&Trim(i'img, Ada.Strings.Left));
+                  put_line(graph,"nd_et_"&Trim(j'img, Ada.Strings.Left)&" -> nd_ref_"&Trim(i'img, Ada.Strings.Left));
                 when nd_expr =>
-                  put_line(graph,"nd_e3_"&Trim(j'img, Ada.Strings.Left)&" -> nd_expr_"&Trim(i'img, Ada.Strings.Left));
+                  put_line(graph,"nd_et_"&Trim(j'img, Ada.Strings.Left)&" -> nd_expr_"&Trim(i'img, Ada.Strings.Left));
                 when nd_lit =>
-                  put_line(graph,"nd_e3_"&Trim(j'img, Ada.Strings.Left)&" -> nd_lit_"&Trim(i'img, Ada.Strings.Left));
+                  put_line(graph,"nd_et_"&Trim(j'img, Ada.Strings.Left)&" -> nd_lit_"&Trim(i'img, Ada.Strings.Left));
                 when others => null;
               end case;
-              put(q,p.e3_cont,i);
+              put(q,p.et_cont,i);
 
 
             when nd_lexpr =>

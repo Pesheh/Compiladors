@@ -29,8 +29,8 @@ package body decls.d_tnoms is
   begin
     pi:= tid(p-1).ptc+1; pf:= tid(p).ptc;
     i:= nom'first;j:= pi;
-    while nom(i)=tc(j) and i<nom'Last and j<pf loop 
-      i:= i+1; j:= j+1; 
+    while nom(i)=tc(j) and i<nom'Last and j<pf loop
+      i:= i+1; j:= j+1;
     end loop;
     return nom(i)=tc(j) and i=nom'Last and j=pf;
   end equal;
@@ -65,8 +65,8 @@ package body decls.d_tnoms is
     nm: String:= To_Lower(nom);
   begin
     i:= hash(nm) mod b; p:= td(i);
-    while p/=null_id and then not equal(nm,tn,p) loop 
-      p:= tid(p).psh; 
+    while p/=null_id and then not equal(nm,tn,p) loop
+      p:= tid(p).psh;
     end loop;
     if p=null_id then
       if nid=maxid then raise space_overflow; end if;
@@ -104,7 +104,7 @@ package body decls.d_tnoms is
     if ns=maxstr then raise space_overflow; end if;
     if ncs-text'Length<nc then raise space_overflow; end if;
     save_string(tc, text, ncs);
-    ns:= ns+1; ts(ns):= ncs; 
+    ns:= ns+1; ts(ns):= ncs;
     ids:=ns;
   end put;
 

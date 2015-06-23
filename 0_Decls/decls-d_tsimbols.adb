@@ -22,7 +22,7 @@ package body decls.d_tsimbols is
     prof: profunditat renames ts.prof;
     ie: index_expansio;
   begin
-    missatges_imprimir_desc("put",d, id, prof'img); 
+    missatges_imprimir_desc("put",d, id, prof'img);
 
     error:= false;
     if td(id).prof=prof then
@@ -35,7 +35,7 @@ package body decls.d_tsimbols is
       te(ie).id:= id; te(ie).next:= 0;
     end if;
   end put;
-    
+
 
   function get(ts: in tsimbols; id: in id_nom) return descripcio is
     td: tdescripcio renames ts.td;
@@ -176,66 +176,71 @@ else te(iep).next:= ie;
   end put_arg;
 
 
-procedure first(ts: in tsimbols; idp: in id_nom; it: out iterador_arg) is
-  td: tdescripcio renames ts.td;
-begin
-  if td(idp).d.td /= dproc then raise no_es_proc; end if;
-  it.ie:= td(idp).next;
-end first;
+  procedure first(ts: in tsimbols; idp: in id_nom; it: out iterador_arg) is
+    td: tdescripcio renames ts.td;
+  begin
+    if td(idp).d.td /= dproc then raise no_es_proc; end if;
+    it.ie:= td(idp).next;
+  end first;
 
 
-procedure next(ts: in tsimbols; it: in out iterador_arg) is
-  te: texpansio renames ts.te;
-begin
-  if it.ie=0 then raise mal_us; end if;
-  it.ie:= te(it.ie).next;
-end next;
+  procedure next(ts: in tsimbols; it: in out iterador_arg) is
+    te: texpansio renames ts.te;
+  begin
+    if it.ie=0 then raise mal_us; end if;
+    it.ie:= te(it.ie).next;
+  end next;
 
 
-procedure get(ts: in tsimbols; it: in iterador_arg; ida: out id_nom; da: out descripcio) is
-  te: texpansio renames ts.te;
-begin
-  if it.ie=0 then raise mal_us; end if;
-  ida:= te(it.ie).id;
-  da:= te(it.ie).d;
-end get;
+  procedure get(ts: in tsimbols; it: in iterador_arg; ida: out id_nom; da: out descripcio) is
+    te: texpansio renames ts.te;
+  begin
+    if it.ie=0 then raise mal_us; end if;
+    ida:= te(it.ie).id;
+    da:= te(it.ie).d;
+  end get;
 
 
-function is_valid(it: in iterador_arg) return boolean is
-begin
-  return it.ie /= 0;
-end is_valid;
+  function is_valid(it: in iterador_arg) return boolean is
+  begin
+    return it.ie /= 0;
+  end is_valid;
 
 
 
+  procedure enter_block(ts: in out tsimbols) is
+    tb: tblocks renames ts.tb;
+    prof: profunditat renames ts.prof;
+    ie: index_expansio;
+  begin
+    ie:= tb(prof);
+    prof:= prof+1;
+    tb(prof):= ie;
+  end enter_block;
 
-procedure enter_block(ts: in out tsimbols) is
-  tb: tblocks renames ts.tb;
-  prof: profunditat renames ts.prof;
-  ie: index_expansio;
-begin
-  ie:= tb(prof);
-  prof:= prof+1;
-  tb(prof):= ie;
-end enter_block;
+
+  procedure exit_block(ts: in out tsimbols) is
+    td: tdescripcio renames ts.td;
+    tb: tblocks renames ts.tb;
+    te: texpansio renames ts.te;
+    prof: profunditat renames ts.prof;
+    ie, il: index_expansio;
+    id: id_nom;
+  begin
+    ie:= tb(prof); prof:= prof-1; il:= tb(prof);
+    while ie > il loop
+      if te(ie).prof /= -1 then
+        id:= te(ie).id;
+        td(id).prof:= te(ie).prof; td(id).d:= te(ie).d; td(id).next:= te(ie).next;
+      end if;
+      ie:= ie-1;
+    end loop;
+  end exit_block;
 
 
-procedure exit_block(ts: in out tsimbols) is
-  td: tdescripcio renames ts.td;
-  tb: tblocks renames ts.tb;
-  te: texpansio renames ts.te;
-  prof: profunditat renames ts.prof;
-  ie, il: index_expansio;
-  id: id_nom;
-begin
-  ie:= tb(prof); prof:= prof-1; il:= tb(prof);
-  while ie > il loop
-    if te(ie).prof /= -1 then
-      id:= te(ie).id;
-      td(id).prof:= te(ie).prof; td(id).d:= te(ie).d; td(id).next:= te(ie).next;
-    end if;
-    ie:= ie-1;
-  end loop;
-end exit_block;
+  function get_prof(ts: in tsimbols) return profunditat is
+  begin
+    return ts.prof;
+  end get_prof;
 
 end decls.d_tsimbols;

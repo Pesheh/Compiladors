@@ -1,0 +1,19 @@
+procedure main is
+  type rang is new integer range 0..10;
+  type rang2 is new integer range -8..-1;
+  type arry is array (rang,rang2) of integer;
+  i: rang;
+  j: rang2;
+  k: integer;
+  a: arry;
+begin
+  i:= 0; k:= 1;
+  while i<10 loop
+    j:= -8;
+    while j >= -1 loop
+      a(i,j):= k;
+      j:= j+1; k:= k*2;
+    end loop;
+    i:= i+1;
+  end loop;
+end procedure;

@@ -1,0 +1,28 @@
+procedure main is
+  
+  minI: constant integer:= -10;
+  maxI: constant integer:= 10;
+  minC: constant character:= 'c';
+  maxC: constant character:= 'g';
+
+  type rangi_matrix is new integer range minI..maxI;
+  type rangc_matrix is new character range minC..maxC;
+
+  type matrix is array (rangi_matrix,rangc_matrix) of integer;
+
+  procedure initMatrix (f: in out matrix; min,max: in rangi_matrix; minc,maxc: in rangc_matrix) is
+    i: rangi_matrix;
+    c: rangc_matrix;
+  begin
+    i:= min; c:= minc;
+    while i < max and c < maxc loop
+      f(i,c):= 0;
+    end loop;
+  end procedure;
+
+  m: matrix;
+  k: rangi_matrix;
+begin
+  k:= -10;
+  initMatrix(m,k,10,'c','g');
+end procedure;

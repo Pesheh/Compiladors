@@ -1,20 +1,19 @@
-with Ada.Text_IO;
+with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 with decls.d_tnoms;
-with semantica.missatges; use semantica.missatges; -- <<< TMP per debuguejar 
+with decls.d_descripcio; use decls.d_descripcio;
+with decls.d_c3a; use decls.d_c3a;
+with semantica.missatges; use semantica.missatges; -- <<< TMP per debuguejar
+
 package body semantica.g_codi_int is
 
-  DEBUG: constant boolean:= false;
+  use Instruccio_IO;
+  use Pila_Procediments;
 
-  fals: constant num_var:= 0;
+  nf: Unbounded_String;
 
-  ti: taula_instruccions;
-  iti: num_instr:= 0;
-
-  tp: taula_procediments;
-
-  tv: taula_variables;
-
-  ne: etiqueta:= 0;
+  fals: constant num_var:= null_nv;
 
   procedure gc_proc(nd_proc: in pnode);
   procedure gc_cproc(nd_cproc: in pnode);
@@ -27,109 +26,89 @@ package body semantica.g_codi_int is
   procedure gc_scrida(nd_cproc: in pnode);
   procedure gc_scrida_args(nod_lexpr: in pnode);
   procedure gc_sassign(nd_sassign: in pnode);
-  procedure gc_ref(nd_ref: in pnode; r: out num_var; d: out despl);
+  procedure gc_ref(nd_ref: in pnode; r: out num_var; d: out num_var);
   procedure gc_ref_id(nd_id: in pnode; r: out num_var; dc: out despl; dv: out num_var);
   procedure gc_ref_qs(nd_qs: in pnode; dc: in out despl; dv: in out num_var);
   procedure gc_ref_lexpr(nd_lexpr: in pnode; desp: in out num_var);
-  procedure gc_expressio(nd_expr: in pnode; r: out num_var; d: out despl);
-  procedure gc_and(nod_and: in pnode; r: out num_var; d: out despl);
-  procedure gc_or(nod_or: in pnode; r: out num_var; d: out despl);
-  procedure gc_e2(nd_e2: in pnode; r: out num_var; d: out despl);
-  procedure gc_e3(nd_e3: in pnode; r: out num_var; d: out despl);
+  procedure gc_expressio(nd_expr: in pnode; r: out num_var; d: out num_var);
+  procedure gc_and(nod_and: in pnode; r: out num_var; d: out num_var);
+  procedure gc_or(nod_or: in pnode; r: out num_var; d: out num_var);
+  procedure gc_eop(nd_eop: in pnode; r: out num_var; d: out num_var);
+  procedure gc_et(nd_et: in pnode; r: out num_var; d: out num_var);
 
-  function nova_etiq return etiqueta is
-  begin
-    ne:= ne+1;
-    return ne;
-  end nova_etiq;
 
-  -- El format es temporal
-  procedure genera(t: in tinstruccio; a,b,c: in num_var) is
-  begin
-    if b = null_nv then
-      missatges_gc_debugging("genera",tinstruccio'Image(t)&""&num_var'Image(a)&" - -");
-    elsif c = null_nv then
-      missatges_gc_debugging("genera",tinstruccio'Image(t)&""&num_var'Image(a)&""&num_var'Image(b)&" -");
-    else
-      missatges_gc_debugging("genera",tinstruccio'Image(t)&""&num_var'Image(a)&""&num_var'Image(b)&""&num_var'Image(c));
-    end if;
-  end genera;
 
-  procedure genera(t: in tinstruccio; a: in etiqueta; b,c: in num_var) is
+  procedure prepara_g_codi_int(nomf: in String) is
   begin
-    if b = null_nv then
-      missatges_gc_debugging("genera",tinstruccio'Image(t)&""&etiqueta'Image(a)&" - -");
-    elsif c = null_nv then
-      missatges_gc_debugging("genera",tinstruccio'Image(t)&""&etiqueta'Image(a)&""&num_var'Image(b)&" -");
-    else
-      missatges_gc_debugging("genera",tinstruccio'Image(t)&""&etiqueta'Image(a)&""&num_var'Image(b)&""&num_var'Image(c));
-    end if;
-  end genera;
+    nf:= To_Unbounded_String(nomf);
+  end prepara_g_codi_int;
 
-  procedure genera(t: in tinstruccio; a: in num_var; b: in String; c: in num_var) is
-  begin
-    if c = null_nv then
-      missatges_gc_debugging("genera",tinstruccio'Image(t)&""&num_var'Image(a)&" "&b&" -");
-    else
-      missatges_gc_debugging("genera",tinstruccio'Image(t)&""&num_var'Image(a)&" "&b&""&num_var'Image(c));
-    end if;
-  end genera;
-
-  procedure genera(t: in tinstruccio; a: in num_var; b: in despl; c: in num_var) is
-  begin
-    if t = paramc or t = cp_idx then 
-      missatges_gc_debugging("genera",tinstruccio'Image(t)&""&num_var'Image(a)&""&despl'Image(b)&""&num_var'Image(c));
-    end if;
-  end genera;
-
-  procedure genera(t: in tinstruccio; a,b: in num_var; c: in despl) is
-  begin
-    if t = cons_idx then 
-      missatges_gc_debugging("genera",tinstruccio'Image(t)&""&num_var'Image(a)&""&num_var'Image(b)&""&despl'Image(c));
-    end if;
-  end genera;
-
-  procedure desref(r: in num_var; d: in despl; t: out num_var) is
-  begin
-    if d = 0 then
-     t:= r;
-    else
-     t:= nova_var;
-     genera(cons_idx, t, r, d);
-    end if;
-  end desref;
 
   procedure gen_codi_int is
   begin
+    Create(f3a, Out_File, To_String(nf)&".c3a");
+    Create(f3as, Out_File, To_String(nf)&".c3as");
+
     if root.p.tn /= nd_null then
+      buida(pproc);
       gc_proc(root.p);
     end if;
+
+    Close(f3as);
+    Close(f3a);
   end gen_codi_int;
+
+
+  procedure genera(i3a: in instr_3a) is
+  begin
+    Instruccio_IO.Write(f3a, i3a);
+    Ada.Text_IO.Put_Line(f3as, Imatge(i3a));
+  end genera;
+
+
+  procedure desref(r: in num_var; d: in num_var; t: out num_var) is
+  begin
+    if d = null_nv then
+     t:= r;
+    else
+     -- no tinc del tot clar aquest ocup_ent, simplifica les coses pero es una
+     -- tudada de memoria
+     nova_var(nv, tv, tp, cim(pproc), ocup_ent, t);
+     genera(Value(cons_idx, t, r, d));
+    end if;
+  end desref;
+
 
   procedure gc_proc(nd_proc: in pnode) is
     p: pnode renames nd_proc;
   begin
+    empila(pproc, p.proc_cproc.cproc_np);
     if p.proc_cproc.tn /= nd_null then
       gc_cproc(p.proc_cproc);
     end if;
     if p.proc_decls.tn /= nd_null then
       gc_decls(p.proc_decls);
     end if;
+    genera(Value(pmb, cim(pproc)));
     gc_sents(p.proc_sents);
-    genera(rtn, num_var(p.proc_cproc.cproc_np), null_nv, null_nv);
+    genera(Value(rtn, cim(pproc)));
+    desempila(pproc);
   end gc_proc;
+
 
   procedure gc_cproc(nd_cproc: in pnode) is
     p: pnode renames nd_cproc;
     nargs: natural;
-    e: etiqueta;
+    e: num_etiq;
   begin
     nargs:= 0; -- usat a la taula de procediments
     if p.cproc_args.tn /= nd_null then
       gc_args(p.cproc_args, nargs);
     end if;
-    e:= nova_etiq; genera(etiq, e, null_nv, null_nv); genera(pmb, num_var(p.cproc_np), null_nv, null_nv);
+    nova_etiq(ne, e);
+    genera(Value(etiq, e));
   end gc_cproc;
+
 
   procedure gc_args(nd_args: in pnode; nargs: out natural) is
     p: pnode renames nd_args;
@@ -139,6 +118,7 @@ package body semantica.g_codi_int is
     end if;
     nargs:= nargs+1;
   end gc_args;
+
 
   procedure gc_decls(nd_decls: in pnode) is
     p: pnode renames nd_decls;
@@ -154,6 +134,7 @@ package body semantica.g_codi_int is
     end if;
   end gc_decls;
 
+
   procedure gc_sents(nd_sents: in pnode) is
   begin
     if DEBUG then
@@ -163,6 +144,7 @@ package body semantica.g_codi_int is
       gc_sent(nd_sents.sents_cont);
     end if;
   end gc_sents;
+
 
   procedure gc_sent(nd_sent: in pnode) is
     p: pnode;
@@ -186,30 +168,30 @@ package body semantica.g_codi_int is
     end case;
   end gc_sent;
 
+
   procedure gc_siter(nd_siter: in pnode) is
     p: pnode renames nd_siter;
-    ei,ef: etiqueta;
-    r,t: num_var;
-    d: despl;
+    ei,ef: num_etiq;
+    r,t,d: num_var;
   begin
     if p.siter_sents.tn /= nd_null then
-      ei:= nova_etiq;
-      genera(etiq, ei, null_nv, null_nv);
+      nova_etiq(ne, ei);
+      genera(Value(etiq, ei));
       gc_expressio(p.siter_expr, r, d);
-      desref(r, d, t);
-      ef:= nova_etiq;
-      genera(ieq_goto, ef, t, fals);
+      desref(r, d, t); -- Bastaria amb un byte per codificar -1..0
+      nova_etiq(ne, ef);
+      genera(Value(ieq_goto, ef, t, fals));
       gc_sents(p.siter_sents);
-      genera(go_to, ei, null_nv, null_nv);
-      genera(etiq, ef, null_nv, null_nv);
+      genera(Value(go_to, ei));
+      genera(Value(etiq, ef));
     end if;
   end gc_siter;
 
+
   procedure gc_scond(nd_scond: in pnode) is
     p: pnode renames nd_scond;
-    ef,efi: etiqueta;
-    r,t: num_var;
-    d: despl;
+    ef,efi: num_etiq;
+    r,t,d: num_var;
   begin
     if DEBUG then
       missatges_gc_debugging("gc_scond if ",tnode'Image(p.scond_sents.tn)&"else "&tnode'Image(p.scond_esents.tn));
@@ -217,13 +199,13 @@ package body semantica.g_codi_int is
     if p.scond_sents.tn /= nd_null or p.scond_esents.tn /= nd_null then
       gc_expressio(p.scond_expr, r, d);
       desref(r, d, t);
-      ef:= nova_etiq;
-      genera(ieq_goto, ef, t, fals);
+      nova_etiq(ne, ef);
+      genera(Value(ieq_goto, ef, t, fals));
       gc_sents(p.scond_sents);
       if p.scond_esents.tn /= nd_null then
-        efi:= nova_etiq;
-        genera(go_to, efi, null_nv, null_nv);
-        genera(etiq, ef, null_nv, null_nv);
+        nova_etiq(ne, efi);
+        genera(Value(go_to, efi));
+        genera(Value(etiq, ef));
         gc_sents(p.scond_esents);
         -- codi esperat:
         -- if t=fals goto efals
@@ -232,16 +214,17 @@ package body semantica.g_codi_int is
         -- efals: skip
         --  sents_else
         -- efi: skip
-      else 
-        efi:= ef; 
+      else
+        efi:= ef; --tefi:= tef;
         -- codi esperat:
         -- if t=fals goto efi
         --  sents_if
         -- efi: skip
       end if;
-      genera(etiq, efi, null_nv, null_nv);
+      genera(Value(etiq, efi));
     end if;
   end gc_scond;
+
 
   procedure gc_scrida(nd_cproc: in pnode) is
     p: pnode;
@@ -259,16 +242,17 @@ package body semantica.g_codi_int is
       if DEBUG then
         missatges_gc_debugging("gc_scrida",tipus_descr'Image(d.td));
       end if;
-      genera(call, num_var(d.np), null_nv, null_nv);
+      genera(Value(call, d.np));
     else
-      genera(call, num_var(p.ref_id.iproc_np), null_nv, null_nv);
+      genera(Value(call, p.ref_id.iproc_np));
     end if;
+
   end gc_scrida;
+
 
   procedure gc_scrida_args(nod_lexpr: in pnode) is
     p: pnode renames nod_lexpr;
-    r: num_var;
-    d: despl;
+    r,d: num_var;
   begin
     if DEBUG then
       missatges_gc_debugging("gc_scrida_args",tnode'Image(p.tn));
@@ -279,13 +263,13 @@ package body semantica.g_codi_int is
     gc_expressio(p.lexpr_expr, r, d);
 
     if DEBUG then
-      missatges_gc_debugging("gc_scrida_args","r="&num_var'Image(r)&"::"&"d="&despl'Image(d));
+      missatges_gc_debugging("gc_scrida_args","r="&num_var'Image(r)&"::"&"d="&num_var'Image(d));
     end if;
 
-    if d = 0 then
-      genera(params, r, null_nv, null_nv);
+    if d = null_nv then
+      genera(Value(params, r));
     else
-      genera(paramc, r, d, null_nv);
+      genera(Value(paramc, r, d));
     end if;
 
   end gc_scrida_args;
@@ -293,33 +277,33 @@ package body semantica.g_codi_int is
 
   procedure gc_sassign(nd_sassign: in pnode) is
     p: pnode renames nd_sassign;
-    r,r1,t,dv: num_var;
-    d,d1,dc: despl;
+    r,r1,t,d,d1: num_var;
   begin
-    gc_ref(p.sassign_ref, r, d); 
+    gc_ref(p.sassign_ref, r, d);
     gc_expressio(p.sassign_expr, r1, d1);
-    if d = 0 then
-      if d1 = 0 then
-        genera(cp, r, r1, null_nv);
+    if d = null_nv then
+      if d1 = null_nv then
+        genera(Value(cp, r, r1));
         -- r:= r1
       else
-        genera(cons_idx, r, r1, d1);
-        -- r:= r1[d]
+        genera(Value(cons_idx, r, r1, d1));
+        -- r:= r1[d1]
       end if;
     else
-      if d1 = 0 then
-        genera(cp_idx, r, d, r1);
+      if d1 = null_nv then
+        genera(Value(cp_idx, r, d, r1));
         -- r[d]:= r1
       else
         desref(r1, d1, t);
-        genera(cp_idx, r, d, t);
+        genera(Value(cp_idx, r,  d, t));
         -- t:= r1[d1]
         -- r[d]:= t
       end if;
     end if;
   end gc_sassign;
 
-  procedure gc_ref(nd_ref: in pnode; r: out num_var; d: out despl) is
+
+  procedure gc_ref(nd_ref: in pnode; r: out num_var; d: out num_var) is
     p: pnode renames nd_ref;
     dc: despl;
     t,t1,dv: num_var;
@@ -329,29 +313,30 @@ package body semantica.g_codi_int is
       gc_ref_qs(p.ref_qs, dc, dv);
     end if;
     if dc = 0 and then dv = 0 then
-      -- r:= r -- ja li hem posat el valor a gc_ref_id
-      d:= 0;
+      -- r = r -- ja li hem posat el valor a gc_ref_id
+      d:= null_nv;
     elsif dc = 0 and then dv /= 0 then
-      -- r:= r -- idem cas anterior
-      d:= despl(dv);
+      -- r = r(dv)
+      d:= dv;
     elsif dc /= 0 and then dv = 0 then
-      t:= nova_var_const(valor(dc), tsb_ent);
+      nova_var_const(nv, tv, valor(dc), tsb_ent, t);
       if DEBUG then
-        missatges_gc_debugging("gc_ref","invc:"&num_var'Image(t));
+        missatges_gc_debugging("gc_ref","dc /= 0 & dv = 0:"&num_var'Image(t));
       end if;
-      -- r:= r -- idem
-      d:= despl(t);
+      -- r:= r.dc
+      d:= t;
     else -- dc /= 0 and dv /= 0
-      t:= nova_var_const(valor(dc), tsb_ent);
+      nova_var_const(nv, tv, valor(dc), tsb_ent, t);
       if DEBUG then
-        missatges_gc_debugging("gc_ref","invc:"&num_var'Image(t));
+        missatges_gc_debugging("gc_ref","dc /= 0 & dv /= 0:"&num_var'Image(t));
       end if;
-      t1:= nova_var;
-      genera(sum, t1, t, dv);
-      -- r:= r --idem
-      d:= despl(t1);
+      nova_var(nv, tv, tp, cim(pproc), ocup_ent, t1);
+      genera(Value(sum, t1, t, dv));
+      -- r:= r.dc(dv)
+      d:= t1;
     end if;
   end gc_ref;
+
 
   procedure gc_ref_id(nd_id: in pnode; r: out num_var; dc: out despl; dv: out num_var) is
     p: pnode renames nd_id;
@@ -359,46 +344,42 @@ package body semantica.g_codi_int is
     if DEBUG then
       missatges_gc_debugging("gc_ref_id",tnode'Image(p.tn));
     end if;
-    if p.tn = nd_var then
-      r:= p.var_nv;
-    else -- p.tn = nd_iproc (otherwise, cataplum)
-      r:= num_var(p.iproc_np);
-    end if;
-    dc:= 0; -- var nul·la
-    dv:= 0;
+    r:= p.var_nv;
+    dc:= 0;
+    dv:= null_nv;
   end gc_ref_id;
+
 
   procedure gc_ref_qs(nd_qs: in pnode; dc: in out despl; dv: in out num_var) is
     p: pnode renames nd_qs;
     t,t1,t2: num_var;
-    desp: num_var:= 0;
+    desp: num_var:= null_nv;
   begin
     if p.qs_qs.tn /= nd_null then
       gc_ref_qs(p.qs_qs, dc, dv);
     end if;
     if p.qs_q.tn = nd_rec then
-      -- subst el casting per un acces a TV(p.qs_q.rec_td) quan s'hagi implementat la TV. Aixo es sols per compilar !!!
-      dc:= dc + despl(p.qs_q.rec_td);
+      dc:= dc + despl(consulta_val_const(tv, p.qs_q.rec_td));
     else -- p.qs_q.tn = nd_arry
       gc_ref_lexpr(p.qs_q.arry_lexpr, desp);
-      t:= nova_var;
-      genera(res, t, desp, p.qs_q.arry_tb);
-      t1:= nova_var;
-      genera(mul, t1, t, p.qs_q.arry_tw);
-      if dv = 0 then
+      nova_var(nv, tv, tp, cim(pproc), ocup_ent, t);
+      genera(Value(res, t, desp, p.qs_q.arry_tb));
+      nova_var(nv, tv, tp, cim(pproc), ocup_ent, t1);
+      genera(Value(mul, t1, t, p.qs_q.arry_tw));
+      if dv = null_nv then
         dv:= t1;
       else
-        t2:= nova_var;
-        genera(sum, t2, t1, dv);
+        nova_var(nv, tv, tp, cim(pproc), ocup_ent, t2);
+        genera(Value(sum, t2, t1, dv));
         dv:= t2;
       end if;
     end if;
   end gc_ref_qs;
 
+
   procedure gc_ref_lexpr(nd_lexpr: in pnode; desp: in out num_var) is
     p: pnode renames nd_lexpr;
-    r,t,t1,te: num_var;
-    d: despl;
+    r,d,t,t1,te: num_var;
   begin
     if DEBUG then
       missatges_gc_debugging("gc_expressio",tnode'Image(p.tn));
@@ -407,17 +388,17 @@ package body semantica.g_codi_int is
       gc_ref_lexpr(p.lexpra_cont, desp);
     end if;
     if desp /= 0 then
-      t:= nova_var; t1:= nova_var; 
-      genera(mul, t, desp, p.lexpra_tu);
+      nova_var(nv, tv, tp, cim(pproc), ocup_ent, t); nova_var(nv, tv, tp, cim(pproc), ocup_ent, t1);
+      genera(Value(mul, t, desp, p.lexpra_tu));
       gc_expressio(p.lexpra_expr, r, d);
       desref(r, d, te);
-      genera(sum, t1, t, te);
+      genera(Value(sum, t1, t, te));
       desp:= t1;
     else
-      t:= nova_var;
+      nova_var(nv, tv, tp, cim(pproc), ocup_ent, t);
       gc_expressio(p.lexpra_expr, r, d);
       desref(r, d, te);
-      genera(cp, t, te, null_nv);
+      genera(Value(cp, t, te, null_nv));
       desp:= t;
     end if;
     if DEBUG then
@@ -425,53 +406,56 @@ package body semantica.g_codi_int is
     end if;
   end gc_ref_lexpr;
 
-  procedure gc_expressio(nd_expr: in pnode; r: out num_var; d: out despl) is
+
+  procedure gc_expressio(nd_expr: in pnode; r: out num_var; d: out num_var) is
     p: pnode renames nd_expr;
   begin
     if DEBUG then
       missatges_gc_debugging("gc_expressio",tnode'Image(p.tn)&"::"&tnode'Image(p.expr_e.tn));
     end if;
     case p.expr_e.tn is
-      when nd_and => 
+      when nd_and =>
         gc_and(p.expr_e, r, d);
+        --ocup:= ocup_bool;
       when nd_or =>
         gc_or(p.expr_e, r, d);
-      when nd_e2 | nd_op_rel => -- cercar un nom mes cool x)
-        gc_e2(p.expr_e, r, d);
+        --ocup:= ocup_bool;
+      when nd_eop | nd_op_rel =>
+        gc_eop(p.expr_e, r, d);
       when others =>
         -- Comprovacio de tipus...
         null;
     end case;
   end gc_expressio;
 
-  procedure gc_and(nod_and: in pnode; r: out num_var; d: out despl) is
+
+  procedure gc_and(nod_and: in pnode; r: out num_var; d: out num_var) is
     p: pnode renames nod_and;
     t,t1,t2: num_var;
-    r1: num_var;
-    d1: despl;
+    r1,d1: num_var;
   begin
     if DEBUG then
       missatges_gc_debugging("gc_and",tnode'Image(p.tn));
     end if;
     if p.e_ope.tn = nd_and then
       gc_and(p.e_ope, r1, d1);
-    else 
-      gc_e2(p.e_ope, r1, d1);
+    else
+      gc_eop(p.e_ope, r1, d1);
     end if;
-    desref(r1, d1, t1);
-    gc_e2(p.e_opd, r1, d1);
-    desref(r1, d1, t2);
-    t:= nova_var;
-    genera(op_and, t, t1, t2);
+    desref(r1, d1, t1); -- bastaria amb un char -1..0 per guardar el resultat
+    gc_eop(p.e_opd, r1, d1);
+    desref(r1, d1, t2); -- bastaria amb un char -1..0 per guardar el resultat
+    nova_var(nv, tv, tp, cim(pproc), ocup_ent, t); -- bastaria amb un char -1..0 per guardar el resultat
+    genera(Value(op_and, t, t1, t2));
     r:= t;
-    d:= 0;
+    d:= null_nv;
   end gc_and;
 
-  procedure gc_or(nod_or: in pnode; r: out num_var; d: out despl) is
+
+  procedure gc_or(nod_or: in pnode; r: out num_var; d: out num_var) is
     p: pnode renames nod_or;
     t,t1,t2: num_var;
-    r1: num_var;
-    d1: despl;
+    r1,d1: num_var;
   begin
     if DEBUG then
       missatges_gc_debugging("gc_or",tnode'Image(p.tn));
@@ -479,105 +463,117 @@ package body semantica.g_codi_int is
     if p.e_ope.tn = nd_or then
       gc_or(p.e_ope, r1, d1);
     else
-      gc_e2(p.e_ope, r1, d1);
+      gc_eop(p.e_ope, r1, d1);
     end if;
+    -- El tema d'ocupi es una mica redundant
+    -- 'a' < 'c' and 'd' > 'k' ==
+    -- tc1:= 'a'; tc2:= 'c';
+    -- t1:= tc1 < tc2;
+    -- tc3:= 'd'; tc4:= 'k';
+    -- t2:= tc3 > tc4;
+    -- t:= t1 and t2
     desref(r1, d1, t1);
-    gc_e2(p.e_opd, r1, d1);
+    gc_eop(p.e_opd, r1, d1);
     desref(r1, d1, t2);
-    t:= nova_var;
-    genera(op_or, t, t1, t2);
+    nova_var(nv, tv, tp, cim(pproc), ocup_ent, t); -- bastaria amb un char -1..0 per guardar el resultat
+    genera(Value(op_or, t, t1, t2));
     r:= t;
-    d:= 0;
+    -- Ocup_bool ?
+    --ocup:= ocup_ent;
+    d:= null_nv;
   end gc_or;
 
-  procedure gc_e2(nd_e2: in pnode; r: out num_var; d: out despl) is
-    p: pnode renames nd_e2;
+
+  procedure gc_eop(nd_eop: in pnode; r: out num_var; d: out num_var) is
+    p: pnode renames nd_eop;
     t,t1,t2: num_var;
-    r1: num_var;
-    d1: despl;
+    r1,d1: num_var;
   begin
     if DEBUG then
-      missatges_gc_debugging("gc_e2",tnode'Image(p.tn));
+      missatges_gc_debugging("gc_eop",tnode'Image(p.tn));
     end if;
-    if p.e2_operand = nul then
-      gc_e3(p.e2_opd, r, d);
-    elsif p.e2_operand = neg_alg or p.e2_operand = neg_log then
-      gc_e3(p.e2_opd, r1, d1);
-      desref(r1, d1, t); 
-      if p.e2_operand = neg_alg then
-        genera(neg, t, null_nv, null_nv);
+    if p.eop_operand = nul then
+      gc_et(p.eop_opd, r, d);
+    elsif p.eop_operand = neg_alg or p.eop_operand = neg_log then
+      gc_et(p.eop_opd, r1, d1);
+      if p.eop_operand = neg_alg then
+        desref(r1, d1, t);
+        genera(Value(neg, t, null_nv, null_nv));
       else
-        genera(op_not, t, null_nv, null_nv);
+        desref(r1, d1, t);
+        genera(Value(op_not, t, null_nv, null_nv));
       end if;
-      r:= t; 
-      d:= 0;
+      r:= t;
+      d:= null_nv;
     else
-      gc_e2(p.e2_ope, r1, d1);
-      desref(r1, d1, t1);
-      gc_e2(p.e2_opd, r1, d1);
+      gc_eop(p.eop_ope, r1, d1);
+      desref(r1, d1, t1); -- Si no vaig malament 'A' + 'b' no esta permes al nostre llenguatge xD
+      gc_eop(p.eop_opd, r1, d1);
       desref(r1, d1, t2);
-      t:= nova_var;
-      case p.e2_operand is
+      nova_var(nv, tv, tp, cim(pproc), ocup_ent, t);
+      case p.eop_operand is
         when major =>
-          genera(gt, t, t1, t2);
+          genera(Value(gt, t, t1, t2));
         when majorigual =>
-          genera(ge, t, t1, t2);
+          genera(Value(ge, t, t1, t2));
         when igual =>
-          genera(eq, t, t1, t2);
+          genera(Value(eq, t, t1, t2));
         when diferent =>
-          genera(neq, t, t1, t2);
+          genera(Value(neq, t, t1, t2));
         when menorigual =>
-          genera(le, t, t1,  t2);
+          genera(Value(le, t, t1,  t2));
         when menor =>
-          genera(lt, t, t1, t2);
+          genera(Value(lt, t, t1, t2));
         when sum =>
-          genera(sum, t, t1, t2);
+          genera(Value(sum, t, t1, t2));
         when res =>
-          genera(res, t, t1, t2);
+          genera(Value(res, t, t1, t2));
         when prod =>
-          genera(mul, t, t1, t2);
+          genera(Value(mul, t, t1, t2));
         when quoci =>
-          genera(div, t, t1, t2);
+          genera(Value(div, t, t1, t2));
         when modul =>
-          genera(modul, t, t1, t2);
+          genera(Value(modul, t, t1, t2));
         when others =>
           null;
       end case;
       r:= t;
-      d:= 0;
+      d:= null_nv;
     end if;
-  end gc_e2;
+  end gc_eop;
 
-  procedure gc_e3(nd_e3: in pnode; r: out num_var; d: out despl) is
-    p: pnode renames nd_e3;
+
+  procedure gc_et(nd_et: in pnode; r: out num_var; d: out num_var) is
+    p: pnode renames nd_et;
     t: num_var;
   begin
     if DEBUG then
-      missatges_gc_debugging("gc_e3",tnode'Image(p.tn)&"=>"&tnode'Image(p.e3_cont.tn));
+      missatges_gc_debugging("gc_et",tnode'Image(p.tn)&"=>"&tnode'Image(p.et_cont.tn));
     end if;
-    case p.e3_cont.tn is
+    case p.et_cont.tn is
       when nd_ref =>
-        gc_ref(p.e3_cont, r, d);
+        gc_ref(p.et_cont, r, d);
       when nd_expr =>
-        gc_expressio(p.e3_cont, r, d);
+        gc_expressio(p.et_cont, r, d);
       when nd_lit =>
         if DEBUG then
-          missatges_gc_debugging("gc_e3",tipus_subjacent'Image(p.e3_cont.lit_tipus)&"::"&id_str'Image(p.e3_cont.lit_ids));
+          missatges_gc_debugging("gc_et",tipus_subjacent'Image(p.et_cont.lit_tipus)&"::"&valor'Image(p.et_cont.lit_val));
         end if;
-        if p.e3_cont.lit_tipus /= tsb_ent then -- es un string, aixo es temporal, senzillament no se que fer amb ells
-          t:= nova_var;
-          genera(cp, t, decls.d_tnoms.get(tn, p.e3_cont.lit_ids), null_nv);
-        else
-          t:= nova_var_const(valor'Value(decls.d_tnoms.get(tn, p.e3_cont.lit_ids)), p.e3_cont.lit_tipus);
-          if DEBUG then
-            missatges_gc_debugging("gc_e3","invc:"&num_var'Image(t));
-          end if;
+        case p.et_cont.lit_tipus is
+          when tsb_ent | tsb_car | tsb_bool | tsb_nul =>
+            nova_var_const(nv, tv, p.et_cont.lit_val, p.et_cont.lit_tipus, t);
+          when others =>
+            null;
+        end case;
+        if DEBUG then
+          missatges_gc_debugging("gc_et","invc:"&num_var'Image(t));
         end if;
         r:= t;
-        d:= 0;
+        d:= null_nv;
       when others =>
         null;
     end case;
-  end gc_e3;
+  end gc_et;
+
 
 end semantica.g_codi_int;

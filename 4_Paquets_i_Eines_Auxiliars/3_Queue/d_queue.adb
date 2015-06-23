@@ -19,7 +19,7 @@ package body d_queue is
     nou.p:=p;
     nou.i:=i;
     nou.next:=null;
-    if els=0 then 
+    if els=0 then
       b:=nou;
       e:=b;
     else
@@ -36,16 +36,16 @@ package body d_queue is
   begin
     if els=0 then
       p:= null; i:= -1; --error
-    else 
+    else
       p:=b.p; i:=b.i;
       els:= els-1;
-      if els=0 then 
+      if els=0 then
         b:=null; e:=null;
-      else 
+      else
         b:=b.next;
       end if;
     end if;
   end pop;
-  
+
 
 end d_queue;

@@ -1,17 +1,17 @@
 with decls.d_descripcio;
-with decls.d_atribut;
+with decls.d_arbre;
 package body semantica.c_arbre is
 
 
   -- Rutina de control
- 
-  procedure r_atom(a: out atribut) is
-  begin
-    a:= new node(nd_null); 
-  end r_atom;
 
-  -- Rutines lèxiques 
-  
+  procedure rl_atom(a: out atribut) is
+  begin
+    a:= new node(nd_null);
+  end rl_atom;
+
+  -- Rutines lèxiques
+
   procedure rl_identifier(a: out atribut; pos: in posicio; text: in String) is
     id: id_nom;
   begin
@@ -21,50 +21,69 @@ package body semantica.c_arbre is
   end rl_identifier;
 
 
-  procedure rl_literal(a: out atribut; pos: in posicio; text: in String; tipus: in decls.d_descripcio.tipus_subjacent) is 
+  procedure rl_literal_ent(a: out atribut; pos: in posicio; text: in String) is
+  begin
+    a:= new node(nd_lit);
+    a.lit_pos:= pos;
+    a.lit_val:= valor'Value(text);
+    a.lit_tipus:= decls.d_descripcio.tsb_ent;
+  end rl_literal_ent;
+
+
+  procedure rl_literal_car(a: out atribut; pos: in posicio; text: in String) is
+  begin
+    a:= new node(nd_lit);
+    a.lit_pos:= pos;
+    a.lit_val:= valor(Character'Pos(text(text'First+1)));
+    a.lit_tipus:= decls.d_descripcio.tsb_car;
+  end rl_literal_car;
+
+
+  procedure rl_literal_str(a: out atribut; pos: in posicio; text: in String) is
     ids: id_str;
   begin
     put(tn,text,ids);
     a:= new node(nd_lit);
-    a.lit_pos:= pos; a.lit_ids:= ids;
-    a.lit_tipus:=tipus;
-  end rl_literal;
+    a.lit_pos:= pos;
+    a.lit_val:= valor(ids);
+    a.lit_tipus:= decls.d_descripcio.tsb_nul;
+  end rl_literal_str;
 
 
   procedure rl_op_menor(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-    a.orel_tipus:= menor; 
+    a.orel_tipus:= menor;
   end rl_op_menor;
-  
+
 
   procedure rl_op_major(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
     a.orel_tipus:= major;
- end rl_op_major;
-  
+  end rl_op_major;
+
 
   procedure rl_op_menorigual(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
-    a.orel_tipus:= menorigual; 
+    a.orel_tipus:= menorigual;
   end rl_op_menorigual;
-  
+
 
   procedure rl_op_majorigual(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
     a.orel_tipus:= majorigual;
   end rl_op_majorigual;
-  
+
 
   procedure rl_op_igual(a: out atribut) is
   begin
     a:= new node(nd_op_rel);
     a.orel_tipus:= igual;
   end rl_op_igual;
-  
+
 
   procedure rl_op_diferent(a: out atribut) is
   begin
@@ -74,13 +93,14 @@ package body semantica.c_arbre is
 
 
   -- Rutines sintàctiques
-  
+
   procedure rs_Root(proc: in atribut) is
   begin
       root:= new node(nd_root);
       root.p:=proc;
   end rs_Root;
-  
+
+
   procedure rs_Proc(proc: out atribut; cproc: in atribut; decls: in atribut; sents: in atribut) is
   begin
       proc:= new node(nd_proc);
@@ -95,6 +115,7 @@ package body semantica.c_arbre is
       cproc:= new node(nd_c_proc);
       cproc.cproc_id:= proc_id;
       cproc.cproc_args:= args;
+      cproc.cproc_np:= null_np;
   end rs_C_Proc;
 
 
@@ -103,6 +124,7 @@ package body semantica.c_arbre is
       cproc:= new node(nd_c_proc);
       cproc.cproc_id:= proc_id;
       cproc.cproc_args:= new node(nd_null);
+      cproc.cproc_np:= null_np;
   end rs_C_Proc;
 
 
@@ -122,8 +144,8 @@ package body semantica.c_arbre is
   end rs_Args;
 
 
-  procedure rs_Arg(arg: out atribut;lid: in atribut; mode: in atribut; tipus: in atribut) is
-  begin 
+  procedure rs_Arg(arg: out atribut; lid: in atribut; mode: in atribut; tipus: in atribut) is
+  begin
       arg:= new node(nd_arg);
       arg.arg_lid:= lid;
       arg.arg_mode:= mode.mode_tipus;
@@ -131,23 +153,30 @@ package body semantica.c_arbre is
   end rs_Arg;
 
 
-  procedure rs_Mode(mode: out atribut; tipus: in tmode) is
+  procedure rs_Mode_in(mode: out atribut) is
   begin
     mode:= new node(nd_mode);
-    mode.mode_tipus:= tipus;
-  end rs_Mode;
+    mode.mode_tipus:= md_in;
+  end rs_Mode_in;
+
+
+  procedure rs_Mode_in_out(mode: out atribut) is
+  begin
+    mode:= new node(nd_mode);
+    mode.mode_tipus:= md_in_out;
+  end rs_Mode_in_out;
 
 
   -- Declaracions
 
-  procedure rs_Decls(decls: out atribut; decls_seg: in atribut; decl: atribut) is
+  procedure rs_Decls(decls: out atribut; decls_seg: in atribut; decl: in atribut) is
   begin
       decls:= new node(nd_decls);
       decls.decls_decls:= decls_seg;
       decls.decls_decl:= decl;
   end rs_Decls;
- 
-  
+
+
   procedure rs_Decl(decl: out atribut; decl_real: in atribut) is
   begin
       decl:=new node(nd_decl);
@@ -161,8 +190,8 @@ package body semantica.c_arbre is
       decl.dvar_lid:= lista_id;
       decl.dvar_tipus:= tipus;
   end rs_Decl_Var;
-  
- 
+
+
   procedure rs_Decl_Const(decl: out atribut; lid_const: in atribut; tipus: in atribut; valor: in atribut) is
   begin
       decl:= new node(nd_decl_const);
@@ -170,14 +199,22 @@ package body semantica.c_arbre is
       decl.dconst_tipus:= tipus;
       decl.dconst_valor:= valor;
   end rs_Decl_Const;
-  
-  
-  procedure rs_Idx(idx: out atribut; idx_cont: in atribut; signe: in tidx) is
+
+
+  procedure rs_Idx_neg(idx: out atribut; idx_cont: in atribut) is
   begin
       idx:= new node(nd_idx);
       idx.idx_cont:= idx_cont;
-      idx.idx_tipus:= signe; -- << comentat a d_atribut
-  end rs_Idx;
+      idx.idx_tipus:= negatiu;
+  end rs_Idx_neg;
+
+
+  procedure rs_Idx_pos(idx: out atribut; idx_cont: in atribut) is
+  begin
+      idx:= new node(nd_idx);
+      idx.idx_cont:= idx_cont;
+      idx.idx_tipus:= positiu;
+  end rs_Idx_pos;
 
 
   procedure rs_Idx_Cont(idx_cont: out atribut; valor: in atribut) is
@@ -198,11 +235,11 @@ package body semantica.c_arbre is
   procedure rs_Decl_T_Cont(decl: out atribut; info: in atribut) is
   begin
       case info.tn is
-          when nd_rang  =>
+          when nd_rang =>
               decl:= new node(nd_decl_t_cont_type);
               decl.dtcont_rang:= info;
 
-          when nd_dcamps    =>
+          when nd_dcamps   =>
               decl:= new node(nd_decl_t_cont_record);
               decl.dtcont_camps:= info;
         when others =>
@@ -211,7 +248,7 @@ package body semantica.c_arbre is
       end case;
   end rs_Decl_T_Cont;
 
-  
+
   procedure rs_Decl_T_Cont(decl: out atribut; rang_array: in atribut; tipus_array: in atribut) is
   begin
       decl:= new node(nd_decl_t_cont_arry);
@@ -236,12 +273,20 @@ package body semantica.c_arbre is
   end rs_DCamps;
 
 
-
   procedure rs_DCamp(camp: out atribut; var: in atribut) is
   begin
     camp:= new node(nd_dcamp);
     camp.dcamp_decl:= var;
   end rs_DCamp;
+
+
+  procedure rs_Rang(rang: out atribut; id_type: in atribut; linf: in atribut; lsup: in atribut) is
+  begin
+    rang:=new node(nd_rang);
+    rang.rang_id:=id_type.id_id;
+    rang.rang_linf:=linf;
+    rang.rang_lsup:=lsup;
+  end rs_Rang;
 
 
   -- Sentencia
@@ -261,7 +306,7 @@ package body semantica.c_arbre is
   end rs_Sent_Nob;
 
 
-  procedure rs_Sent_Nob(sents: out atribut; sent: in atribut) is 
+  procedure rs_Sent_Nob(sents: out atribut; sent: in atribut) is
   begin
     sents:= new node(nd_sents_nob);
     sents.snb_snb:= new node(nd_null);
@@ -275,13 +320,13 @@ package body semantica.c_arbre is
     sent.sent_sent:= stipus;
   end rs_Sent;
 
-  
+
   procedure rs_SIter(sent: out atribut; expr: in atribut; sents: in atribut) is
-    begin
-        sent:= new node(nd_siter);
-        sent.siter_expr:= expr;
-        sent.siter_sents:= sents;
-    end rs_SIter;
+  begin
+    sent:= new node(nd_siter);
+    sent.siter_expr:= expr;
+    sent.siter_sents:= sents;
+  end rs_SIter;
 
 
   procedure rs_SCond(sent: out atribut; expr: in atribut; sents: in atribut) is
@@ -291,7 +336,7 @@ package body semantica.c_arbre is
     sent.scond_sents:= sents;
     sent.scond_esents:= new node(nd_null);
   end rs_SCond;
-  
+
 
   procedure rs_SCond(sent: out atribut; expr: in atribut; sents_if: in atribut; sents_else: in atribut) is
   begin
@@ -300,16 +345,16 @@ package body semantica.c_arbre is
     sent.scond_sents:= sents_if;
     sent.scond_esents:= sents_else;
   end rs_SCond;
-  
-  
-    procedure rs_SCrida(sent: out atribut; ref: in atribut) is
+
+
+  procedure rs_SCrida(sent: out atribut; ref: in atribut) is
   begin
     sent:= new node(nd_scrida);
     sent.scrida_ref:= ref;
   end rs_SCrida;
-  
 
-  procedure rs_SAssign(sent: out atribut; ref: in atribut; expr: in atribut) is 
+
+  procedure rs_SAssign(sent: out atribut; ref: in atribut; expr: in atribut) is
   begin
     sent:= new node(nd_sassign);
     sent.sassign_ref:= ref;
@@ -358,97 +403,119 @@ package body semantica.c_arbre is
   end rs_EOr;
 
 
-	--Rutines semàntiques auxiliars 
-
-  procedure rs_E2o(expr: out atribut; ee: in atribut; ed: in atribut; op: in atribut) is
+  procedure rs_EOpo(expr: out atribut; ee: in atribut; ed: in atribut; op: in atribut) is
   begin
-    expr:= new node(nd_e2);
-    expr.e2_ope:= ee;
-    expr.e2_opd:= ed;
-    expr.e2_operand:= op.orel_tipus;
-  end rs_E2o;
+    expr:= new node(nd_eop);
+    expr.eop_ope:= ee;
+    expr.eop_opd:= ed;
+    expr.eop_operand:= op.orel_tipus;
+  end rs_EOpo;
 
 
-  procedure rs_E2s(expr: out atribut; ee: in atribut; ed: in atribut) is
+  procedure rs_EOps(expr: out atribut; ee: in atribut; ed: in atribut) is
   begin
-    expr:= new node(nd_e2);
-    expr.e2_ope:= ee;
-    expr.e2_opd:= ed;
-    expr.e2_operand:= decls.d_atribut.sum;
-  end rs_E2s;
+    expr:= new node(nd_eop);
+    expr.eop_ope:= ee;
+    expr.eop_opd:= ed;
+    expr.eop_operand:= decls.d_arbre.sum;
+  end rs_EOps;
 
 
-  procedure rs_E2r(expr: out atribut; ee: in atribut; ed: in atribut) is
+  procedure rs_EOpr(expr: out atribut; ee: in atribut; ed: in atribut) is
   begin
-    expr:= new node(nd_e2);
-    expr.e2_ope:= ee;
-    expr.e2_opd:= ed;
-    expr.e2_operand:= decls.d_atribut.res;
-  end rs_E2r;
-  
+    expr:= new node(nd_eop);
+    expr.eop_ope:= ee;
+    expr.eop_opd:= ed;
+    expr.eop_operand:= decls.d_arbre.res;
+  end rs_EOpr;
 
-  procedure rs_E2p(expr: out atribut; ee: in atribut; ed: in atribut) is
+
+  procedure rs_EOpp(expr: out atribut; ee: in atribut; ed: in atribut) is
   begin
-    expr:= new node(nd_e2);
-    expr.e2_ope:= ee;
-    expr.e2_opd:= ed;
-    expr.e2_operand:= decls.d_atribut.prod;
-  end rs_E2p;
+    expr:= new node(nd_eop);
+    expr.eop_ope:= ee;
+    expr.eop_opd:= ed;
+    expr.eop_operand:= decls.d_arbre.prod;
+  end rs_EOpp;
 
 
-  procedure rs_E2q(expr: out atribut; ee: in atribut; ed: in atribut) is
+  procedure rs_EOpq(expr: out atribut; ee: in atribut; ed: in atribut) is
   begin
-    expr:= new node(nd_e2);
-    expr.e2_ope:= ee;
-    expr.e2_opd:= ed;
-    expr.e2_operand:= decls.d_atribut.quoci;
-  end rs_E2q;
+    expr:= new node(nd_eop);
+    expr.eop_ope:= ee;
+    expr.eop_opd:= ed;
+    expr.eop_operand:= decls.d_arbre.quoci;
+  end rs_EOpq;
 
 
-  procedure rs_E2m(expr: out atribut; ee: in atribut; ed: in atribut) is
+  procedure rs_EOpm(expr: out atribut; ee: in atribut; ed: in atribut) is
   begin
-    expr:= new node(nd_e2);
-    expr.e2_ope:= ee;
-    expr.e2_opd:= ed;
-    expr.e2_operand:= decls.d_atribut.modul;
-  end rs_E2m;
+    expr:= new node(nd_eop);
+    expr.eop_ope:= ee;
+    expr.eop_opd:= ed;
+    expr.eop_operand:= decls.d_arbre.modul;
+  end rs_EOpm;
 
-  
-  procedure rs_E2nl(expr: out atribut; ed: in atribut) is
+
+  procedure rs_EOpnl(expr: out atribut; ed: in atribut) is
   begin
-    expr:= new node(nd_e2);
-    expr.e2_ope:= new node(nd_null);
-    expr.e2_opd:= ed;
-    expr.e2_operand:= decls.d_atribut.neg_log;
-  end rs_E2nl;
-  
-  
-  procedure rs_E2na(expr: out atribut; ed: in atribut) is
+    expr:= new node(nd_eop);
+    expr.eop_ope:= new node(nd_null);
+    expr.eop_opd:= ed;
+    expr.eop_operand:= decls.d_arbre.neg_log;
+  end rs_EOpnl;
+
+
+  procedure rs_EOpna(expr: out atribut; ed: in atribut) is
   begin
-    expr:= new node(nd_e2);
-    expr.e2_ope:= new node(nd_null);
-    expr.e2_opd:= ed;
-    expr.e2_operand:= decls.d_atribut.neg_alg;
-  end rs_E2na;
+    expr:= new node(nd_eop);
+    expr.eop_ope:= new node(nd_null);
+    expr.eop_opd:= ed;
+    expr.eop_operand:= decls.d_arbre.neg_alg;
+  end rs_EOpna;
 
-  
-  procedure rs_E2(expr: out atribut; ed: in atribut) is
+
+  procedure rs_EOp(expr: out atribut; ed: in atribut) is
   begin
-    expr:= new node(nd_e2);
-    expr.e2_ope:= new node(nd_null);
-    expr.e2_opd:= ed;
-    expr.e2_operand:= nul;
-  end rs_E2;
+    expr:= new node(nd_eop);
+    expr.eop_ope:= new node(nd_null);
+    expr.eop_opd:= ed;
+    expr.eop_operand:= nul;
+  end rs_EOp;
 
 
-  procedure rs_E3(expr: out atribut; e: in atribut) is
+  procedure rs_ET(expr: out atribut; e: in atribut) is
   begin
-    expr:= new node(nd_e3);
-    expr.e3_cont:= e;
-  end rs_E3;
+    expr:= new node(nd_et);
+    expr.et_cont:= e;
+  end rs_ET;
 
 
-  -- Altres
+  -- Referències
+
+  procedure rs_Ref(ref: out atribut; ref_id: in atribut; qs: in atribut) is
+  begin
+    ref:= new node(nd_ref);
+    ref.ref_id:= ref_id;
+    ref.ref_qs:= qs;
+  end rs_Ref;
+
+  procedure rs_Qs(qs: out atribut; qs_in: in atribut; q: in atribut) is
+  begin
+    qs:= new node(nd_qs);
+    qs.qs_qs:= qs_in;
+    qs.qs_q:= q;
+  end rs_Qs;
+
+
+  procedure rs_Q(q: out atribut; contingut: in atribut) is
+  begin
+    q:= new node(nd_q);
+    q.q_contingut:= contingut;
+  end rs_Q;
+
+
+  -- Llistes
 
   procedure rs_Lid(lid: out atribut; id_seg: in atribut; id: in atribut) is
   begin
@@ -456,42 +523,14 @@ package body semantica.c_arbre is
     lid.lid_seg:= id_seg;
     lid.lid_id:= id;
   end rs_Lid;
-  
-  procedure rs_Lid(lid: out atribut;  id: in atribut) is
+
+
+  procedure rs_Lid(lid: out atribut; id: in atribut) is
   begin
     lid:= new node(nd_lid);
     lid.lid_seg:= new node(nd_null);
     lid.lid_id:= id;
   end rs_Lid;
 
-
-  procedure rs_Ref(ref: out atribut; ref_id: in atribut; qs: in atribut) is
-  begin
-      ref:= new node(nd_ref);
-      ref.ref_id:= ref_id;
-      ref.ref_qs:= qs;
-  end rs_Ref;
-
-procedure rs_Qs(qs: out atribut; qs_in: in atribut; q: in atribut) is
-  begin
-      qs:= new node(nd_qs);
-      qs.qs_qs:= qs_in;
-      qs.qs_q:= q;
-  end rs_Qs;
-
-
-  procedure rs_Q(q: out atribut; contingut: in atribut) is
-  begin
-      q:= new node(nd_q);
-      q.q_contingut:= contingut;
-  end rs_Q;
-  
-  procedure rs_Rang(rang: out atribut;id_type: in atribut; linf: in atribut; lsup: in atribut) is
-  begin
-    rang:=new node(nd_rang);
-    rang.rang_id:=id_type.id_id;
-    rang.rang_linf:=linf;
-    rang.rang_lsup:=lsup;
-  end rs_Rang;
 
 end semantica.c_arbre;

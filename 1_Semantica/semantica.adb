@@ -1,50 +1,37 @@
 with Ada.Text_IO; --TMP
 with semantica.missatges;
+with semantica.g_codi_int;
 package body semantica is
 
-  DEBUG: constant boolean:= true;
+--procedure print_arbre is
+--begin
+--  missatges.imprimir_arbre(root);
+--end print_arbre;
 
-  procedure print_arbre is
+  procedure prepara_analisi(nomf: in String) is
   begin
-    missatges.imprimir_arbre(root);
-  end print_arbre;
-	
-  function nova_var return Num_var is
-	begin
-    nv:= nv+1;
-		if DEBUG then
-      Ada.Text_IO.Put_Line("nova_var:nv::"&num_var'Image(nv));
-    end if;
-		return nv;
-	end nova_var;
-	
-  function nou_proc return Num_proc is
-	begin
-		np:= np+1;
-		return np;
-	end nou_proc;
-  
-  function nova_var(np: num_proc; ocup: ocupacio; desp: despl) return num_var is
-  begin
-		-- pendent d'ampliar
-    nv:= nv+1;
-		if DEBUG then
-      Ada.Text_IO.Put_Line("nova_var:nv::"&num_var'Image(nv));
-    end if;
-		return nv;
-  end nova_var;
+  -- FALTA DEFINIR::  prepara_missatges(nomf);
+    -- guarda el nom del fitxer
+    -- per si mes tard s'ha d'emprar
+    semantica.g_codi_int.prepara_g_codi_int(nomf);
+  -- FALTA DEFINIR::  prepara_g_codi_ass(nomf);
 
-  function nova_var_const(val: valor; tsb: tipus_subjacent) return num_var is
+    empty(tn);
+    empty(ts);
+
+    nv:= null_nv;
+    np:= null_np;
+    ne:= null_ne;
+
+    ERROR:= false;
+
+  end prepara_analisi;
+
+  procedure conclou_analisi is
   begin
-		-- pendent d'ampliar
-    nv:= nv+1;
-		if DEBUG then
-      Ada.Text_IO.Put_Line("nova_var_const:nvc::"
-      &num_var'Image(nv)&"::"
-      &valor'Image(val)&"::"
-      &tipus_subjacent'Image(tsb));
-    end if;
-		return nv;
-  end nova_var_const;
+    null;
+  -- FALTA DEFINIR  conclou_missatges;
+  end conclou_analisi;
+
 
 end semantica;

@@ -1,0 +1,11 @@
+procedure main is
+  type rtest is 
+    record
+      n: integer;
+      k: integer;
+    end record;
+  rvar: rtest;
+begin
+  rvar.n:= 0;
+  rvar.k:= 0;
+end procedure;

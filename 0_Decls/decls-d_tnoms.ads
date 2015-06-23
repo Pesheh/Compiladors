@@ -23,7 +23,7 @@ private
     maxid: constant id_nom:= id_nom(max_id);
     maxstr: constant id_str:= id_str(max_str);
     b: constant Ada.Containers.Hash_Type:= Ada.Containers.Hash_Type(max_id);
-    
+
     subtype hash_index is Ada.Containers.Hash_Type range 0..b-1;
     type list_item is
         record

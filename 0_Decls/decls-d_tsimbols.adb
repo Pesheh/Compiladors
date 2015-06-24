@@ -242,5 +242,10 @@ else te(iep).next:= ie;
   begin
     return ts.prof;
   end get_prof;
+  
+  function "<"(prof1, prof2: in profunditat) return boolean is
+  begin
+    return Integer(prof1) < Integer(prof2);
+  end "<";
 
 end decls.d_tsimbols;

@@ -42,7 +42,6 @@ begin
     -- de codi intermitg i assemblador
     semantica.prepara_analisi(substring(Argument(1),'.'));
     a_lexic.Open(Argument(1));
-    semantica.c_tipus.posa_entorn_standard;
     YYParse;
     a_lexic.Close;
     semantica.c_tipus.comprovacio_tipus(err);

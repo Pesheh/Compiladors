@@ -15,7 +15,8 @@ package body semantica.g_codi_int is
   f3as: Ada.Text_IO.File_Type;
   nf: Unbounded_String;
 
-  fals: constant num_var:= null_nv;
+  fals: num_var;
+  cert: num_var;
 
   procedure gc_proc(nd_proc: in pnode);
   procedure gc_cproc(nd_cproc: in pnode);
@@ -40,8 +41,10 @@ package body semantica.g_codi_int is
 
 
 
-  procedure prepara_g_codi_int(nomf: in String) is
+  procedure prepara_g_codi_int(nomf: in String; c,f: in num_var) is
   begin
+    cert:= c;
+    fals:= f;
     nf:= To_Unbounded_String(nomf);
   end prepara_g_codi_int;
 

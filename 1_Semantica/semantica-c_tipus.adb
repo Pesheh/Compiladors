@@ -95,7 +95,6 @@ package body semantica.c_tipus is
   procedure comprovacio_tipus (err: out boolean) is
   begin
     buida(pproc);
-  --  posa_entorn_standard;
     ct_decl_proc(root.p);
     err:= ERROR;
   end comprovacio_tipus;
@@ -104,7 +103,7 @@ package body semantica.c_tipus is
   --S'inicialitzen els tipus basics, altres valors predefinits(true,false)
   --i els procediments d'entrada/sortida
 
-  procedure posa_entorn_standard is
+  procedure posa_entorn_standard (c,f: out num_var) is
     idb,idtr,idf, id_arg:id_nom;
     idint,idchar: id_nom;
     idstdio: id_nom;
@@ -133,6 +132,7 @@ package body semantica.c_tipus is
       ERROR:= true;
       missatges_ct_error_intern((fila=>124, columna=>5), "posa_entorn_standart");
     end if;
+    nova_var_const(nv, tv, -1, tsb_ent, c);
 
     put(tn, "false", idf);
     desc:= (td=>dconst, tc=>idf, vc=>0);
@@ -141,6 +141,7 @@ package body semantica.c_tipus is
       ERROR:= true;
       missatges_ct_error_intern((fila=>131, columna=>5), "posa_entorn_standart");
     end if;
+    nova_var_const(nv, tv, 0, tsb_ent, f);
 
     --Enters
     put(tn, "integer", idint);

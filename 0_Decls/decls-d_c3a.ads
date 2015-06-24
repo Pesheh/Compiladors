@@ -69,12 +69,12 @@ package decls.d_c3a is
 
   -- funcions per consultar els camps de les variables
   function consulta_val_const(tv: in tvariables; nv: in num_var) return valor;
-  function consulta_np_var(tv: in tvariables; nv: in num_var) return num_proc;
-  function consulta_desp_var(tv: in tvariables; nv: in num_var) return despl;
-  function es_var(tv: in tvariables; nv: in num_var) return boolean;
+--function consulta_np_var(tv: in tvariables; nv: in num_var) return num_proc;
+--function consulta_desp_var(tv: in tvariables; nv: in num_var) return despl;
+--function es_var(tv: in tvariables; nv: in num_var) return boolean;
 
-  function consulta_prof_proc(tp: in tprocediments; np: in num_proc) return profunditat;
-  pragma Inline(nou_proc, nova_etiq, Value, consulta_tipus, consulta_val_const, consulta_np_var, consulta_desp_var, es_var);
+--function consulta_prof_proc(tp: in tprocediments; np: in num_proc) return profunditat;
+--pragma Inline(nou_proc, nova_etiq, Value, consulta_tipus, consulta_val_const, consulta_np_var, consulta_desp_var, es_var);
 
 private
 

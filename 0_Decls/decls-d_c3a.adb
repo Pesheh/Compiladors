@@ -176,10 +176,12 @@ package body decls.d_c3a is
   end consulta_arg_ne;
 
   function consulta_arg2(i3a: in instr_3a) return num_var is
+  begin
     return i3a.b;
   end consulta_arg2;
 
   function consulta_arg3(i3a: in instr_3a) return num_var is
+  begin
     return i3a.c;
   end consulta_arg3;
 

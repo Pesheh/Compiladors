@@ -1,6 +1,7 @@
 with Ada.Text_IO; --TMP
 with semantica.missatges;
 with semantica.g_codi_int;
+with semantica.c_tipus;
 with semantica.g_codi_ass;
 package body semantica is
 
@@ -10,12 +11,8 @@ package body semantica is
 --end print_arbre;
 
   procedure prepara_analisi(nomf: in String) is
+    cert, fals: num_var;
   begin
-  -- FALTA DEFINIR::  prepara_missatges(nomf);
-    -- guarda el nom del fitxer
-    -- per si mes tard s'ha d'emprar
-    semantica.g_codi_int.prepara_g_codi_int(nomf);
-    semantica.g_codi_ass.prepara_g_codi_ass(nomf);
 
     empty(tn);
     empty(ts);
@@ -26,6 +23,12 @@ package body semantica is
 
     ERROR:= false;
 
+    semantica.c_tipus.posa_entorn_standard(cert, fals);
+  -- FALTA DEFINIR::  prepara_missatges(nomf);
+    -- guarda el nom del fitxer
+    -- per si mes tard s'ha d'emprar
+    semantica.g_codi_int.prepara_g_codi_int(nomf, cert, fals);
+    semantica.g_codi_ass.prepara_g_codi_ass(nomf);
   end prepara_analisi;
 
   procedure conclou_analisi is

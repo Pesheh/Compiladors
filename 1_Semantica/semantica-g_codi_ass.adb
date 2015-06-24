@@ -84,8 +84,10 @@ package body semantica.g_codi_ass is
 
   
   function ga_llegir return instr_3a is
+    inst: instr_3a_bin;
   begin
-    return To_i3a(Instruccio_IO.Read(Input, instr_3a_bin'Type));
+    Instruccio_IO.Read(Input, Item=> inst);
+    return To_i3a(inst);
   end ga_llegir;
 
 
@@ -100,49 +102,50 @@ package body semantica.g_codi_ass is
   begin
     while not End_Of_File(Input) loop
       inst:=ga_llegir;
+      put_line(Imatge(inst));
       case consulta_tipus(inst) is
         when cp       =>
-          ga_escribir(ga_cp(inst));--(inst.a, inst.b));
+          ga_escribir(ga_cp(inst));
         when cp_idx   =>
-          ga_escribir(ga_cp_idx(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_cp_idx(inst));
         when cons_idx =>
-          ga_escribir(ga_cons_idx(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_cons_idx(inst));
         when sum      =>
-          ga_escribir(ga_sum(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_sum(inst));
         when res      =>
-          ga_escribir(ga_res(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_res(inst));
         when mul      =>
-          ga_escribir(ga_mul(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_mul(inst));
         when div      =>
-          ga_escribir(ga_div(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_div(inst));
         when modul    =>
-          ga_escribir(ga_modul(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_modul(inst));
         when neg      =>
-          ga_escribir(ga_neg(inst));--(inst.a, inst.b));
+          ga_escribir(ga_neg(inst));
         when op_not   =>
-          ga_escribir(ga_op_not(inst));--(inst.a, inst.b));
+          ga_escribir(ga_op_not(inst));
         when op_and   =>
-          ga_escribir(ga_op_and(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_op_and(inst));
         when op_or    =>
-          ga_escribir(ga_op_or(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_op_or(inst));
         when etiq     =>
-          ga_escribir(ga_etiq(consulta_arg_ne(inst)));--(inst.a));
+          ga_escribir(ga_etiq(consulta_arg_ne(inst)));
         when go_to    =>
-          ga_escribir(ga_goto(consulta_arg_ne(inst)));--(inst.a));
+          ga_escribir(ga_goto(consulta_arg_ne(inst)));
         when ieq_goto =>
-          ga_escribir(ga_ieq_goto(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_ieq_goto(inst));
         when gt       =>
-          ga_escribir(ga_gt(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_gt(inst));
         when ge       =>
-          ga_escribir(ga_ge(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_ge(inst));
         when eq       =>
-          ga_escribir(ga_eq(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_eq(inst));
         when neq      =>
-          ga_escribir(ga_neq(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_neq(inst));
         when le       =>
-          ga_escribir(ga_le(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_le(inst));
         when lt       =>
-          ga_escribir(ga_lt(inst));--(inst.a, inst.b, inst.c));
+          ga_escribir(ga_lt(inst));
         when pmb      =>
           null;
         when rtn      =>

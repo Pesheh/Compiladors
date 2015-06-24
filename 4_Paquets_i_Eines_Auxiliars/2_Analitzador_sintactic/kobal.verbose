@@ -1,0 +1,2650 @@
+------------------
+State  0
+
+Kernel
+( 0)  $accept	: _ PROC_PRIMA END_OF_INPUT 
+
+Closure
+( 0)  $accept	: _ PROC_PRIMA END_OF_INPUT 
+( 1)  PROC_PRIMA	: _ PROC 
+( 2)  PROC	: _ PC_PROCEDURE C_PROC PC_IS DECLS PC_BEGIN SENTS PC_END PC_PROCEDURE PUNTICOMA 
+
+
+	PROC 	goto  1
+	PROC_PRIMA 	goto  3
+ 	PC_PROCEDURE 	shift  2
+ 	default 	error
+------------------
+State  1
+
+Kernel
+( 1)  PROC_PRIMA	: PROC _ 
+
+Closure
+( 1)  PROC_PRIMA	: PROC _ 
+
+
+ 	default 	reduce  1
+------------------
+State  2
+
+Kernel
+( 2)  PROC	: PC_PROCEDURE _ C_PROC PC_IS DECLS PC_BEGIN SENTS PC_END PC_PROCEDURE PUNTICOMA 
+
+Closure
+( 2)  PROC	: PC_PROCEDURE _ C_PROC PC_IS DECLS PC_BEGIN SENTS PC_END PC_PROCEDURE PUNTICOMA 
+( 18)  C_PROC	: _ IDENTIF PARENTESI_O ARGS PARENTESI_T 
+( 19)  C_PROC	: _ IDENTIF 
+
+
+	C_PROC 	goto  5
+ 	IDENTIF 	shift  4
+ 	default 	error
+------------------
+State  3
+
+Kernel
+( 0)  $accept	: PROC_PRIMA _ END_OF_INPUT 
+
+Closure
+( 0)  $accept	: PROC_PRIMA _ END_OF_INPUT 
+
+
+ 	END_OF_INPUT 	accept
+ 	default 	error
+------------------
+State  4
+
+Kernel
+( 18)  C_PROC	: IDENTIF _ PARENTESI_O ARGS PARENTESI_T 
+( 19)  C_PROC	: IDENTIF _ 
+
+Closure
+( 18)  C_PROC	: IDENTIF _ PARENTESI_O ARGS PARENTESI_T 
+( 19)  C_PROC	: IDENTIF _ 
+
+
+ 	PARENTESI_O 	shift  7
+ 	default 	reduce  19
+------------------
+State  5
+
+Kernel
+( 2)  PROC	: PC_PROCEDURE C_PROC _ PC_IS DECLS PC_BEGIN SENTS PC_END PC_PROCEDURE PUNTICOMA 
+
+Closure
+( 2)  PROC	: PC_PROCEDURE C_PROC _ PC_IS DECLS PC_BEGIN SENTS PC_END PC_PROCEDURE PUNTICOMA 
+
+
+ 	PC_IS 	shift  8
+ 	default 	error
+------------------
+State  6
+
+Kernel
+( 0)  $accept	: PROC_PRIMA END_OF_INPUT _ 
+
+Closure
+( 0)  $accept	: PROC_PRIMA END_OF_INPUT _ 
+
+
+ 	default 	error
+------------------
+State  7
+
+Kernel
+( 18)  C_PROC	: IDENTIF PARENTESI_O _ ARGS PARENTESI_T 
+
+Closure
+( 18)  C_PROC	: IDENTIF PARENTESI_O _ ARGS PARENTESI_T 
+( 20)  ARGS	: _ ARGS PUNTICOMA ARG 
+( 21)  ARGS	: _ ARG 
+( 22)  ARG	: _ LID DOSPUNTS MODE IDENTIF 
+( 25)  LID	: _ LID COMA IDENTIF 
+( 26)  LID	: _ IDENTIF 
+
+
+	ARG 	goto  10
+	ARGS 	goto  9
+	LID 	goto  11
+ 	IDENTIF 	shift  12
+ 	default 	error
+------------------
+State  8
+
+Kernel
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS _ DECLS PC_BEGIN SENTS PC_END PC_PROCEDURE PUNTICOMA 
+
+Closure
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS _ DECLS PC_BEGIN SENTS PC_END PC_PROCEDURE PUNTICOMA 
+( 3)  DECLS	: _ DECLS DECL 
+( 4)  DECLS	: _ 
+
+
+	DECLS 	goto  13
+ 	default 	reduce  4
+------------------
+State  9
+
+Kernel
+( 18)  C_PROC	: IDENTIF PARENTESI_O ARGS _ PARENTESI_T 
+( 20)  ARGS	: ARGS _ PUNTICOMA ARG 
+
+Closure
+( 18)  C_PROC	: IDENTIF PARENTESI_O ARGS _ PARENTESI_T 
+( 20)  ARGS	: ARGS _ PUNTICOMA ARG 
+
+
+ 	PUNTICOMA 	shift  15
+ 	PARENTESI_T 	shift  14
+ 	default 	error
+------------------
+State  10
+
+Kernel
+( 21)  ARGS	: ARG _ 
+
+Closure
+( 21)  ARGS	: ARG _ 
+
+
+ 	default 	reduce  21
+------------------
+State  11
+
+Kernel
+( 22)  ARG	: LID _ DOSPUNTS MODE IDENTIF 
+( 25)  LID	: LID _ COMA IDENTIF 
+
+Closure
+( 22)  ARG	: LID _ DOSPUNTS MODE IDENTIF 
+( 25)  LID	: LID _ COMA IDENTIF 
+
+
+ 	DOSPUNTS 	shift  16
+ 	COMA 	shift  17
+ 	default 	error
+------------------
+State  12
+
+Kernel
+( 26)  LID	: IDENTIF _ 
+
+Closure
+( 26)  LID	: IDENTIF _ 
+
+
+ 	default 	reduce  26
+------------------
+State  13
+
+Kernel
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS DECLS _ PC_BEGIN SENTS PC_END PC_PROCEDURE PUNTICOMA 
+( 3)  DECLS	: DECLS _ DECL 
+
+Closure
+( 2)  PROC	: _ PC_PROCEDURE C_PROC PC_IS DECLS PC_BEGIN SENTS PC_END PC_PROCEDURE PUNTICOMA 
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS DECLS _ PC_BEGIN SENTS PC_END PC_PROCEDURE PUNTICOMA 
+( 3)  DECLS	: DECLS _ DECL 
+( 5)  DECL	: _ PROC 
+( 6)  DECL	: _ DECL_CONST 
+( 7)  DECL	: _ DECL_VAR 
+( 8)  DECL	: _ DECL_T 
+( 9)  DECL_CONST	: _ LID DOSPUNTS PC_CONST IDENTIF DOSPUNTSIGUAL IDX PUNTICOMA 
+( 10)  DECL_VAR	: _ LID DOSPUNTS IDENTIF PUNTICOMA 
+( 11)  DECL_T	: _ PC_TYPE IDENTIF PC_IS DECL_T_CONT 
+( 25)  LID	: _ LID COMA IDENTIF 
+( 26)  LID	: _ IDENTIF 
+
+
+	LID 	goto  22
+	DECL_T 	goto  21
+	DECL_VAR 	goto  20
+	DECL_CONST 	goto  19
+	DECL 	goto  25
+	PROC 	goto  18
+ 	PC_PROCEDURE 	shift  2
+ 	PC_BEGIN 	shift  24
+ 	PC_TYPE 	shift  23
+ 	IDENTIF 	shift  12
+ 	default 	error
+------------------
+State  14
+
+Kernel
+( 18)  C_PROC	: IDENTIF PARENTESI_O ARGS PARENTESI_T _ 
+
+Closure
+( 18)  C_PROC	: IDENTIF PARENTESI_O ARGS PARENTESI_T _ 
+
+
+ 	default 	reduce  18
+------------------
+State  15
+
+Kernel
+( 20)  ARGS	: ARGS PUNTICOMA _ ARG 
+
+Closure
+( 20)  ARGS	: ARGS PUNTICOMA _ ARG 
+( 22)  ARG	: _ LID DOSPUNTS MODE IDENTIF 
+( 25)  LID	: _ LID COMA IDENTIF 
+( 26)  LID	: _ IDENTIF 
+
+
+	ARG 	goto  26
+	LID 	goto  11
+ 	IDENTIF 	shift  12
+ 	default 	error
+------------------
+State  16
+
+Kernel
+( 22)  ARG	: LID DOSPUNTS _ MODE IDENTIF 
+
+Closure
+( 22)  ARG	: LID DOSPUNTS _ MODE IDENTIF 
+( 23)  MODE	: _ PC_IN 
+( 24)  MODE	: _ PC_IN_OUT 
+
+
+	MODE 	goto  29
+ 	PC_IN 	shift  27
+ 	PC_IN_OUT 	shift  28
+ 	default 	error
+------------------
+State  17
+
+Kernel
+( 25)  LID	: LID COMA _ IDENTIF 
+
+Closure
+( 25)  LID	: LID COMA _ IDENTIF 
+
+
+ 	IDENTIF 	shift  30
+ 	default 	error
+------------------
+State  18
+
+Kernel
+( 5)  DECL	: PROC _ 
+
+Closure
+( 5)  DECL	: PROC _ 
+
+
+ 	default 	reduce  5
+------------------
+State  19
+
+Kernel
+( 6)  DECL	: DECL_CONST _ 
+
+Closure
+( 6)  DECL	: DECL_CONST _ 
+
+
+ 	default 	reduce  6
+------------------
+State  20
+
+Kernel
+( 7)  DECL	: DECL_VAR _ 
+
+Closure
+( 7)  DECL	: DECL_VAR _ 
+
+
+ 	default 	reduce  7
+------------------
+State  21
+
+Kernel
+( 8)  DECL	: DECL_T _ 
+
+Closure
+( 8)  DECL	: DECL_T _ 
+
+
+ 	default 	reduce  8
+------------------
+State  22
+
+Kernel
+( 9)  DECL_CONST	: LID _ DOSPUNTS PC_CONST IDENTIF DOSPUNTSIGUAL IDX PUNTICOMA 
+( 10)  DECL_VAR	: LID _ DOSPUNTS IDENTIF PUNTICOMA 
+( 25)  LID	: LID _ COMA IDENTIF 
+
+Closure
+( 9)  DECL_CONST	: LID _ DOSPUNTS PC_CONST IDENTIF DOSPUNTSIGUAL IDX PUNTICOMA 
+( 10)  DECL_VAR	: LID _ DOSPUNTS IDENTIF PUNTICOMA 
+( 25)  LID	: LID _ COMA IDENTIF 
+
+
+ 	DOSPUNTS 	shift  31
+ 	COMA 	shift  17
+ 	default 	error
+------------------
+State  23
+
+Kernel
+( 11)  DECL_T	: PC_TYPE _ IDENTIF PC_IS DECL_T_CONT 
+
+Closure
+( 11)  DECL_T	: PC_TYPE _ IDENTIF PC_IS DECL_T_CONT 
+
+
+ 	IDENTIF 	shift  32
+ 	default 	error
+------------------
+State  24
+
+Kernel
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS DECLS PC_BEGIN _ SENTS PC_END PC_PROCEDURE PUNTICOMA 
+
+Closure
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS DECLS PC_BEGIN _ SENTS PC_END PC_PROCEDURE PUNTICOMA 
+( 32)  SENTS	: _ SENTS_NOB 
+( 33)  SENTS	: _ PC_NULL PUNTICOMA 
+( 34)  SENTS_NOB	: _ SENTS_NOB SENT 
+( 35)  SENTS_NOB	: _ SENT 
+( 36)  SENT	: _ S_ITER 
+( 37)  SENT	: _ S_COND 
+( 38)  SENT	: _ S_CRIDA 
+( 39)  SENT	: _ S_ASSIGN 
+( 40)  S_ITER	: _ PC_WHILE EXPR PC_LOOP SENTS PC_END PC_LOOP PUNTICOMA 
+( 41)  S_COND	: _ PC_IF EXPR PC_THEN SENTS PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: _ PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+( 43)  S_CRIDA	: _ REF PUNTICOMA 
+( 44)  S_ASSIGN	: _ REF DOSPUNTSIGUAL EXPR PUNTICOMA 
+( 45)  REF	: _ IDENTIF QS 
+
+
+	REF 	goto  42
+	S_ASSIGN 	goto  39
+	S_CRIDA 	goto  38
+	S_COND 	goto  37
+	S_ITER 	goto  36
+	SENT 	goto  35
+	SENTS_NOB 	goto  33
+	SENTS 	goto  44
+ 	PC_NULL 	shift  34
+ 	PC_WHILE 	shift  40
+ 	PC_IF 	shift  41
+ 	IDENTIF 	shift  43
+ 	default 	error
+------------------
+State  25
+
+Kernel
+( 3)  DECLS	: DECLS DECL _ 
+
+Closure
+( 3)  DECLS	: DECLS DECL _ 
+
+
+ 	default 	reduce  3
+------------------
+State  26
+
+Kernel
+( 20)  ARGS	: ARGS PUNTICOMA ARG _ 
+
+Closure
+( 20)  ARGS	: ARGS PUNTICOMA ARG _ 
+
+
+ 	default 	reduce  20
+------------------
+State  27
+
+Kernel
+( 23)  MODE	: PC_IN _ 
+
+Closure
+( 23)  MODE	: PC_IN _ 
+
+
+ 	default 	reduce  23
+------------------
+State  28
+
+Kernel
+( 24)  MODE	: PC_IN_OUT _ 
+
+Closure
+( 24)  MODE	: PC_IN_OUT _ 
+
+
+ 	default 	reduce  24
+------------------
+State  29
+
+Kernel
+( 22)  ARG	: LID DOSPUNTS MODE _ IDENTIF 
+
+Closure
+( 22)  ARG	: LID DOSPUNTS MODE _ IDENTIF 
+
+
+ 	IDENTIF 	shift  45
+ 	default 	error
+------------------
+State  30
+
+Kernel
+( 25)  LID	: LID COMA IDENTIF _ 
+
+Closure
+( 25)  LID	: LID COMA IDENTIF _ 
+
+
+ 	default 	reduce  25
+------------------
+State  31
+
+Kernel
+( 9)  DECL_CONST	: LID DOSPUNTS _ PC_CONST IDENTIF DOSPUNTSIGUAL IDX PUNTICOMA 
+( 10)  DECL_VAR	: LID DOSPUNTS _ IDENTIF PUNTICOMA 
+
+Closure
+( 9)  DECL_CONST	: LID DOSPUNTS _ PC_CONST IDENTIF DOSPUNTSIGUAL IDX PUNTICOMA 
+( 10)  DECL_VAR	: LID DOSPUNTS _ IDENTIF PUNTICOMA 
+
+
+ 	PC_CONST 	shift  46
+ 	IDENTIF 	shift  47
+ 	default 	error
+------------------
+State  32
+
+Kernel
+( 11)  DECL_T	: PC_TYPE IDENTIF _ PC_IS DECL_T_CONT 
+
+Closure
+( 11)  DECL_T	: PC_TYPE IDENTIF _ PC_IS DECL_T_CONT 
+
+
+ 	PC_IS 	shift  48
+ 	default 	error
+------------------
+State  33
+
+Kernel
+( 32)  SENTS	: SENTS_NOB _ 
+( 34)  SENTS_NOB	: SENTS_NOB _ SENT 
+
+Closure
+( 32)  SENTS	: SENTS_NOB _ 
+( 34)  SENTS_NOB	: SENTS_NOB _ SENT 
+( 36)  SENT	: _ S_ITER 
+( 37)  SENT	: _ S_COND 
+( 38)  SENT	: _ S_CRIDA 
+( 39)  SENT	: _ S_ASSIGN 
+( 40)  S_ITER	: _ PC_WHILE EXPR PC_LOOP SENTS PC_END PC_LOOP PUNTICOMA 
+( 41)  S_COND	: _ PC_IF EXPR PC_THEN SENTS PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: _ PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+( 43)  S_CRIDA	: _ REF PUNTICOMA 
+( 44)  S_ASSIGN	: _ REF DOSPUNTSIGUAL EXPR PUNTICOMA 
+( 45)  REF	: _ IDENTIF QS 
+
+
+	REF 	goto  42
+	S_ASSIGN 	goto  39
+	S_CRIDA 	goto  38
+	S_COND 	goto  37
+	S_ITER 	goto  36
+	SENT 	goto  49
+ 	PC_WHILE 	shift  40
+ 	PC_IF 	shift  41
+ 	IDENTIF 	shift  43
+ 	default 	reduce  32
+------------------
+State  34
+
+Kernel
+( 33)  SENTS	: PC_NULL _ PUNTICOMA 
+
+Closure
+( 33)  SENTS	: PC_NULL _ PUNTICOMA 
+
+
+ 	PUNTICOMA 	shift  50
+ 	default 	error
+------------------
+State  35
+
+Kernel
+( 35)  SENTS_NOB	: SENT _ 
+
+Closure
+( 35)  SENTS_NOB	: SENT _ 
+
+
+ 	default 	reduce  35
+------------------
+State  36
+
+Kernel
+( 36)  SENT	: S_ITER _ 
+
+Closure
+( 36)  SENT	: S_ITER _ 
+
+
+ 	default 	reduce  36
+------------------
+State  37
+
+Kernel
+( 37)  SENT	: S_COND _ 
+
+Closure
+( 37)  SENT	: S_COND _ 
+
+
+ 	default 	reduce  37
+------------------
+State  38
+
+Kernel
+( 38)  SENT	: S_CRIDA _ 
+
+Closure
+( 38)  SENT	: S_CRIDA _ 
+
+
+ 	default 	reduce  38
+------------------
+State  39
+
+Kernel
+( 39)  SENT	: S_ASSIGN _ 
+
+Closure
+( 39)  SENT	: S_ASSIGN _ 
+
+
+ 	default 	reduce  39
+------------------
+State  40
+
+Kernel
+( 40)  S_ITER	: PC_WHILE _ EXPR PC_LOOP SENTS PC_END PC_LOOP PUNTICOMA 
+
+Closure
+( 40)  S_ITER	: PC_WHILE _ EXPR PC_LOOP SENTS PC_END PC_LOOP PUNTICOMA 
+( 45)  REF	: _ IDENTIF QS 
+( 50)  EXPR	: _ E_AND 
+( 51)  EXPR	: _ E_OR 
+( 52)  EXPR	: _ E_OP 
+( 53)  E_AND	: _ E_AND PC_AND E_OP 
+( 54)  E_AND	: _ E_OP PC_AND E_OP 
+( 55)  E_OR	: _ E_OR PC_OR E_OP 
+( 56)  E_OR	: _ E_OP PC_OR E_OP 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  53
+	E_OR 	goto  52
+	E_AND 	goto  51
+	REF 	goto  57
+	EXPR 	goto  60
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  41
+
+Kernel
+( 41)  S_COND	: PC_IF _ EXPR PC_THEN SENTS PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: PC_IF _ EXPR PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+
+Closure
+( 41)  S_COND	: PC_IF _ EXPR PC_THEN SENTS PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: PC_IF _ EXPR PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+( 45)  REF	: _ IDENTIF QS 
+( 50)  EXPR	: _ E_AND 
+( 51)  EXPR	: _ E_OR 
+( 52)  EXPR	: _ E_OP 
+( 53)  E_AND	: _ E_AND PC_AND E_OP 
+( 54)  E_AND	: _ E_OP PC_AND E_OP 
+( 55)  E_OR	: _ E_OR PC_OR E_OP 
+( 56)  E_OR	: _ E_OP PC_OR E_OP 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  53
+	E_OR 	goto  52
+	E_AND 	goto  51
+	REF 	goto  57
+	EXPR 	goto  61
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  42
+
+Kernel
+( 43)  S_CRIDA	: REF _ PUNTICOMA 
+( 44)  S_ASSIGN	: REF _ DOSPUNTSIGUAL EXPR PUNTICOMA 
+
+Closure
+( 43)  S_CRIDA	: REF _ PUNTICOMA 
+( 44)  S_ASSIGN	: REF _ DOSPUNTSIGUAL EXPR PUNTICOMA 
+
+
+ 	DOSPUNTSIGUAL 	shift  63
+ 	PUNTICOMA 	shift  62
+ 	default 	error
+------------------
+State  43
+
+Kernel
+( 45)  REF	: IDENTIF _ QS 
+
+Closure
+( 45)  REF	: IDENTIF _ QS 
+( 46)  QS	: _ QS Q 
+( 47)  QS	: _ 
+
+
+	QS 	goto  64
+ 	default 	reduce  47
+------------------
+State  44
+
+Kernel
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS DECLS PC_BEGIN SENTS _ PC_END PC_PROCEDURE PUNTICOMA 
+
+Closure
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS DECLS PC_BEGIN SENTS _ PC_END PC_PROCEDURE PUNTICOMA 
+
+
+ 	PC_END 	shift  65
+ 	default 	error
+------------------
+State  45
+
+Kernel
+( 22)  ARG	: LID DOSPUNTS MODE IDENTIF _ 
+
+Closure
+( 22)  ARG	: LID DOSPUNTS MODE IDENTIF _ 
+
+
+ 	default 	reduce  22
+------------------
+State  46
+
+Kernel
+( 9)  DECL_CONST	: LID DOSPUNTS PC_CONST _ IDENTIF DOSPUNTSIGUAL IDX PUNTICOMA 
+
+Closure
+( 9)  DECL_CONST	: LID DOSPUNTS PC_CONST _ IDENTIF DOSPUNTSIGUAL IDX PUNTICOMA 
+
+
+ 	IDENTIF 	shift  66
+ 	default 	error
+------------------
+State  47
+
+Kernel
+( 10)  DECL_VAR	: LID DOSPUNTS IDENTIF _ PUNTICOMA 
+
+Closure
+( 10)  DECL_VAR	: LID DOSPUNTS IDENTIF _ PUNTICOMA 
+
+
+ 	PUNTICOMA 	shift  67
+ 	default 	error
+------------------
+State  48
+
+Kernel
+( 11)  DECL_T	: PC_TYPE IDENTIF PC_IS _ DECL_T_CONT 
+
+Closure
+( 11)  DECL_T	: PC_TYPE IDENTIF PC_IS _ DECL_T_CONT 
+( 12)  DECL_T_CONT	: _ PC_NEW RANG PUNTICOMA 
+( 13)  DECL_T_CONT	: _ PC_RECORD DCAMPS PC_END PC_RECORD PUNTICOMA 
+( 14)  DECL_T_CONT	: _ PC_ARRAY PARENTESI_O LID PARENTESI_T PC_OF IDENTIF PUNTICOMA 
+
+
+	DECL_T_CONT 	goto  71
+ 	PC_NEW 	shift  68
+ 	PC_RECORD 	shift  69
+ 	PC_ARRAY 	shift  70
+ 	default 	error
+------------------
+State  49
+
+Kernel
+( 34)  SENTS_NOB	: SENTS_NOB SENT _ 
+
+Closure
+( 34)  SENTS_NOB	: SENTS_NOB SENT _ 
+
+
+ 	default 	reduce  34
+------------------
+State  50
+
+Kernel
+( 33)  SENTS	: PC_NULL PUNTICOMA _ 
+
+Closure
+( 33)  SENTS	: PC_NULL PUNTICOMA _ 
+
+
+ 	default 	reduce  33
+------------------
+State  51
+
+Kernel
+( 50)  EXPR	: E_AND _ 
+( 53)  E_AND	: E_AND _ PC_AND E_OP 
+
+Closure
+( 50)  EXPR	: E_AND _ 
+( 53)  E_AND	: E_AND _ PC_AND E_OP 
+
+
+ 	PC_AND 	shift  72
+ 	default 	reduce  50
+------------------
+State  52
+
+Kernel
+( 51)  EXPR	: E_OR _ 
+( 55)  E_OR	: E_OR _ PC_OR E_OP 
+
+Closure
+( 51)  EXPR	: E_OR _ 
+( 55)  E_OR	: E_OR _ PC_OR E_OP 
+
+
+ 	PC_OR 	shift  73
+ 	default 	reduce  51
+------------------
+State  53
+
+Kernel
+( 52)  EXPR	: E_OP _ 
+( 54)  E_AND	: E_OP _ PC_AND E_OP 
+( 56)  E_OR	: E_OP _ PC_OR E_OP 
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+Closure
+( 52)  EXPR	: E_OP _ 
+( 54)  E_AND	: E_OP _ PC_AND E_OP 
+( 56)  E_OR	: E_OP _ PC_OR E_OP 
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+
+ 	PC_AND 	shift  74
+ 	PC_OR 	shift  75
+ 	OP_REL 	shift  76
+ 	S_MES 	shift  77
+ 	S_MENYS 	shift  78
+ 	S_PROD 	shift  79
+ 	S_QUOCI 	shift  80
+ 	PC_MOD 	shift  81
+ 	default 	reduce  52
+------------------
+State  54
+
+Kernel
+( 63)  E_OP	: PC_NOT _ E_T 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 63)  E_OP	: PC_NOT _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  82
+	REF 	goto  57
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  55
+
+Kernel
+( 64)  E_OP	: S_MENYS _ E_T 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 64)  E_OP	: S_MENYS _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  83
+	REF 	goto  57
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  56
+
+Kernel
+( 65)  E_OP	: E_T _ 
+
+Closure
+( 65)  E_OP	: E_T _ 
+
+
+ 	default 	reduce  65
+------------------
+State  57
+
+Kernel
+( 66)  E_T	: REF _ 
+
+Closure
+( 66)  E_T	: REF _ 
+
+
+ 	default 	reduce  66
+------------------
+State  58
+
+Kernel
+( 67)  E_T	: PARENTESI_O _ EXPR PARENTESI_T 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 50)  EXPR	: _ E_AND 
+( 51)  EXPR	: _ E_OR 
+( 52)  EXPR	: _ E_OP 
+( 53)  E_AND	: _ E_AND PC_AND E_OP 
+( 54)  E_AND	: _ E_OP PC_AND E_OP 
+( 55)  E_OR	: _ E_OR PC_OR E_OP 
+( 56)  E_OR	: _ E_OP PC_OR E_OP 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 67)  E_T	: PARENTESI_O _ EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  53
+	E_OR 	goto  52
+	E_AND 	goto  51
+	REF 	goto  57
+	EXPR 	goto  84
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  59
+
+Kernel
+( 68)  E_T	: LIT _ 
+
+Closure
+( 68)  E_T	: LIT _ 
+
+
+ 	default 	reduce  68
+------------------
+State  60
+
+Kernel
+( 40)  S_ITER	: PC_WHILE EXPR _ PC_LOOP SENTS PC_END PC_LOOP PUNTICOMA 
+
+Closure
+( 40)  S_ITER	: PC_WHILE EXPR _ PC_LOOP SENTS PC_END PC_LOOP PUNTICOMA 
+
+
+ 	PC_LOOP 	shift  85
+ 	default 	error
+------------------
+State  61
+
+Kernel
+( 41)  S_COND	: PC_IF EXPR _ PC_THEN SENTS PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: PC_IF EXPR _ PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+
+Closure
+( 41)  S_COND	: PC_IF EXPR _ PC_THEN SENTS PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: PC_IF EXPR _ PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+
+
+ 	PC_THEN 	shift  86
+ 	default 	error
+------------------
+State  62
+
+Kernel
+( 43)  S_CRIDA	: REF PUNTICOMA _ 
+
+Closure
+( 43)  S_CRIDA	: REF PUNTICOMA _ 
+
+
+ 	default 	reduce  43
+------------------
+State  63
+
+Kernel
+( 44)  S_ASSIGN	: REF DOSPUNTSIGUAL _ EXPR PUNTICOMA 
+
+Closure
+( 44)  S_ASSIGN	: REF DOSPUNTSIGUAL _ EXPR PUNTICOMA 
+( 45)  REF	: _ IDENTIF QS 
+( 50)  EXPR	: _ E_AND 
+( 51)  EXPR	: _ E_OR 
+( 52)  EXPR	: _ E_OP 
+( 53)  E_AND	: _ E_AND PC_AND E_OP 
+( 54)  E_AND	: _ E_OP PC_AND E_OP 
+( 55)  E_OR	: _ E_OR PC_OR E_OP 
+( 56)  E_OR	: _ E_OP PC_OR E_OP 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  53
+	E_OR 	goto  52
+	E_AND 	goto  51
+	REF 	goto  57
+	EXPR 	goto  87
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  64
+
+Kernel
+( 45)  REF	: IDENTIF QS _ 
+( 46)  QS	: QS _ Q 
+
+Closure
+( 45)  REF	: IDENTIF QS _ 
+( 46)  QS	: QS _ Q 
+( 48)  Q	: _ PUNT IDENTIF 
+( 49)  Q	: _ PARENTESI_O LEXPR PARENTESI_T 
+
+
+	Q 	goto  90
+ 	PUNT 	shift  88
+ 	PARENTESI_O 	shift  89
+ 	default 	reduce  45
+------------------
+State  65
+
+Kernel
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS DECLS PC_BEGIN SENTS PC_END _ PC_PROCEDURE PUNTICOMA 
+
+Closure
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS DECLS PC_BEGIN SENTS PC_END _ PC_PROCEDURE PUNTICOMA 
+
+
+ 	PC_PROCEDURE 	shift  91
+ 	default 	error
+------------------
+State  66
+
+Kernel
+( 9)  DECL_CONST	: LID DOSPUNTS PC_CONST IDENTIF _ DOSPUNTSIGUAL IDX PUNTICOMA 
+
+Closure
+( 9)  DECL_CONST	: LID DOSPUNTS PC_CONST IDENTIF _ DOSPUNTSIGUAL IDX PUNTICOMA 
+
+
+ 	DOSPUNTSIGUAL 	shift  92
+ 	default 	error
+------------------
+State  67
+
+Kernel
+( 10)  DECL_VAR	: LID DOSPUNTS IDENTIF PUNTICOMA _ 
+
+Closure
+( 10)  DECL_VAR	: LID DOSPUNTS IDENTIF PUNTICOMA _ 
+
+
+ 	default 	reduce  10
+------------------
+State  68
+
+Kernel
+( 12)  DECL_T_CONT	: PC_NEW _ RANG PUNTICOMA 
+
+Closure
+( 12)  DECL_T_CONT	: PC_NEW _ RANG PUNTICOMA 
+( 27)  RANG	: _ IDENTIF PC_RANGE IDX PUNT PUNT IDX 
+
+
+	RANG 	goto  94
+ 	IDENTIF 	shift  93
+ 	default 	error
+------------------
+State  69
+
+Kernel
+( 13)  DECL_T_CONT	: PC_RECORD _ DCAMPS PC_END PC_RECORD PUNTICOMA 
+
+Closure
+( 10)  DECL_VAR	: _ LID DOSPUNTS IDENTIF PUNTICOMA 
+( 13)  DECL_T_CONT	: PC_RECORD _ DCAMPS PC_END PC_RECORD PUNTICOMA 
+( 15)  DCAMPS	: _ DCAMPS DCAMP 
+( 16)  DCAMPS	: _ DCAMP 
+( 17)  DCAMP	: _ DECL_VAR 
+( 25)  LID	: _ LID COMA IDENTIF 
+( 26)  LID	: _ IDENTIF 
+
+
+	DCAMP 	goto  96
+	DCAMPS 	goto  95
+	LID 	goto  98
+	DECL_VAR 	goto  97
+ 	IDENTIF 	shift  12
+ 	default 	error
+------------------
+State  70
+
+Kernel
+( 14)  DECL_T_CONT	: PC_ARRAY _ PARENTESI_O LID PARENTESI_T PC_OF IDENTIF PUNTICOMA 
+
+Closure
+( 14)  DECL_T_CONT	: PC_ARRAY _ PARENTESI_O LID PARENTESI_T PC_OF IDENTIF PUNTICOMA 
+
+
+ 	PARENTESI_O 	shift  99
+ 	default 	error
+------------------
+State  71
+
+Kernel
+( 11)  DECL_T	: PC_TYPE IDENTIF PC_IS DECL_T_CONT _ 
+
+Closure
+( 11)  DECL_T	: PC_TYPE IDENTIF PC_IS DECL_T_CONT _ 
+
+
+ 	default 	reduce  11
+------------------
+State  72
+
+Kernel
+( 53)  E_AND	: E_AND PC_AND _ E_OP 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 53)  E_AND	: E_AND PC_AND _ E_OP 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  100
+	REF 	goto  57
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  73
+
+Kernel
+( 55)  E_OR	: E_OR PC_OR _ E_OP 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 55)  E_OR	: E_OR PC_OR _ E_OP 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  101
+	REF 	goto  57
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  74
+
+Kernel
+( 54)  E_AND	: E_OP PC_AND _ E_OP 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 54)  E_AND	: E_OP PC_AND _ E_OP 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  102
+	REF 	goto  57
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  75
+
+Kernel
+( 56)  E_OR	: E_OP PC_OR _ E_OP 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 56)  E_OR	: E_OP PC_OR _ E_OP 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  103
+	REF 	goto  57
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  76
+
+Kernel
+( 57)  E_OP	: E_OP OP_REL _ E_OP 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 57)  E_OP	: E_OP OP_REL _ E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  104
+	REF 	goto  57
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  77
+
+Kernel
+( 58)  E_OP	: E_OP S_MES _ E_OP 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 58)  E_OP	: E_OP S_MES _ E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  105
+	REF 	goto  57
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  78
+
+Kernel
+( 59)  E_OP	: E_OP S_MENYS _ E_OP 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 59)  E_OP	: E_OP S_MENYS _ E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  106
+	REF 	goto  57
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  79
+
+Kernel
+( 60)  E_OP	: E_OP S_PROD _ E_OP 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 60)  E_OP	: E_OP S_PROD _ E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  107
+	REF 	goto  57
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  80
+
+Kernel
+( 61)  E_OP	: E_OP S_QUOCI _ E_OP 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 61)  E_OP	: E_OP S_QUOCI _ E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  108
+	REF 	goto  57
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  81
+
+Kernel
+( 62)  E_OP	: E_OP PC_MOD _ E_OP 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 62)  E_OP	: E_OP PC_MOD _ E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+
+
+	E_T 	goto  56
+	E_OP 	goto  109
+	REF 	goto  57
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  82
+
+Kernel
+( 63)  E_OP	: PC_NOT E_T _ 
+
+Closure
+( 63)  E_OP	: PC_NOT E_T _ 
+
+
+ 	default 	reduce  63
+------------------
+State  83
+
+Kernel
+( 64)  E_OP	: S_MENYS E_T _ 
+
+Closure
+( 64)  E_OP	: S_MENYS E_T _ 
+
+
+ 	default 	reduce  64
+------------------
+State  84
+
+Kernel
+( 67)  E_T	: PARENTESI_O EXPR _ PARENTESI_T 
+
+Closure
+( 67)  E_T	: PARENTESI_O EXPR _ PARENTESI_T 
+
+
+ 	PARENTESI_T 	shift  110
+ 	default 	error
+------------------
+State  85
+
+Kernel
+( 40)  S_ITER	: PC_WHILE EXPR PC_LOOP _ SENTS PC_END PC_LOOP PUNTICOMA 
+
+Closure
+( 32)  SENTS	: _ SENTS_NOB 
+( 33)  SENTS	: _ PC_NULL PUNTICOMA 
+( 34)  SENTS_NOB	: _ SENTS_NOB SENT 
+( 35)  SENTS_NOB	: _ SENT 
+( 36)  SENT	: _ S_ITER 
+( 37)  SENT	: _ S_COND 
+( 38)  SENT	: _ S_CRIDA 
+( 39)  SENT	: _ S_ASSIGN 
+( 40)  S_ITER	: _ PC_WHILE EXPR PC_LOOP SENTS PC_END PC_LOOP PUNTICOMA 
+( 40)  S_ITER	: PC_WHILE EXPR PC_LOOP _ SENTS PC_END PC_LOOP PUNTICOMA 
+( 41)  S_COND	: _ PC_IF EXPR PC_THEN SENTS PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: _ PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+( 43)  S_CRIDA	: _ REF PUNTICOMA 
+( 44)  S_ASSIGN	: _ REF DOSPUNTSIGUAL EXPR PUNTICOMA 
+( 45)  REF	: _ IDENTIF QS 
+
+
+	REF 	goto  42
+	S_ASSIGN 	goto  39
+	S_CRIDA 	goto  38
+	S_COND 	goto  37
+	S_ITER 	goto  36
+	SENT 	goto  35
+	SENTS_NOB 	goto  33
+	SENTS 	goto  111
+ 	PC_NULL 	shift  34
+ 	PC_WHILE 	shift  40
+ 	PC_IF 	shift  41
+ 	IDENTIF 	shift  43
+ 	default 	error
+------------------
+State  86
+
+Kernel
+( 41)  S_COND	: PC_IF EXPR PC_THEN _ SENTS PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: PC_IF EXPR PC_THEN _ SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+
+Closure
+( 32)  SENTS	: _ SENTS_NOB 
+( 33)  SENTS	: _ PC_NULL PUNTICOMA 
+( 34)  SENTS_NOB	: _ SENTS_NOB SENT 
+( 35)  SENTS_NOB	: _ SENT 
+( 36)  SENT	: _ S_ITER 
+( 37)  SENT	: _ S_COND 
+( 38)  SENT	: _ S_CRIDA 
+( 39)  SENT	: _ S_ASSIGN 
+( 40)  S_ITER	: _ PC_WHILE EXPR PC_LOOP SENTS PC_END PC_LOOP PUNTICOMA 
+( 41)  S_COND	: _ PC_IF EXPR PC_THEN SENTS PC_END PC_IF PUNTICOMA 
+( 41)  S_COND	: PC_IF EXPR PC_THEN _ SENTS PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: _ PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: PC_IF EXPR PC_THEN _ SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+( 43)  S_CRIDA	: _ REF PUNTICOMA 
+( 44)  S_ASSIGN	: _ REF DOSPUNTSIGUAL EXPR PUNTICOMA 
+( 45)  REF	: _ IDENTIF QS 
+
+
+	REF 	goto  42
+	S_ASSIGN 	goto  39
+	S_CRIDA 	goto  38
+	S_COND 	goto  37
+	S_ITER 	goto  36
+	SENT 	goto  35
+	SENTS_NOB 	goto  33
+	SENTS 	goto  112
+ 	PC_NULL 	shift  34
+ 	PC_WHILE 	shift  40
+ 	PC_IF 	shift  41
+ 	IDENTIF 	shift  43
+ 	default 	error
+------------------
+State  87
+
+Kernel
+( 44)  S_ASSIGN	: REF DOSPUNTSIGUAL EXPR _ PUNTICOMA 
+
+Closure
+( 44)  S_ASSIGN	: REF DOSPUNTSIGUAL EXPR _ PUNTICOMA 
+
+
+ 	PUNTICOMA 	shift  113
+ 	default 	error
+------------------
+State  88
+
+Kernel
+( 48)  Q	: PUNT _ IDENTIF 
+
+Closure
+( 48)  Q	: PUNT _ IDENTIF 
+
+
+ 	IDENTIF 	shift  114
+ 	default 	error
+------------------
+State  89
+
+Kernel
+( 49)  Q	: PARENTESI_O _ LEXPR PARENTESI_T 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 49)  Q	: PARENTESI_O _ LEXPR PARENTESI_T 
+( 50)  EXPR	: _ E_AND 
+( 51)  EXPR	: _ E_OR 
+( 52)  EXPR	: _ E_OP 
+( 53)  E_AND	: _ E_AND PC_AND E_OP 
+( 54)  E_AND	: _ E_OP PC_AND E_OP 
+( 55)  E_OR	: _ E_OR PC_OR E_OP 
+( 56)  E_OR	: _ E_OP PC_OR E_OP 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+( 69)  LEXPR	: _ LEXPR COMA EXPR 
+( 70)  LEXPR	: _ EXPR 
+
+
+	E_T 	goto  56
+	E_OP 	goto  53
+	E_OR 	goto  52
+	E_AND 	goto  51
+	LEXPR 	goto  115
+	REF 	goto  57
+	EXPR 	goto  116
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  90
+
+Kernel
+( 46)  QS	: QS Q _ 
+
+Closure
+( 46)  QS	: QS Q _ 
+
+
+ 	default 	reduce  46
+------------------
+State  91
+
+Kernel
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS DECLS PC_BEGIN SENTS PC_END PC_PROCEDURE _ PUNTICOMA 
+
+Closure
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS DECLS PC_BEGIN SENTS PC_END PC_PROCEDURE _ PUNTICOMA 
+
+
+ 	PUNTICOMA 	shift  117
+ 	default 	error
+------------------
+State  92
+
+Kernel
+( 9)  DECL_CONST	: LID DOSPUNTS PC_CONST IDENTIF DOSPUNTSIGUAL _ IDX PUNTICOMA 
+
+Closure
+( 9)  DECL_CONST	: LID DOSPUNTS PC_CONST IDENTIF DOSPUNTSIGUAL _ IDX PUNTICOMA 
+( 28)  IDX	: _ S_MENYS IDX_CONT 
+( 29)  IDX	: _ IDX_CONT 
+( 30)  IDX_CONT	: _ LIT 
+( 31)  IDX_CONT	: _ IDENTIF 
+
+
+	IDX_CONT 	goto  119
+	IDX 	goto  122
+ 	S_MENYS 	shift  118
+ 	IDENTIF 	shift  121
+ 	LIT 	shift  120
+ 	default 	error
+------------------
+State  93
+
+Kernel
+( 27)  RANG	: IDENTIF _ PC_RANGE IDX PUNT PUNT IDX 
+
+Closure
+( 27)  RANG	: IDENTIF _ PC_RANGE IDX PUNT PUNT IDX 
+
+
+ 	PC_RANGE 	shift  123
+ 	default 	error
+------------------
+State  94
+
+Kernel
+( 12)  DECL_T_CONT	: PC_NEW RANG _ PUNTICOMA 
+
+Closure
+( 12)  DECL_T_CONT	: PC_NEW RANG _ PUNTICOMA 
+
+
+ 	PUNTICOMA 	shift  124
+ 	default 	error
+------------------
+State  95
+
+Kernel
+( 13)  DECL_T_CONT	: PC_RECORD DCAMPS _ PC_END PC_RECORD PUNTICOMA 
+( 15)  DCAMPS	: DCAMPS _ DCAMP 
+
+Closure
+( 10)  DECL_VAR	: _ LID DOSPUNTS IDENTIF PUNTICOMA 
+( 13)  DECL_T_CONT	: PC_RECORD DCAMPS _ PC_END PC_RECORD PUNTICOMA 
+( 15)  DCAMPS	: DCAMPS _ DCAMP 
+( 17)  DCAMP	: _ DECL_VAR 
+( 25)  LID	: _ LID COMA IDENTIF 
+( 26)  LID	: _ IDENTIF 
+
+
+	DCAMP 	goto  126
+	LID 	goto  98
+	DECL_VAR 	goto  97
+ 	PC_END 	shift  125
+ 	IDENTIF 	shift  12
+ 	default 	error
+------------------
+State  96
+
+Kernel
+( 16)  DCAMPS	: DCAMP _ 
+
+Closure
+( 16)  DCAMPS	: DCAMP _ 
+
+
+ 	default 	reduce  16
+------------------
+State  97
+
+Kernel
+( 17)  DCAMP	: DECL_VAR _ 
+
+Closure
+( 17)  DCAMP	: DECL_VAR _ 
+
+
+ 	default 	reduce  17
+------------------
+State  98
+
+Kernel
+( 10)  DECL_VAR	: LID _ DOSPUNTS IDENTIF PUNTICOMA 
+( 25)  LID	: LID _ COMA IDENTIF 
+
+Closure
+( 10)  DECL_VAR	: LID _ DOSPUNTS IDENTIF PUNTICOMA 
+( 25)  LID	: LID _ COMA IDENTIF 
+
+
+ 	DOSPUNTS 	shift  127
+ 	COMA 	shift  17
+ 	default 	error
+------------------
+State  99
+
+Kernel
+( 14)  DECL_T_CONT	: PC_ARRAY PARENTESI_O _ LID PARENTESI_T PC_OF IDENTIF PUNTICOMA 
+
+Closure
+( 14)  DECL_T_CONT	: PC_ARRAY PARENTESI_O _ LID PARENTESI_T PC_OF IDENTIF PUNTICOMA 
+( 25)  LID	: _ LID COMA IDENTIF 
+( 26)  LID	: _ IDENTIF 
+
+
+	LID 	goto  128
+ 	IDENTIF 	shift  12
+ 	default 	error
+------------------
+State  100
+
+Kernel
+( 53)  E_AND	: E_AND PC_AND E_OP _ 
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+Closure
+( 53)  E_AND	: E_AND PC_AND E_OP _ 
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+
+ 	OP_REL 	shift  76
+ 	S_MES 	shift  77
+ 	S_MENYS 	shift  78
+ 	S_PROD 	shift  79
+ 	S_QUOCI 	shift  80
+ 	PC_MOD 	shift  81
+ 	default 	reduce  53
+------------------
+State  101
+
+Kernel
+( 55)  E_OR	: E_OR PC_OR E_OP _ 
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+Closure
+( 55)  E_OR	: E_OR PC_OR E_OP _ 
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+
+ 	OP_REL 	shift  76
+ 	S_MES 	shift  77
+ 	S_MENYS 	shift  78
+ 	S_PROD 	shift  79
+ 	S_QUOCI 	shift  80
+ 	PC_MOD 	shift  81
+ 	default 	reduce  55
+------------------
+State  102
+
+Kernel
+( 54)  E_AND	: E_OP PC_AND E_OP _ 
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+Closure
+( 54)  E_AND	: E_OP PC_AND E_OP _ 
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+
+ 	OP_REL 	shift  76
+ 	S_MES 	shift  77
+ 	S_MENYS 	shift  78
+ 	S_PROD 	shift  79
+ 	S_QUOCI 	shift  80
+ 	PC_MOD 	shift  81
+ 	default 	reduce  54
+------------------
+State  103
+
+Kernel
+( 56)  E_OR	: E_OP PC_OR E_OP _ 
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+Closure
+( 56)  E_OR	: E_OP PC_OR E_OP _ 
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+
+ 	OP_REL 	shift  76
+ 	S_MES 	shift  77
+ 	S_MENYS 	shift  78
+ 	S_PROD 	shift  79
+ 	S_QUOCI 	shift  80
+ 	PC_MOD 	shift  81
+ 	default 	reduce  56
+------------------
+State  104
+
+Kernel
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 57)  E_OP	: E_OP OP_REL E_OP _ 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+Closure
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 57)  E_OP	: E_OP OP_REL E_OP _ 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+
+ 	OP_REL 	error
+ 	S_MES 	shift  77
+ 	S_MENYS 	shift  78
+ 	S_PROD 	shift  79
+ 	S_QUOCI 	shift  80
+ 	PC_MOD 	shift  81
+ 	default 	reduce  57
+------------------
+State  105
+
+Kernel
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 58)  E_OP	: E_OP S_MES E_OP _ 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+Closure
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 58)  E_OP	: E_OP S_MES E_OP _ 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+
+ 	S_PROD 	shift  79
+ 	S_QUOCI 	shift  80
+ 	PC_MOD 	shift  81
+ 	default 	reduce  58
+------------------
+State  106
+
+Kernel
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 59)  E_OP	: E_OP S_MENYS E_OP _ 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+Closure
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 59)  E_OP	: E_OP S_MENYS E_OP _ 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+
+ 	S_PROD 	shift  79
+ 	S_QUOCI 	shift  80
+ 	PC_MOD 	shift  81
+ 	default 	reduce  59
+------------------
+State  107
+
+Kernel
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 60)  E_OP	: E_OP S_PROD E_OP _ 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+Closure
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 60)  E_OP	: E_OP S_PROD E_OP _ 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+
+ 	default 	reduce  60
+------------------
+State  108
+
+Kernel
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 61)  E_OP	: E_OP S_QUOCI E_OP _ 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+Closure
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 61)  E_OP	: E_OP S_QUOCI E_OP _ 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+
+
+ 	default 	reduce  61
+------------------
+State  109
+
+Kernel
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+( 62)  E_OP	: E_OP PC_MOD E_OP _ 
+
+Closure
+( 57)  E_OP	: E_OP _ OP_REL E_OP 
+( 58)  E_OP	: E_OP _ S_MES E_OP 
+( 59)  E_OP	: E_OP _ S_MENYS E_OP 
+( 60)  E_OP	: E_OP _ S_PROD E_OP 
+( 61)  E_OP	: E_OP _ S_QUOCI E_OP 
+( 62)  E_OP	: E_OP _ PC_MOD E_OP 
+( 62)  E_OP	: E_OP PC_MOD E_OP _ 
+
+
+ 	default 	reduce  62
+------------------
+State  110
+
+Kernel
+( 67)  E_T	: PARENTESI_O EXPR PARENTESI_T _ 
+
+Closure
+( 67)  E_T	: PARENTESI_O EXPR PARENTESI_T _ 
+
+
+ 	default 	reduce  67
+------------------
+State  111
+
+Kernel
+( 40)  S_ITER	: PC_WHILE EXPR PC_LOOP SENTS _ PC_END PC_LOOP PUNTICOMA 
+
+Closure
+( 40)  S_ITER	: PC_WHILE EXPR PC_LOOP SENTS _ PC_END PC_LOOP PUNTICOMA 
+
+
+ 	PC_END 	shift  129
+ 	default 	error
+------------------
+State  112
+
+Kernel
+( 41)  S_COND	: PC_IF EXPR PC_THEN SENTS _ PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: PC_IF EXPR PC_THEN SENTS _ PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+
+Closure
+( 41)  S_COND	: PC_IF EXPR PC_THEN SENTS _ PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: PC_IF EXPR PC_THEN SENTS _ PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+
+
+ 	PC_END 	shift  130
+ 	PC_ELSE 	shift  131
+ 	default 	error
+------------------
+State  113
+
+Kernel
+( 44)  S_ASSIGN	: REF DOSPUNTSIGUAL EXPR PUNTICOMA _ 
+
+Closure
+( 44)  S_ASSIGN	: REF DOSPUNTSIGUAL EXPR PUNTICOMA _ 
+
+
+ 	default 	reduce  44
+------------------
+State  114
+
+Kernel
+( 48)  Q	: PUNT IDENTIF _ 
+
+Closure
+( 48)  Q	: PUNT IDENTIF _ 
+
+
+ 	default 	reduce  48
+------------------
+State  115
+
+Kernel
+( 49)  Q	: PARENTESI_O LEXPR _ PARENTESI_T 
+( 69)  LEXPR	: LEXPR _ COMA EXPR 
+
+Closure
+( 49)  Q	: PARENTESI_O LEXPR _ PARENTESI_T 
+( 69)  LEXPR	: LEXPR _ COMA EXPR 
+
+
+ 	COMA 	shift  133
+ 	PARENTESI_T 	shift  132
+ 	default 	error
+------------------
+State  116
+
+Kernel
+( 70)  LEXPR	: EXPR _ 
+
+Closure
+( 70)  LEXPR	: EXPR _ 
+
+
+ 	default 	reduce  70
+------------------
+State  117
+
+Kernel
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS DECLS PC_BEGIN SENTS PC_END PC_PROCEDURE PUNTICOMA _ 
+
+Closure
+( 2)  PROC	: PC_PROCEDURE C_PROC PC_IS DECLS PC_BEGIN SENTS PC_END PC_PROCEDURE PUNTICOMA _ 
+
+
+ 	default 	reduce  2
+------------------
+State  118
+
+Kernel
+( 28)  IDX	: S_MENYS _ IDX_CONT 
+
+Closure
+( 28)  IDX	: S_MENYS _ IDX_CONT 
+( 30)  IDX_CONT	: _ LIT 
+( 31)  IDX_CONT	: _ IDENTIF 
+
+
+	IDX_CONT 	goto  134
+ 	IDENTIF 	shift  121
+ 	LIT 	shift  120
+ 	default 	error
+------------------
+State  119
+
+Kernel
+( 29)  IDX	: IDX_CONT _ 
+
+Closure
+( 29)  IDX	: IDX_CONT _ 
+
+
+ 	default 	reduce  29
+------------------
+State  120
+
+Kernel
+( 30)  IDX_CONT	: LIT _ 
+
+Closure
+( 30)  IDX_CONT	: LIT _ 
+
+
+ 	default 	reduce  30
+------------------
+State  121
+
+Kernel
+( 31)  IDX_CONT	: IDENTIF _ 
+
+Closure
+( 31)  IDX_CONT	: IDENTIF _ 
+
+
+ 	default 	reduce  31
+------------------
+State  122
+
+Kernel
+( 9)  DECL_CONST	: LID DOSPUNTS PC_CONST IDENTIF DOSPUNTSIGUAL IDX _ PUNTICOMA 
+
+Closure
+( 9)  DECL_CONST	: LID DOSPUNTS PC_CONST IDENTIF DOSPUNTSIGUAL IDX _ PUNTICOMA 
+
+
+ 	PUNTICOMA 	shift  135
+ 	default 	error
+------------------
+State  123
+
+Kernel
+( 27)  RANG	: IDENTIF PC_RANGE _ IDX PUNT PUNT IDX 
+
+Closure
+( 27)  RANG	: IDENTIF PC_RANGE _ IDX PUNT PUNT IDX 
+( 28)  IDX	: _ S_MENYS IDX_CONT 
+( 29)  IDX	: _ IDX_CONT 
+( 30)  IDX_CONT	: _ LIT 
+( 31)  IDX_CONT	: _ IDENTIF 
+
+
+	IDX_CONT 	goto  119
+	IDX 	goto  136
+ 	S_MENYS 	shift  118
+ 	IDENTIF 	shift  121
+ 	LIT 	shift  120
+ 	default 	error
+------------------
+State  124
+
+Kernel
+( 12)  DECL_T_CONT	: PC_NEW RANG PUNTICOMA _ 
+
+Closure
+( 12)  DECL_T_CONT	: PC_NEW RANG PUNTICOMA _ 
+
+
+ 	default 	reduce  12
+------------------
+State  125
+
+Kernel
+( 13)  DECL_T_CONT	: PC_RECORD DCAMPS PC_END _ PC_RECORD PUNTICOMA 
+
+Closure
+( 13)  DECL_T_CONT	: PC_RECORD DCAMPS PC_END _ PC_RECORD PUNTICOMA 
+
+
+ 	PC_RECORD 	shift  137
+ 	default 	error
+------------------
+State  126
+
+Kernel
+( 15)  DCAMPS	: DCAMPS DCAMP _ 
+
+Closure
+( 15)  DCAMPS	: DCAMPS DCAMP _ 
+
+
+ 	default 	reduce  15
+------------------
+State  127
+
+Kernel
+( 10)  DECL_VAR	: LID DOSPUNTS _ IDENTIF PUNTICOMA 
+
+Closure
+( 10)  DECL_VAR	: LID DOSPUNTS _ IDENTIF PUNTICOMA 
+
+
+ 	IDENTIF 	shift  47
+ 	default 	error
+------------------
+State  128
+
+Kernel
+( 14)  DECL_T_CONT	: PC_ARRAY PARENTESI_O LID _ PARENTESI_T PC_OF IDENTIF PUNTICOMA 
+( 25)  LID	: LID _ COMA IDENTIF 
+
+Closure
+( 14)  DECL_T_CONT	: PC_ARRAY PARENTESI_O LID _ PARENTESI_T PC_OF IDENTIF PUNTICOMA 
+( 25)  LID	: LID _ COMA IDENTIF 
+
+
+ 	COMA 	shift  17
+ 	PARENTESI_T 	shift  138
+ 	default 	error
+------------------
+State  129
+
+Kernel
+( 40)  S_ITER	: PC_WHILE EXPR PC_LOOP SENTS PC_END _ PC_LOOP PUNTICOMA 
+
+Closure
+( 40)  S_ITER	: PC_WHILE EXPR PC_LOOP SENTS PC_END _ PC_LOOP PUNTICOMA 
+
+
+ 	PC_LOOP 	shift  139
+ 	default 	error
+------------------
+State  130
+
+Kernel
+( 41)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_END _ PC_IF PUNTICOMA 
+
+Closure
+( 41)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_END _ PC_IF PUNTICOMA 
+
+
+ 	PC_IF 	shift  140
+ 	default 	error
+------------------
+State  131
+
+Kernel
+( 42)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_ELSE _ SENTS PC_END PC_IF PUNTICOMA 
+
+Closure
+( 32)  SENTS	: _ SENTS_NOB 
+( 33)  SENTS	: _ PC_NULL PUNTICOMA 
+( 34)  SENTS_NOB	: _ SENTS_NOB SENT 
+( 35)  SENTS_NOB	: _ SENT 
+( 36)  SENT	: _ S_ITER 
+( 37)  SENT	: _ S_COND 
+( 38)  SENT	: _ S_CRIDA 
+( 39)  SENT	: _ S_ASSIGN 
+( 40)  S_ITER	: _ PC_WHILE EXPR PC_LOOP SENTS PC_END PC_LOOP PUNTICOMA 
+( 41)  S_COND	: _ PC_IF EXPR PC_THEN SENTS PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: _ PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA 
+( 42)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_ELSE _ SENTS PC_END PC_IF PUNTICOMA 
+( 43)  S_CRIDA	: _ REF PUNTICOMA 
+( 44)  S_ASSIGN	: _ REF DOSPUNTSIGUAL EXPR PUNTICOMA 
+( 45)  REF	: _ IDENTIF QS 
+
+
+	REF 	goto  42
+	S_ASSIGN 	goto  39
+	S_CRIDA 	goto  38
+	S_COND 	goto  37
+	S_ITER 	goto  36
+	SENT 	goto  35
+	SENTS_NOB 	goto  33
+	SENTS 	goto  141
+ 	PC_NULL 	shift  34
+ 	PC_WHILE 	shift  40
+ 	PC_IF 	shift  41
+ 	IDENTIF 	shift  43
+ 	default 	error
+------------------
+State  132
+
+Kernel
+( 49)  Q	: PARENTESI_O LEXPR PARENTESI_T _ 
+
+Closure
+( 49)  Q	: PARENTESI_O LEXPR PARENTESI_T _ 
+
+
+ 	default 	reduce  49
+------------------
+State  133
+
+Kernel
+( 69)  LEXPR	: LEXPR COMA _ EXPR 
+
+Closure
+( 45)  REF	: _ IDENTIF QS 
+( 50)  EXPR	: _ E_AND 
+( 51)  EXPR	: _ E_OR 
+( 52)  EXPR	: _ E_OP 
+( 53)  E_AND	: _ E_AND PC_AND E_OP 
+( 54)  E_AND	: _ E_OP PC_AND E_OP 
+( 55)  E_OR	: _ E_OR PC_OR E_OP 
+( 56)  E_OR	: _ E_OP PC_OR E_OP 
+( 57)  E_OP	: _ E_OP OP_REL E_OP 
+( 58)  E_OP	: _ E_OP S_MES E_OP 
+( 59)  E_OP	: _ E_OP S_MENYS E_OP 
+( 60)  E_OP	: _ E_OP S_PROD E_OP 
+( 61)  E_OP	: _ E_OP S_QUOCI E_OP 
+( 62)  E_OP	: _ E_OP PC_MOD E_OP 
+( 63)  E_OP	: _ PC_NOT E_T 
+( 64)  E_OP	: _ S_MENYS E_T 
+( 65)  E_OP	: _ E_T 
+( 66)  E_T	: _ REF 
+( 67)  E_T	: _ PARENTESI_O EXPR PARENTESI_T 
+( 68)  E_T	: _ LIT 
+( 69)  LEXPR	: LEXPR COMA _ EXPR 
+
+
+	E_T 	goto  56
+	E_OP 	goto  53
+	E_OR 	goto  52
+	E_AND 	goto  51
+	REF 	goto  57
+	EXPR 	goto  142
+ 	S_MENYS 	shift  55
+ 	PC_NOT 	shift  54
+ 	IDENTIF 	shift  43
+ 	LIT 	shift  59
+ 	PARENTESI_O 	shift  58
+ 	default 	error
+------------------
+State  134
+
+Kernel
+( 28)  IDX	: S_MENYS IDX_CONT _ 
+
+Closure
+( 28)  IDX	: S_MENYS IDX_CONT _ 
+
+
+ 	default 	reduce  28
+------------------
+State  135
+
+Kernel
+( 9)  DECL_CONST	: LID DOSPUNTS PC_CONST IDENTIF DOSPUNTSIGUAL IDX PUNTICOMA _ 
+
+Closure
+( 9)  DECL_CONST	: LID DOSPUNTS PC_CONST IDENTIF DOSPUNTSIGUAL IDX PUNTICOMA _ 
+
+
+ 	default 	reduce  9
+------------------
+State  136
+
+Kernel
+( 27)  RANG	: IDENTIF PC_RANGE IDX _ PUNT PUNT IDX 
+
+Closure
+( 27)  RANG	: IDENTIF PC_RANGE IDX _ PUNT PUNT IDX 
+
+
+ 	PUNT 	shift  143
+ 	default 	error
+------------------
+State  137
+
+Kernel
+( 13)  DECL_T_CONT	: PC_RECORD DCAMPS PC_END PC_RECORD _ PUNTICOMA 
+
+Closure
+( 13)  DECL_T_CONT	: PC_RECORD DCAMPS PC_END PC_RECORD _ PUNTICOMA 
+
+
+ 	PUNTICOMA 	shift  144
+ 	default 	error
+------------------
+State  138
+
+Kernel
+( 14)  DECL_T_CONT	: PC_ARRAY PARENTESI_O LID PARENTESI_T _ PC_OF IDENTIF PUNTICOMA 
+
+Closure
+( 14)  DECL_T_CONT	: PC_ARRAY PARENTESI_O LID PARENTESI_T _ PC_OF IDENTIF PUNTICOMA 
+
+
+ 	PC_OF 	shift  145
+ 	default 	error
+------------------
+State  139
+
+Kernel
+( 40)  S_ITER	: PC_WHILE EXPR PC_LOOP SENTS PC_END PC_LOOP _ PUNTICOMA 
+
+Closure
+( 40)  S_ITER	: PC_WHILE EXPR PC_LOOP SENTS PC_END PC_LOOP _ PUNTICOMA 
+
+
+ 	PUNTICOMA 	shift  146
+ 	default 	error
+------------------
+State  140
+
+Kernel
+( 41)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_END PC_IF _ PUNTICOMA 
+
+Closure
+( 41)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_END PC_IF _ PUNTICOMA 
+
+
+ 	PUNTICOMA 	shift  147
+ 	default 	error
+------------------
+State  141
+
+Kernel
+( 42)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS _ PC_END PC_IF PUNTICOMA 
+
+Closure
+( 42)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS _ PC_END PC_IF PUNTICOMA 
+
+
+ 	PC_END 	shift  148
+ 	default 	error
+------------------
+State  142
+
+Kernel
+( 69)  LEXPR	: LEXPR COMA EXPR _ 
+
+Closure
+( 69)  LEXPR	: LEXPR COMA EXPR _ 
+
+
+ 	default 	reduce  69
+------------------
+State  143
+
+Kernel
+( 27)  RANG	: IDENTIF PC_RANGE IDX PUNT _ PUNT IDX 
+
+Closure
+( 27)  RANG	: IDENTIF PC_RANGE IDX PUNT _ PUNT IDX 
+
+
+ 	PUNT 	shift  149
+ 	default 	error
+------------------
+State  144
+
+Kernel
+( 13)  DECL_T_CONT	: PC_RECORD DCAMPS PC_END PC_RECORD PUNTICOMA _ 
+
+Closure
+( 13)  DECL_T_CONT	: PC_RECORD DCAMPS PC_END PC_RECORD PUNTICOMA _ 
+
+
+ 	default 	reduce  13
+------------------
+State  145
+
+Kernel
+( 14)  DECL_T_CONT	: PC_ARRAY PARENTESI_O LID PARENTESI_T PC_OF _ IDENTIF PUNTICOMA 
+
+Closure
+( 14)  DECL_T_CONT	: PC_ARRAY PARENTESI_O LID PARENTESI_T PC_OF _ IDENTIF PUNTICOMA 
+
+
+ 	IDENTIF 	shift  150
+ 	default 	error
+------------------
+State  146
+
+Kernel
+( 40)  S_ITER	: PC_WHILE EXPR PC_LOOP SENTS PC_END PC_LOOP PUNTICOMA _ 
+
+Closure
+( 40)  S_ITER	: PC_WHILE EXPR PC_LOOP SENTS PC_END PC_LOOP PUNTICOMA _ 
+
+
+ 	default 	reduce  40
+------------------
+State  147
+
+Kernel
+( 41)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_END PC_IF PUNTICOMA _ 
+
+Closure
+( 41)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_END PC_IF PUNTICOMA _ 
+
+
+ 	default 	reduce  41
+------------------
+State  148
+
+Kernel
+( 42)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS PC_END _ PC_IF PUNTICOMA 
+
+Closure
+( 42)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS PC_END _ PC_IF PUNTICOMA 
+
+
+ 	PC_IF 	shift  151
+ 	default 	error
+------------------
+State  149
+
+Kernel
+( 27)  RANG	: IDENTIF PC_RANGE IDX PUNT PUNT _ IDX 
+
+Closure
+( 27)  RANG	: IDENTIF PC_RANGE IDX PUNT PUNT _ IDX 
+( 28)  IDX	: _ S_MENYS IDX_CONT 
+( 29)  IDX	: _ IDX_CONT 
+( 30)  IDX_CONT	: _ LIT 
+( 31)  IDX_CONT	: _ IDENTIF 
+
+
+	IDX_CONT 	goto  119
+	IDX 	goto  152
+ 	S_MENYS 	shift  118
+ 	IDENTIF 	shift  121
+ 	LIT 	shift  120
+ 	default 	error
+------------------
+State  150
+
+Kernel
+( 14)  DECL_T_CONT	: PC_ARRAY PARENTESI_O LID PARENTESI_T PC_OF IDENTIF _ PUNTICOMA 
+
+Closure
+( 14)  DECL_T_CONT	: PC_ARRAY PARENTESI_O LID PARENTESI_T PC_OF IDENTIF _ PUNTICOMA 
+
+
+ 	PUNTICOMA 	shift  153
+ 	default 	error
+------------------
+State  151
+
+Kernel
+( 42)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF _ PUNTICOMA 
+
+Closure
+( 42)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF _ PUNTICOMA 
+
+
+ 	PUNTICOMA 	shift  154
+ 	default 	error
+------------------
+State  152
+
+Kernel
+( 27)  RANG	: IDENTIF PC_RANGE IDX PUNT PUNT IDX _ 
+
+Closure
+( 27)  RANG	: IDENTIF PC_RANGE IDX PUNT PUNT IDX _ 
+
+
+ 	default 	reduce  27
+------------------
+State  153
+
+Kernel
+( 14)  DECL_T_CONT	: PC_ARRAY PARENTESI_O LID PARENTESI_T PC_OF IDENTIF PUNTICOMA _ 
+
+Closure
+( 14)  DECL_T_CONT	: PC_ARRAY PARENTESI_O LID PARENTESI_T PC_OF IDENTIF PUNTICOMA _ 
+
+
+ 	default 	reduce  14
+------------------
+State  154
+
+Kernel
+( 42)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA _ 
+
+Closure
+( 42)  S_COND	: PC_IF EXPR PC_THEN SENTS PC_ELSE SENTS PC_END PC_IF PUNTICOMA _ 
+
+
+ 	default 	reduce  42

@@ -192,5 +192,25 @@ package body decls.d_c3a is
   begin
     return tv(nv).all.val;
   end consulta_val_const;
+  
+  function consulta_np_var(tv: in tvariables; nv: in num_var) return num_proc is
+  begin
+    return tv(nv).all.np;
+  end consulta_np_var;
+  
+  function consulta_desp_var(tv: in tvariables; nv: in num_var) return despl is
+  begin
+    return tv(nv).all.desp;
+  end consulta_desp_var;
+
+  function es_var(tv: in tvariables; nv: in num_var) return boolean is
+  begin
+    return tv(nv).all.e;
+  end es_var;
+
+  function consulta_prof_proc(tp: in tprocediments; np: in num_proc) return profunditat is
+  begin
+    return tp(np).prof;
+  end consulta_prof_proc;
 
 end decls.d_c3a;

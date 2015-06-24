@@ -125,6 +125,32 @@ package body decls.d_c3a is
     end if;
   end Imatge;
 
+
+  function To_i3a_bin(i3a: in instr_3a) return instr_3a_bin is
+  begin
+    case i3a.d is
+      when comu =>
+        return (i3a.t, integer(i3a.nv), integer(i3a.b), integer(i3a.c));
+      when proc =>
+        return (i3a.t, integer(i3a.np), integer(i3a.b), integer(i3a.c));
+      when etiq =>
+        return (i3a.t, integer(i3a.ne), integer(i3a.b), integer(i3a.c));
+      end case;
+  end To_i3a_bin;
+
+
+  function To_i3a(i3a_b: in instr_3a_bin) return instr_3a is
+  begin
+    case i3a_b.t is
+      when pmb | call | rtn =>
+        return (proc, i3a_b.t, np=> num_proc(i3a_b.a), b=> num_var(i3a_b.b), c=> num_var(i3a_b.c));
+      when etiq | go_to | ieq_goto =>
+        return (etiq, i3a_b.t, ne=> num_etiq(i3a_b.a), b=> num_var(i3a_b.b), c=> num_var(i3a_b.c));
+      when others =>
+         return (comu, i3a_b.t, nv=> num_var(i3a_b.a), b=> num_var(i3a_b.b), c=> num_var(i3a_b.c));
+    end case;
+  end To_i3a;
+
   -- Es l'unica manera de mantenir la privacitat del tipus variable. Si escau
   -- aplicar aquest esquema als camps necessaris a posteriori d'aquest tipus
   function consulta_val_const(tv: in tvariables; nv: in num_var) return valor is

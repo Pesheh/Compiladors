@@ -11,6 +11,8 @@ package body semantica.g_codi_int is
   use Instruccio_IO;
   use Pila_Procediments;
 
+  f3a:  Instruccio_IO.File_Type;
+  f3as: Ada.Text_IO.File_Type;
   nf: Unbounded_String;
 
   fals: constant num_var:= null_nv;
@@ -61,7 +63,7 @@ package body semantica.g_codi_int is
 
   procedure genera(i3a: in instr_3a) is
   begin
-    Instruccio_IO.Write(f3a, i3a);
+    Instruccio_IO.Write(f3a, To_i3a_bin(i3a));
     Ada.Text_IO.Put_Line(f3as, Imatge(i3a));
   end genera;
 

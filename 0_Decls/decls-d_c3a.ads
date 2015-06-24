@@ -1,3 +1,4 @@
+with Ada.Sequential_IO;
 with decls.d_descripcio; use decls.d_descripcio;
 with decls.d_tsimbols; use decls.d_tsimbols;
 
@@ -5,6 +6,8 @@ package decls.d_c3a is
 
   type discr_instruccio is (comu, proc, etiq);
   type instr_3a(d: discr_instruccio) is private;
+  type instr_3a_bin is private;
+
   type tinstruccio is (
     cp,
     cp_idx,
@@ -53,6 +56,9 @@ package decls.d_c3a is
 
   function Imatge(i3a: in instr_3a) return String;
 
+  function To_i3a_bin(i3a: in instr_3a) return instr_3a_bin;
+  function To_i3a(i3a_b: in instr_3a_bin) return instr_3a;
+
   -- Es l'unica manera de mantenir la privacitat del tipus variable. Si escau
   -- aplicar aquest esquema als camps necessaris a posteriori d'aquest tipus
   function consulta_val_const(tv: in tvariables; nv: in num_var) return valor;
@@ -74,6 +80,17 @@ private
         when etiq =>
           ne: num_etiq;
       end case;
+    end record;
+
+  -- aquestes son les instruccions que escrivim
+  -- al fitxer binari, aixi es simplifica molt
+  -- la seva gestio
+  type instr_3a_bin is
+    record
+      t: tinstruccio;
+      a: integer;
+      b: integer;
+      c: integer;
     end record;
 
   esvar: constant boolean:= true;

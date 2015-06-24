@@ -1,3 +1,4 @@
+with Ada.Sequential_IO;
 with decls; use decls;
 with decls.d_tnoms; use decls.d_tnoms;
 with decls.d_tsimbols; use decls.d_tsimbols;
@@ -30,6 +31,8 @@ private
   -- i assemblador) requereixen aquesta pila, però l'alternativa es
   -- reinstanciar cada cop el paquet, cosa encara pitjor.
   package Pila_Procediments is new D_Pila(max_proc, elem => num_proc);
+
+  package Instruccio_IO is new Ada.Sequential_IO(instr_3a_bin);
 
   pproc: Pila_Procediments.pila;
 end semantica;

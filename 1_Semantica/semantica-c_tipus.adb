@@ -127,7 +127,7 @@ package body semantica.c_tipus is
     end if;
 
     put(tn, "true", idtr);
-    desc:= (td=>dconst, tc=>idtr, vc=>-1);
+    desc:= (td=>dconst, tc=>idb, vc=>-1);
     put(ts, idtr, desc, error);
     if error then
       ERROR:= true;
@@ -135,7 +135,7 @@ package body semantica.c_tipus is
     end if;
 
     put(tn, "false", idf);
-    desc:= (td=>dconst, tc=>idf, vc=>0);
+    desc:= (td=>dconst, tc=>idb, vc=>0);
     put(ts, idf, desc, error);
     if error then
       ERROR:= true;

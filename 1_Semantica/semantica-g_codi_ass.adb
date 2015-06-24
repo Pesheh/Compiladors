@@ -6,8 +6,10 @@ with semantica; use semantica;
 with decls.d_c3a; use decls.d_c3a;
 
 package body semantica.g_codi_ass is 
-  Output: File_Type; 
-  Input: File_Type;
+  use Instruccio_IO;
+
+  Output: Ada.Text_IO.File_Type; 
+  Input: Instruccio_IO.File_Type;
   newline: String(1..1):=(1=>ASCII.LF); --new line
 
   np_encurs: num_proc:=0;
@@ -37,27 +39,27 @@ package body semantica.g_codi_ass is
   function ga_load_address_param_local(nv: in num_var; r: in registre) return String;
   function ga_load_address_var_global(nv: in num_var; r: in registre) return String;
   function ga_load_address_param_global(nv: in num_var; r: in registre) return String;
-  function ga_cp(a, b: in num_var) return String;
-  function ga_cons_idx(a, b, c: in num_var) return String;
-  function ga_cp_idx(a, b, c: in num_var) return String;
-  function ga_sum(a, b, c: in num_var) return String;
-  function ga_res(a, b, c: in num_var) return String;
-  function ga_mul(a, b, c: in num_var) return String;
-  function ga_div(a, b, c: in num_var) return String;
-  function ga_modul(a, b, c: in num_var) return String;
-  function ga_neg(a, b: in num_var) return String; 
-  function ga_op_not(a, b: in num_var) return String; 
-  function ga_op_and(a, b, c: in num_var) return String;
-  function ga_op_or(a, b, c: in num_var) return String;
+  function ga_cp(i3a: in instr_3a) return String;
+  function ga_cons_idx(i3a: in instr_3a) return String;
+  function ga_cp_idx(i3a: in instr_3a) return String;
+  function ga_sum(i3a: in instr_3a) return String;
+  function ga_res(i3a: in instr_3a) return String;
+  function ga_mul(i3a: in instr_3a) return String;
+  function ga_div(i3a: in instr_3a) return String;
+  function ga_modul(i3a: in instr_3a) return String;
+  function ga_neg(i3a: in instr_3a) return String; 
+  function ga_op_not(i3a: in instr_3a) return String; 
+  function ga_op_and(i3a: in instr_3a) return String;
+  function ga_op_or(i3a: in instr_3a) return String;
   function ga_etiq(e: in num_etiq) return String;
   function ga_goto(e: in num_etiq) return String;
-  function ga_ieq_goto(a, b: in num_var; e: in num_etiq) return String;
-  function ga_gt(a, b, c: in num_var) return String;
-  function ga_ge(a, b, c: in num_var) return String;
-  function ga_eq(a, b, c: in num_var) return String;
-  function ga_neq(a, b, c: in num_var) return String;
-  function ga_le(a, b, c: in num_var) return String;
-  function ga_lt(a, b, c: in num_var) return String;
+  function ga_ieq_goto(i3a: in instr_3a) return String;
+  function ga_gt(i3a: in instr_3a) return String;
+  function ga_ge(i3a: in instr_3a) return String;
+  function ga_eq(i3a: in instr_3a) return String;
+  function ga_neq(i3a: in instr_3a) return String;
+  function ga_le(i3a: in instr_3a) return String;
+  function ga_lt(i3a: in instr_3a) return String;
 
 
 
@@ -67,7 +69,7 @@ package body semantica.g_codi_ass is
 
   procedure gen_codi_ass is
   begin
-    Open(File=>Input, Mode=>In_File, Name=> To_String(nf) & ".c3as");
+    Open(File=>Input, Mode=>In_File, Name=> To_String(nf) & ".c3a");
     Create(File=>Output, Mode=>Out_File, Name=> To_String(nf) & ".s");
     generacio_assemblador;
     Close(Input);
@@ -83,7 +85,7 @@ package body semantica.g_codi_ass is
   
   function ga_llegir return instr_3a is
   begin
-    return instr_3a'Input(Stream(Input));
+    return To_i3a(Instruccio_IO.Read(Input, instr_3a_bin'Type));
   end ga_llegir;
 
 
@@ -98,49 +100,49 @@ package body semantica.g_codi_ass is
   begin
     while not End_Of_File(Input) loop
       inst:=ga_llegir;
-      case inst.t is
+      case consulta_tipus(inst) is
         when cp       =>
-          ga_escribir(ga_cp(inst.a, inst.b));
+          ga_escribir(ga_cp(inst));--(inst.a, inst.b));
         when cp_idx   =>
-          ga_escribir(ga_cp_idx(inst.a, inst.b, inst.c));
+          ga_escribir(ga_cp_idx(inst));--(inst.a, inst.b, inst.c));
         when cons_idx =>
-          ga_escribir(ga_cons_idx(inst.a, inst.b, inst.c));
+          ga_escribir(ga_cons_idx(inst));--(inst.a, inst.b, inst.c));
         when sum      =>
-          ga_escribir(ga_sum(inst.a, inst.b, inst.c));
+          ga_escribir(ga_sum(inst));--(inst.a, inst.b, inst.c));
         when res      =>
-          ga_escribir(ga_res(inst.a, inst.b, inst.c));
+          ga_escribir(ga_res(inst));--(inst.a, inst.b, inst.c));
         when mul      =>
-          ga_escribir(ga_mul(inst.a, inst.b, inst.c));
+          ga_escribir(ga_mul(inst));--(inst.a, inst.b, inst.c));
         when div      =>
-          ga_escribir(ga_div(inst.a, inst.b, inst.c));
+          ga_escribir(ga_div(inst));--(inst.a, inst.b, inst.c));
         when modul    =>
-          ga_escribir(ga_modul(inst.a, inst.b, inst.c));
+          ga_escribir(ga_modul(inst));--(inst.a, inst.b, inst.c));
         when neg      =>
-          ga_escribir(ga_neg(inst.a, inst.b));
+          ga_escribir(ga_neg(inst));--(inst.a, inst.b));
         when op_not   =>
-          ga_escribir(ga_not(inst.a, inst.b));
+          ga_escribir(ga_op_not(inst));--(inst.a, inst.b));
         when op_and   =>
-          ga_escribir(ga_op_and(inst.a, inst.b, inst.c));
+          ga_escribir(ga_op_and(inst));--(inst.a, inst.b, inst.c));
         when op_or    =>
-          ga_escribir(ga_op_or(inst.a, inst.b, inst.c));
-        when num_etiq     =>
-          ga_escribir(ga_op_or(inst.a));
+          ga_escribir(ga_op_or(inst));--(inst.a, inst.b, inst.c));
+        when etiq     =>
+          ga_escribir(ga_etiq(consulta_arg_ne(inst)));--(inst.a));
         when go_to    =>
-          ga_escribir(ga_goto(inst.a));
+          ga_escribir(ga_goto(consulta_arg_ne(inst)));--(inst.a));
         when ieq_goto =>
-          ga_escribir(ga_ieq_goto(inst.a, inst.b, inst.c));
+          ga_escribir(ga_ieq_goto(inst));--(inst.a, inst.b, inst.c));
         when gt       =>
-          ga_escribir(ga_gt(inst.a, inst.b, inst.c));
+          ga_escribir(ga_gt(inst));--(inst.a, inst.b, inst.c));
         when ge       =>
-          ga_escribir(ga_ge(inst.a, inst.b, inst.c));
+          ga_escribir(ga_ge(inst));--(inst.a, inst.b, inst.c));
         when eq       =>
-          ga_escribir(ga_eq(inst.a, inst.b, inst.c));
+          ga_escribir(ga_eq(inst));--(inst.a, inst.b, inst.c));
         when neq      =>
-          ga_escribir(ga_neq(inst.a, inst.b, inst.c));
+          ga_escribir(ga_neq(inst));--(inst.a, inst.b, inst.c));
         when le       =>
-          ga_escribir(ga_le(inst.a, inst.b, inst.c));
+          ga_escribir(ga_le(inst));--(inst.a, inst.b, inst.c));
         when lt       =>
-          ga_escribir(ga_lt(inst.a, inst.b, inst.c));
+          ga_escribir(ga_lt(inst));--(inst.a, inst.b, inst.c));
         when pmb      =>
           null;
         when rtn      =>
@@ -331,13 +333,18 @@ package body semantica.g_codi_ass is
 
 
   --Instruccions de copia
-  function ga_cp(a, b: in num_var) return String is
+  function ga_cp(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
   begin
     return ga_load(b, eax) 
          & ga_store(a, eax);
   end ga_cp;
 
-  function ga_cons_idx(a, b, c: in num_var) return String is
+  function ga_cons_idx(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
   begin
     return  ga_load(c, eax) 
           & ga_load_address(b, esi)
@@ -346,7 +353,10 @@ package body semantica.g_codi_ass is
           & ga_store(a, eax);
   end ga_cons_idx;
 
-  function ga_cp_idx(a, b, c: in num_var) return String is
+  function ga_cp_idx(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
   begin
     return  ga_load(b, eax) 
           & ga_load(c, ebx)
@@ -356,7 +366,10 @@ package body semantica.g_codi_ass is
   end ga_cp_idx;
 
   --Instruccions artimetic-logiques
-  function ga_sum(a, b, c: in num_var) return String is
+  function ga_sum(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
   begin
     return  ga_load(b, eax)
           & ga_load(c, ebx)
@@ -364,7 +377,10 @@ package body semantica.g_codi_ass is
           & ga_store(a, eax);
   end ga_sum;
 
-  function ga_res(a, b, c: in num_var) return String is
+  function ga_res(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
   begin
     return  ga_load(b, eax)
           & ga_load(c, ebx)
@@ -372,7 +388,10 @@ package body semantica.g_codi_ass is
           & ga_store(a, eax);
   end ga_res;
 
-  function ga_mul(a, b, c: in num_var) return String is
+  function ga_mul(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
   begin
     return  ga_load(b, eax) 
           & ga_load(c, ebx)
@@ -380,7 +399,10 @@ package body semantica.g_codi_ass is
           & ga_store(a, eax);
   end ga_mul;
 
-  function ga_div(a, b, c: in num_var) return String is
+  function ga_div(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
   begin
     return  ga_load(b, eax)
           & "movl %eax, %edx"
@@ -389,7 +411,10 @@ package body semantica.g_codi_ass is
           & ga_store(a, eax);
   end ga_div;
 
-  function ga_modul(a, b, c: in num_var) return String is
+  function ga_modul(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
   begin
     return  ga_load(b, eax)
           & "movl %eax, %edx"
@@ -398,21 +423,30 @@ package body semantica.g_codi_ass is
           & ga_store(a, edx);
   end ga_modul;
 
-  function ga_neg(a, b: in num_var) return String is 
+  function ga_neg(i3a: in instr_3a) return String is 
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
   begin
     return  ga_load(b, eax)
           & "negl %eax" & newline
           & ga_store(a, eax);
   end ga_neg;
 
-  function ga_op_not(a, b: in num_var) return String is 
+  function ga_op_not(i3a: in instr_3a) return String is 
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
   begin
     return  ga_load(b, eax)
           & "notl %eax" & newline
           & ga_store(a, eax);
   end ga_op_not;
 
-  function ga_op_and(a, b, c: in num_var) return String is
+  function ga_op_and(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
   begin
     return  ga_load(b, eax)
           & ga_load(c, ebx)
@@ -420,7 +454,10 @@ package body semantica.g_codi_ass is
           & ga_store(a, eax);
   end ga_op_and;
 
-  function ga_op_or(a, b, c: in num_var) return String is
+  function ga_op_or(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
   begin
     return  ga_load(b, eax)
           & ga_load(c, ebx)
@@ -440,7 +477,10 @@ package body semantica.g_codi_ass is
     return  "jmp  E" & num_etiq'Image(e) & newline;
   end ga_goto;
   
-  function ga_ieq_goto(a, b: in num_var; e: in num_etiq) return String is
+  function ga_ieq_goto(i3a: in instr_3a) return String is
+    e: constant num_etiq:= consulta_arg_ne(i3a);
+    a: constant num_var:= consulta_arg2(i3a);
+    b: constant num_var:= consulta_arg3(i3a);
     e1: num_etiq;
   begin
     nova_etiq(ne, e1);
@@ -453,7 +493,10 @@ package body semantica.g_codi_ass is
   end ga_ieq_goto;
 
   
-  function ga_gt(a, b, c: in num_var) return String is
+  function ga_gt(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
     e, e1: num_etiq;
   begin
     nova_etiq(ne, e);
@@ -471,7 +514,10 @@ package body semantica.g_codi_ass is
   end ga_gt;
   
   
-  function ga_ge(a, b, c: in num_var) return String is
+  function ga_ge(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
     e, e1: num_etiq;
   begin
     nova_etiq(ne, e);
@@ -489,7 +535,10 @@ package body semantica.g_codi_ass is
   end ga_ge;
   
   
-  function ga_eq(a, b, c: in num_var) return String is
+  function ga_eq(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
     e, e1: num_etiq;
   begin
     nova_etiq(ne, e);
@@ -507,7 +556,10 @@ package body semantica.g_codi_ass is
   end ga_eq;
  
 
-  function ga_neq(a, b, c: in num_var) return String is
+  function ga_neq(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
     e, e1: num_etiq;
   begin
     nova_etiq(ne, e);
@@ -525,7 +577,10 @@ package body semantica.g_codi_ass is
   end ga_neq;
   
   
-  function ga_le(a, b, c: in num_var) return String is
+  function ga_le(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
     e, e1: num_etiq;
   begin
     nova_etiq(ne, e);
@@ -543,7 +598,10 @@ package body semantica.g_codi_ass is
   end ga_le;
   
   
-  function ga_lt(a, b, c: in num_var) return String is
+  function ga_lt(i3a: in instr_3a) return String is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
     e, e1: num_etiq;
   begin
     nova_etiq(ne, e);

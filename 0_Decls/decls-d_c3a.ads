@@ -5,7 +5,7 @@ with decls.d_tsimbols; use decls.d_tsimbols;
 package decls.d_c3a is
 
   type discr_instruccio is (comu, proc, etiq);
-  type instr_3a(d: discr_instruccio) is private;
+  type instr_3a(d: discr_instruccio:= comu) is private;
   type instr_3a_bin is private;
 
   type tinstruccio is (
@@ -59,19 +59,26 @@ package decls.d_c3a is
   function To_i3a_bin(i3a: in instr_3a) return instr_3a_bin;
   function To_i3a(i3a_b: in instr_3a_bin) return instr_3a;
 
-  -- Es l'unica manera de mantenir la privacitat del tipus variable. Si escau
-  -- aplicar aquest esquema als camps necessaris a posteriori d'aquest tipus
+  -- funcions per consultar els camps de les instruccions
+  function consulta_tipus(i3a: in instr_3a) return tinstruccio;
+  function consulta_arg_nv(i3a: in instr_3a) return num_var;
+  function consulta_arg_np(i3a: in instr_3a) return num_proc;
+  function consulta_arg_ne(i3a: in instr_3a) return num_etiq;
+  function consulta_arg2(i3a: in instr_3a) return num_var;
+  function consulta_arg3(i3a: in instr_3a) return num_var;
+
+  -- funcions per consultar els camps de les variables
   function consulta_val_const(tv: in tvariables; nv: in num_var) return valor;
   function consulta_np_var(tv: in tvariables; nv: in num_var) return num_proc;
   function consulta_desp_var(tv: in tvariables; nv: in num_var) return despl;
   function es_var(tv: in tvariables; nv: in num_var) return boolean;
 
   function consulta_prof_proc(tp: in tprocediments; np: in num_proc) return profunditat;
-  pragma Inline(nou_proc, nova_etiq, Value, consulta_val_const);
+  pragma Inline(nou_proc, nova_etiq, Value, consulta_tipus, consulta_val_const, consulta_np_var, consulta_desp_var, es_var);
 
 private
 
-  type instr_3a (d: discr_instruccio) is
+  type instr_3a (d: discr_instruccio:= comu) is
     record
       t: tinstruccio;
       b: num_var;

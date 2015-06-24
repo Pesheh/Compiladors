@@ -151,6 +151,39 @@ package body decls.d_c3a is
     end case;
   end To_i3a;
 
+
+  function consulta_tipus(i3a: in instr_3a) return tinstruccio is
+  begin
+    return i3a.t;
+  end consulta_tipus;
+
+
+  function consulta_arg_nv(i3a: in instr_3a) return num_var is
+  begin
+    return i3a.nv;
+  end consulta_arg_nv;
+
+
+  function consulta_arg_np(i3a: in instr_3a) return num_proc is
+  begin
+    return i3a.np;
+  end consulta_arg_np;
+
+
+  function consulta_arg_ne(i3a: in instr_3a) return num_etiq is
+  begin
+    return i3a.ne;
+  end consulta_arg_ne;
+
+  function consulta_arg2(i3a: in instr_3a) return num_var is
+    return i3a.b;
+  end consulta_arg2;
+
+  function consulta_arg3(i3a: in instr_3a) return num_var is
+    return i3a.c;
+  end consulta_arg3;
+
+
   -- Es l'unica manera de mantenir la privacitat del tipus variable. Si escau
   -- aplicar aquest esquema als camps necessaris a posteriori d'aquest tipus
   function consulta_val_const(tv: in tvariables; nv: in num_var) return valor is

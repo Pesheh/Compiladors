@@ -1,6 +1,7 @@
 with Ada.Text_IO; --TMP
 with semantica.missatges;
 with semantica.g_codi_int;
+with semantica.g_codi_ass;
 package body semantica is
 
 --procedure print_arbre is
@@ -14,7 +15,7 @@ package body semantica is
     -- guarda el nom del fitxer
     -- per si mes tard s'ha d'emprar
     semantica.g_codi_int.prepara_g_codi_int(nomf);
-  -- FALTA DEFINIR::  prepara_g_codi_ass(nomf);
+    semantica.g_codi_ass.prepara_g_codi_ass(nomf);
 
     empty(tn);
     empty(ts);

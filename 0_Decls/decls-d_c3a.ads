@@ -62,7 +62,11 @@ package decls.d_c3a is
   -- Es l'unica manera de mantenir la privacitat del tipus variable. Si escau
   -- aplicar aquest esquema als camps necessaris a posteriori d'aquest tipus
   function consulta_val_const(tv: in tvariables; nv: in num_var) return valor;
+  function consulta_np_var(tv: in tvariables; nv: in num_var) return num_proc;
+  function consulta_desp_var(tv: in tvariables; nv: in num_var) return despl;
+  function es_var(tv: in tvariables; nv: in num_var) return boolean;
 
+  function consulta_prof_proc(tp: in tprocediments; np: in num_proc) return profunditat;
   pragma Inline(nou_proc, nova_etiq, Value, consulta_val_const);
 
 private

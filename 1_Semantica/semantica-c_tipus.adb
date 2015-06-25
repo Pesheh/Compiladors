@@ -167,7 +167,7 @@ package body semantica.c_tipus is
     --putc
     put(tn, "putc", idstdio);
     nova_etiq(ne, e);
-    nou_proc(np, tp, e, prof, 1, p);
+    nou_proc_std(np, tp, idstdio, prof, 1, p);
     desc:= (td=>dproc, np=> p); 
     empila(pproc, np);
     put(ts, idstdio, desc, error);
@@ -185,7 +185,7 @@ package body semantica.c_tipus is
     --puti
     put(tn, "puti", idstdio);
     nova_etiq(ne, e);
-    nou_proc(np, tp, e, prof, 1, p);
+    nou_proc_std(np, tp, idstdio, prof, 1, p);
     desc:= (td=>dproc, np=> p);
     empila(pproc, np);
     put(ts, idstdio, desc, error);
@@ -204,7 +204,7 @@ package body semantica.c_tipus is
     --puts
     put(tn, "puts", idstdio);
     nova_etiq(ne, e);
-    nou_proc(np, tp, e, prof, 1, p);
+    nou_proc_std(np, tp, idstdio, prof, 1, p);
     desc:= (td=>dproc, np=> p);
     empila(pproc, np);
     put(ts, idstdio, desc, error);
@@ -214,16 +214,15 @@ package body semantica.c_tipus is
     end if;
 
     put(tn, "s", id_arg);
-    -- cridar metode long_str a tnoms
-    nova_var(nv, tv, tp, np, ocup_char*0, t);
+    nova_var(nv, tv, tp, np, ocup_ent, t); -- passam l'ids
     --cuando no tiene tipus es un string
-    desc_arg:=(td=>dargc, ta=> null_id, na=> t); -- string::{ocup: ¿?, despl: 0}
+    desc_arg:=(td=>dargc, ta=> null_id, na=> t); -- string::{ocup: 4B, despl: 0}
     put_arg(ts, idstdio, id_arg, desc_arg, error);
 
     --newline
     put(tn, "newline", idstdio);
     nova_etiq(ne, e);
-    nou_proc(np, tp, e, prof, 0, p);
+    nou_proc_std(np, tp, idstdio, prof, 0, p);
     desc:= (td=>dproc, np=> p);
     empila(pproc, np);
     put(ts, idstdio, desc, error);
@@ -235,7 +234,7 @@ package body semantica.c_tipus is
     --geti
     put(tn, "geti", idstdio);
     nova_etiq(ne, e);
-    nou_proc(np, tp, e, prof, 0, p);
+    nou_proc_std(np, tp, idstdio, prof, 0, p);
     desc:= (td=>dproc, np=> p); -- ocupacio? 0 params?
     put(ts, idstdio, desc, error);
     if error then
@@ -251,7 +250,7 @@ package body semantica.c_tipus is
     --getc -> per caracters de 4 bytes(com es el nostre cas)
     put(tn, "getc", idstdio);
     nova_etiq(ne, e);
-    nou_proc(np, tp, e, prof, 0, p);
+    nou_proc_std(np, tp, idstdio, prof, 0, p);
     desc:= (td=>dproc, np=> p);
     empila(pproc, np);
     put(ts, idstdio, desc, error);
@@ -268,7 +267,7 @@ package body semantica.c_tipus is
     --getcc -> per caracters de 1 byte( en cas que lo necessitem)
     put(tn, "getcc", idstdio);
     nova_etiq(ne, e);
-    nou_proc(np, tp, e, prof, 0, p);
+    nou_proc_std(np, tp, idstdio, prof, 0, p);
     desc:= (td=>dproc, np=> p);
     empila(pproc, np);
     put(ts, idstdio, desc, error);

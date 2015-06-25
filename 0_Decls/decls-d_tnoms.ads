@@ -38,8 +38,8 @@ private
     type tnoms is
         record
             td: disp_table:= (others=> null_id);
-            tid: id_table:= (others=> (null_id, 0));
-            ts: str_table:= (others=> max_ch);
+            tid: id_table;
+            ts: str_table;
             tc: char_table;
             nid: id_nom:= null_id;--num idents
             ns: id_str:= 0;--num strings

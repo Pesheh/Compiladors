@@ -1,6 +1,7 @@
 with Ada.Sequential_IO;
 with decls.d_descripcio; use decls.d_descripcio;
 with decls.d_tsimbols; use decls.d_tsimbols;
+with decls.d_tnoms; use decls.d_tnoms;
 
 package decls.d_c3a is
 
@@ -42,6 +43,7 @@ package decls.d_c3a is
   procedure nova_var(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; ocup: in despl; t: out num_var);
   procedure nova_var_const(nv: in out num_var; tv: in out tvariables; val: in valor; tsb: in tipus_subjacent; t: out num_var);
   procedure nou_proc(np: in out num_proc; tp: in out tprocediments; e: in num_etiq; prof: in profunditat; nparam: in natural; p: out num_proc);
+  procedure nou_proc_std(np: in out num_proc; tp: in out tprocediments; id: in id_nom; prof: in profunditat; nparam: in natural; p: out num_proc);
   procedure nova_etiq (ne: in out num_etiq; e: out num_etiq);
 
   procedure act_proc_args(tp: in out tprocediments; np: in num_proc; nargs: in natural);
@@ -76,9 +78,9 @@ package decls.d_c3a is
   function consulta_prof_proc(tp: in tprocediments; np: in num_proc) return profunditat;
   function consulta_ocup_proc(tp: in tprocediments; np: in num_proc) return despl;
   function consulta_etiq_proc(tp: in tprocediments; np: in num_proc) return num_etiq;
+  function consulta_nom_proc(tp: in tprocediments; np: in num_proc; tn: in tnoms) return String;
   function consulta_nparam_proc(tp: in tprocediments; np: in num_proc) return natural;
-  
-  pragma Inline(nou_proc, nova_etiq, Value, consulta_tipus, consulta_val_const, consulta_np_var, consulta_desp_var, es_var);
+
 
 private
 
@@ -108,11 +110,10 @@ private
       c: integer;
     end record;
 
-  esvar: constant boolean:= true;
-  esconst: constant boolean:= false;
-  type e_tvar (e: boolean) is
+  type tvar is (esvar, esconst);
+  type e_tvar (tv: tvar) is
     record
-      case e is
+      case tv is
         when esvar =>
           np: num_proc;
           ocup: despl;
@@ -123,18 +124,26 @@ private
       end case;
     end record;
 
-  -- Es l'unica manera de poder tenir un array d'elements de tamany "variable"
   type pe_tvar is access e_tvar;
 
-  type e_tproc is
+
+  type tproc is (std, comu);
+  type e_tproc (tp: tproc)is
     record
-      e: num_etiq;
       prof: profunditat;
-      ocup_vl: despl;
       nparam: natural;
+      case tp is
+        when comu =>
+          e: num_etiq;
+          ocup_vl: despl;
+        when std =>
+          id: id_nom;
+      end case;
     end record;
 
+  type pe_tproc is access e_tproc;
+
   type tvariables is array (num_var) of pe_tvar;
-  type tprocediments is array (num_proc) of e_tproc;
+  type tprocediments is array (num_proc) of pe_tproc;
 
 end decls.d_c3a;

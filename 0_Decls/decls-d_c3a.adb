@@ -212,5 +212,19 @@ package body decls.d_c3a is
   begin
     return tp(np).prof;
   end consulta_prof_proc;
-
+  
+  function consulta_ocup_proc(tp: in tprocediments; np: in num_proc) return despl is
+  begin
+    return tp(np).ocup_vl;
+  end consulta_ocup_proc;
+  
+  function consulta_etiq_proc(tp: in tprocediments; np: in num_proc) return num_etiq is
+  begin
+    return tp(np).e;
+  end consulta_etiq_proc;
+  
+  function consulta_nparam_proc(tp: in tprocediments; np: in num_proc) return natural is
+  begin
+    return tp(np).nparam;
+  end consulta_nparam_proc;
 end decls.d_c3a;

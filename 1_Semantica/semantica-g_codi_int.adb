@@ -500,13 +500,13 @@ package body semantica.g_codi_int is
     if p.eop_operand = nul then
       gc_et(p.eop_opd, r, d);
     elsif p.eop_operand = neg_alg or p.eop_operand = neg_log then
+      nova_var(nv, tv, tp, cim(pproc), ocup_ent, t);
       gc_et(p.eop_opd, r1, d1);
+        desref(r1, d1, t1);
       if p.eop_operand = neg_alg then
-        desref(r1, d1, t);
-        genera(Value(neg, t, null_nv, null_nv));
+        genera(Value(neg, t, t1, null_nv));
       else
-        desref(r1, d1, t);
-        genera(Value(op_not, t, null_nv, null_nv));
+        genera(Value(op_not, t, t1, null_nv));
       end if;
       r:= t;
       d:= null_nv;

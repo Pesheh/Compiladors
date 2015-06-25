@@ -44,6 +44,7 @@ package decls.d_tsimbols is
 
     function get_prof(ts: in tsimbols) return profunditat;
     function "<"(prof1, prof2: in profunditat) return boolean;
+    function value(prof: in profunditat) return integer;
     no_es_tipus, no_es_record, no_es_array, no_es_proc, mal_us: exception;
 
 private

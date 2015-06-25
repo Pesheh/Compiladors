@@ -247,5 +247,10 @@ else te(iep).next:= ie;
   begin
     return Integer(prof1) < Integer(prof2);
   end "<";
+    
+  function value(prof: in profunditat) return integer is
+  begin
+    return Integer(prof);
+  end value;
 
 end decls.d_tsimbols;

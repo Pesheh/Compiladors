@@ -226,6 +226,12 @@ package body decls.d_c3a is
   end es_var;
 
 
+  function consulta_tproc(tp: in tprocediments; np: in num_proc) return tproc is
+  begin
+    return tp(np).tp;
+  end consulta_tproc;
+
+
   function consulta_prof_proc(tp: in tprocediments; np: in num_proc) return profunditat is
   begin
     return tp(np).prof;

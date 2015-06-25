@@ -37,6 +37,8 @@ package decls.d_c3a is
     params,
     paramc
   );
+  type tproc is (std, comu);
+
   type tvariables is limited private;
   type tprocediments is limited private;
 
@@ -75,6 +77,7 @@ package decls.d_c3a is
   function consulta_desp_var(tv: in tvariables; nv: in num_var) return despl;
   function es_var(tv: in tvariables; nv: in num_var) return boolean;
 
+  function consulta_tproc(tp: in tprocediments; np: in num_proc) return tproc;
   function consulta_prof_proc(tp: in tprocediments; np: in num_proc) return profunditat;
   function consulta_ocup_proc(tp: in tprocediments; np: in num_proc) return despl;
   function consulta_etiq_proc(tp: in tprocediments; np: in num_proc) return num_etiq;
@@ -127,7 +130,6 @@ private
   type pe_tvar is access e_tvar;
 
 
-  type tproc is (std, comu);
   type e_tproc (tp: tproc)is
     record
       prof: profunditat;

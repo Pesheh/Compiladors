@@ -1,0 +1,32 @@
+proc main is
+  type elem_p1 is
+    record
+      i: integer;
+      j: integer;
+      k: integer;
+    end record;
+
+  type rangi is new integer range -1..1;
+  type a_elem_p1 is array(rangi) of elem_p1;
+
+  type elem_p2 is
+    record
+      p1: a_elem_p1;
+      b: character;
+    end record;
+
+  a: elem_p2;
+  i: rangi;
+
+begin
+  i:= -1;
+  while i < 1 loop
+    a.p1(i).i:= 0;
+    a.p1(i).j:= 1;
+    a.p1(i).k:= 2;
+    i:= i+1;
+  end loop;
+
+  a.b:= 'c';
+
+end proc;

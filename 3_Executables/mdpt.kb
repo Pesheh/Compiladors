@@ -1,0 +1,9 @@
+proc A is
+  B: integer;
+  proc C(b: in out integer; a: in character) is
+  begin
+    b:= 0;
+  end proc;
+begin
+  C(b, 'c');
+end proc;

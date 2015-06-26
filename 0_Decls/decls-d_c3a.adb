@@ -219,6 +219,12 @@ package body decls.d_c3a is
     return tv(nv).all.val;
   end consulta_val_const;
 
+  
+  function consulta_tsb_const(tv: in tvariables; nv: in num_var) return tipus_subjacent is
+  begin
+    return tv(nv).all.tsb;
+  end consulta_tsb_const;
+
 
   function consulta_np_var(tv: in tvariables; nv: in num_var) return num_proc is
   begin
@@ -231,6 +237,10 @@ package body decls.d_c3a is
     return tv(nv).all.desp;
   end consulta_desp_var;
 
+  function consulta_ocup_var(tv: in tvariables; nv: in num_var) return despl is
+  begin
+    return tv(nv).all.ocup;
+  end consulta_ocup_var;
 
   function es_var(tv: in tvariables; nv: in num_var) return boolean is
   begin
@@ -284,5 +294,14 @@ package body decls.d_c3a is
   begin
     return tp(np).nparam;
   end consulta_nparam_proc;
-
+  
+  procedure actualitza_ocupvl_proc(tp: in out tprocediments; np: in num_proc; ocup: in despl) is
+  begin
+    tp(np).ocup_vl:=ocup;
+  end actualitza_ocupvl_proc;
+  
+  procedure actualitza_desp_var(tv: in out tvariables; nv: in num_var; desp: in despl) is
+  begin
+    tv(nv).all.desp:=desp;
+  end actualitza_desp_var;
 end decls.d_c3a;

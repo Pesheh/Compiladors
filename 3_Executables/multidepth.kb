@@ -1,0 +1,23 @@
+proc A is
+  a: integer;
+  proc B is
+    type tB is new integer range 0..1;
+    type aB is array(tB) of character;
+    a: tB;
+    b: aB;
+    proc C (a: in out tB) is
+    begin
+      a:= 0;
+      while a < 1 loop
+        b(a):= 'a';
+        a:= a+1;
+      end loop;
+    end proc;
+  begin
+    C(a);
+  end proc;
+begin
+  a:= 0;
+  B;
+  puti(a);
+end proc;

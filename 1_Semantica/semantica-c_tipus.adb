@@ -70,7 +70,7 @@ package body semantica.c_tipus is
   procedure ct_et_ref(nd_ref: in out pnode; id_texpr: out id_nom; tsb_expr: out tipus_subjacent; esvar: out boolean; pos: in out posicio);
 
   --Auxiliar
-  function tipus_compatible(id_tipus1, id_tipus2: in id_nom; tsb1, tsb2: in tipus_subjacent; id_texp: out id_nom; tsb_exp: out tipus_subjacent) return boolean;
+  procedure tipus_compatible(id_tipus1, id_tipus2: in id_nom; tsb1, tsb2: in tipus_subjacent; id_texp: out id_nom; tsb_exp: out tipus_subjacent; error: out boolean);
 
 
 
@@ -167,7 +167,6 @@ package body semantica.c_tipus is
     --STDIO
     --putc
     put(tn, "putc", idstdio);
-    nova_etiq(ne, e);
     nou_proc_std(np, tp, idstdio, prof, 1, p);
     desc:= (td=>dproc, np=> p); 
     empila(pproc, np);
@@ -185,7 +184,6 @@ package body semantica.c_tipus is
 
     --puti
     put(tn, "puti", idstdio);
-    nova_etiq(ne, e);
     nou_proc_std(np, tp, idstdio, prof, 1, p);
     desc:= (td=>dproc, np=> p);
     empila(pproc, np);
@@ -204,7 +202,6 @@ package body semantica.c_tipus is
 
     --puts
     put(tn, "puts", idstdio);
-    nova_etiq(ne, e);
     nou_proc_std(np, tp, idstdio, prof, 1, p);
     desc:= (td=>dproc, np=> p);
     empila(pproc, np);
@@ -222,8 +219,7 @@ package body semantica.c_tipus is
 
     --newline
     put(tn, "newline", idstdio);
-    nova_etiq(ne, e);
-    nou_proc_std(np, tp, idstdio, prof, 0, p);
+    --nova_etiq(ne, e);
     desc:= (td=>dproc, np=> p);
     empila(pproc, np);
     put(ts, idstdio, desc, error);
@@ -234,7 +230,6 @@ package body semantica.c_tipus is
 
     --geti
     put(tn, "geti", idstdio);
-    nova_etiq(ne, e);
     nou_proc_std(np, tp, idstdio, prof, 0, p);
     desc:= (td=>dproc, np=> p); -- ocupacio? 0 params?
     put(ts, idstdio, desc, error);
@@ -250,7 +245,6 @@ package body semantica.c_tipus is
 
     --getc -> per caracters de 4 bytes(com es el nostre cas)
     put(tn, "getc", idstdio);
-    nova_etiq(ne, e);
     nou_proc_std(np, tp, idstdio, prof, 0, p);
     desc:= (td=>dproc, np=> p);
     empila(pproc, np);
@@ -267,7 +261,6 @@ package body semantica.c_tipus is
 
     --getcc -> per caracters de 1 byte( en cas que lo necessitem)
     put(tn, "getcc", idstdio);
-    nova_etiq(ne, e);
     nou_proc_std(np, tp, idstdio, prof, 0, p);
     desc:= (td=>dproc, np=> p);
     empila(pproc, np);
@@ -1141,11 +1134,17 @@ package body semantica.c_tipus is
 
     end case;
 
-    if id_texpr = null_id then
-      desc_tipus_arg:= get(ts, id_tipus_arg);
-      if desc_tipus_arg.dt.tsb /= tsb_expr then
-        ERROR:= true;
-        missatges_tipus_incosistent_lit(pos, id_tipus_arg, tsb_expr);
+     if id_texpr = null_id then
+      if id_tipus_arg /= null_id then
+        desc_tipus_arg:= get(ts, id_tipus_arg);
+        if desc_tipus_arg.dt.tsb /= tsb_expr then
+          ERROR:= true;
+          missatges_tipus_incosistent_lit(pos, id_tipus_arg, tsb_expr);
+        end if;
+      else 
+        if desc_arg.td /=dargc then
+          ERROR:=true;
+        end if;
       end if;
     else
       if id_tipus_arg /= id_texpr then
@@ -1190,6 +1189,7 @@ package body semantica.c_tipus is
         if desc_camp.td /= dcamp then
           ERROR:= true;
           missatges_camp_no_record(pos, id_tipus, id_camp);
+          return;
         end if;
         id_tipus:= desc_camp.tcmp;
 
@@ -1322,6 +1322,7 @@ package body semantica.c_tipus is
     tsb1, tsb2: tipus_subjacent;
     esvar1, esvar2: boolean;
     pos1, pos2: posicio:= (0, 0);
+    error: boolean;
   begin
     if nd_e.e_ope.tn = nd_and or else nd_e.e_ope.tn = nd_or then
       ct_e(nd_e.e_ope, id_tipus1, tsb1, esvar1, pos1);
@@ -1330,7 +1331,8 @@ package body semantica.c_tipus is
     end if;
     ct_eop(nd_e.e_opd, id_tipus2, tsb2, esvar2, pos2);
 
-    if tipus_compatible(id_tipus1, id_tipus2, tsb1, tsb2, id_texpr, tsb_expr) then
+    tipus_compatible(id_tipus1, id_tipus2, tsb1, tsb2, id_texpr, tsb_expr, error);
+    if error then
       ERROR:= true;
       missatges_expressions_incompatibles(pos1, id_tipus1, id_tipus2);
     end if;
@@ -1386,7 +1388,7 @@ package body semantica.c_tipus is
     ct_eop(nd_e.eop_ope, id_tipus1, tsb1, esvar1, pos1);
     ct_eop(nd_e.eop_opd, id_tipus2, tsb2, esvar2, pos2);
 
-    error:= tipus_compatible(id_tipus1, id_tipus2, tsb1, tsb2, id_texpr, tsb_expr);
+    tipus_compatible(id_tipus1, id_tipus2, tsb1, tsb2, id_texpr, tsb_expr, error);
 
     if tsb1 > tsb_ent then
       ERROR:= true;
@@ -1405,11 +1407,13 @@ package body semantica.c_tipus is
     tsb1, tsb2: tipus_subjacent;
     esvar1, esvar2: boolean;
     pos1, pos2: posicio:= (0, 0);
+    error: boolean;
   begin
     ct_eop(nd_e.eop_ope, id_tipus1, tsb1, esvar1, pos1);
     ct_eop(nd_e.eop_opd, id_tipus2, tsb2, esvar2, pos2);
 
-    if tipus_compatible(id_tipus1, id_tipus2, tsb1, tsb2, id_texpr, tsb_expr) then
+    tipus_compatible(id_tipus1, id_tipus2, tsb1, tsb2, id_texpr, tsb_expr, error);
+    if error then
       ERROR:= true;
       missatges_expressions_incompatibles(pos1, id_tipus1, id_tipus2);
     end if;
@@ -1510,10 +1514,10 @@ package body semantica.c_tipus is
   end ct_et_lit;
 
 
-  function tipus_compatible(id_tipus1, id_tipus2: in id_nom; tsb1, tsb2: in tipus_subjacent;
-                            id_texp: out id_nom; tsb_exp: out tipus_subjacent) return boolean is
-    error: boolean:= false;
+  procedure tipus_compatible(id_tipus1, id_tipus2: in id_nom; tsb1, tsb2: in tipus_subjacent;
+    id_texp: out id_nom; tsb_exp: out tipus_subjacent; error: out boolean) is
   begin
+    error:=false;
     if id_tipus1 = null_id and id_tipus2 = null_id then
       if tsb1 /= tsb2 then error:= true; end if;
       id_texp:= null_id; tsb_exp:= tsb1;
@@ -1531,7 +1535,6 @@ package body semantica.c_tipus is
       id_texp:= id_tipus1; tsb_exp:= tsb1;
 
     end if;
-    return error;
   end tipus_compatible;
 
 end semantica.c_tipus;

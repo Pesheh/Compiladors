@@ -1,0 +1,5 @@
+proc main is
+  a: integer;
+begin
+  putc('c');
+end proc;

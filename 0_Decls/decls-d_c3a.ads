@@ -74,8 +74,10 @@ package decls.d_c3a is
 
   -- funcions per consultar els camps de les variables
   function consulta_val_const(tv: in tvariables; nv: in num_var) return valor;
+  function consulta_tsb_const(tv: in tvariables; nv: in num_var) return tipus_subjacent;
   function consulta_np_var(tv: in tvariables; nv: in num_var) return num_proc;
   function consulta_desp_var(tv: in tvariables; nv: in num_var) return despl;
+  function consulta_ocup_var(tv: in tvariables; nv: in num_var) return despl;
   function es_var(tv: in tvariables; nv: in num_var) return boolean;
 
   function consulta_tproc(tp: in tprocediments; np: in num_proc) return tproc;
@@ -85,6 +87,9 @@ package decls.d_c3a is
   function consulta_nom_proc(tp: in tprocediments; np: in num_proc; tn: in tnoms) return String;
   function consulta_nparam_proc(tp: in tprocediments; np: in num_proc) return natural;
 
+  --Procediments per actualitzar els campsde les variables/procs
+  procedure actualitza_ocupvl_proc(tp: in out tprocediments; np: in num_proc; ocup: in despl);
+  procedure actualitza_desp_var(tv: in out tvariables; nv: in num_var; desp: in despl);
 
 private
 

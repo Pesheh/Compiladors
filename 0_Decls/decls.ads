@@ -7,9 +7,9 @@ package decls is
   type despl is new integer;
 
   ocup_ent: constant despl:= 4; -- 4Bytes x enter
-  ocup_char: constant despl:= ocup_ent; -- 4Bytes x char (simplificacio) 
+  ocup_char: constant despl:= ocup_ent; -- 4Bytes x char (simplificacio)
   ocup_bool: constant despl:= ocup_char; -- 4Bytes x bool (simplificacio).
-  -- Aquests 2 serien els que teoricament hauriem d'emprar
+  -- Aquests 2 serien els que teoricament hauriem d'emprar però per simplicitat no ho feim
   ocup_char_compressed: constant despl:= 1; -- 1Byte x char
   ocup_bool_compressed: constant despl:= ocup_char_compressed; -- 1Byte x boolean
 

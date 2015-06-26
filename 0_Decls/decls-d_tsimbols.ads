@@ -16,12 +16,12 @@ package decls.d_tsimbols is
     procedure update(ts: in out tsimbols; id: in id_nom; d: in descripcio);
 
 
-  -- Operacions de record
+    -- Operacions de record
     procedure put_camp(ts: in out tsimbols; idr,idc: in id_nom; dc: in descripcio; error: out boolean); --idr: id record , idc: id camp
     function get_camp(ts: in tsimbols; idr,idc: in id_nom) return descripcio;
 
 
-  -- Operacions d'array
+    -- Operacions d'array
     procedure put_index(ts: in out tsimbols; ida: in id_nom; di: in descripcio);
     procedure first(ts: in tsimbols; ida: in id_nom; it: out iterador_index);
     procedure next(ts: in tsimbols; it: in out iterador_index);
@@ -29,7 +29,7 @@ package decls.d_tsimbols is
     function is_valid(it: in iterador_index) return boolean;
 
 
-  -- Operacions de procediment
+    -- Operacions de procediment
     procedure put_arg(ts: in out tsimbols; idp,ida: in id_nom; da: in descripcio; error: out boolean);
     procedure first(ts: in tsimbols; idp: in id_nom; it: out iterador_arg);
     procedure next(ts: in tsimbols; it: in out iterador_arg);
@@ -37,7 +37,7 @@ package decls.d_tsimbols is
     function is_valid(it: in iterador_arg) return boolean;
 
 
-    -- Operacions del compilador! :)
+    -- Operacions del compilador!
     procedure enter_block(ts: in out tsimbols);
     procedure exit_block(ts: in out tsimbols);
 
@@ -50,7 +50,6 @@ private
 
     type index_expansio is new integer range 0..max_id;
 
-    --Sinceramente no se que maximo ponerle
     type profunditat is new integer range -1..100;
 
     type te_item;
@@ -69,7 +68,6 @@ private
             next: index_expansio;
         end record;
 
-    --!!!los rangos no estan bien puestos!!!
     type tdescripcio is array (id_nom) of td_item;
     type texpansio is array (index_expansio) of te_item;
     type tblocks is array (profunditat) of index_expansio;

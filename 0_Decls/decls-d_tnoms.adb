@@ -112,7 +112,7 @@ package body decls.d_tnoms is
   function get(tn: in tnoms; ids: in id_str) return string is
     tc: char_table renames tn.tc;
     ts: str_table renames tn.ts;
-    ns: id_str renames tn.ns;--number of stored strings
+    ns: id_str renames tn.ns;
     i,j: integer;
   begin
     if ids=0 or ids>ns then raise bad_use; end if;

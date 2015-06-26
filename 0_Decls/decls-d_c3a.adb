@@ -1,4 +1,3 @@
-with Ada.Text_IO;
 with decls.d_tnoms;
 with semantica; use semantica;
 package body decls.d_c3a is
@@ -13,6 +12,7 @@ package body decls.d_c3a is
     else
       -- si portessim a terme una etapa d'optimitzacio, aixo hauria de calcular-se
       -- un cop hagues acabat l'esmentada etapa (es absurd calcular una ocupacio que canviara).
+      -- però com que no es el cas, ho feim aquí
       if tp(np).ocup_vl = 0 then
         tv(nv):= new e_tvar'(esvar, np, ocup, 0 - ocup_ent);
         tp(np).ocup_vl:= ocup;
@@ -22,7 +22,6 @@ package body decls.d_c3a is
         tp(np).ocup_vl:= i + ocup;
       end if;
     end if;
-
     t:= nv;
   end nova_var;
 
@@ -31,23 +30,14 @@ package body decls.d_c3a is
   begin
     nv:= nv+1;
     tv(nv):= new e_tvar'(esconst, val, tsb);
-
-    --if DEBUG then
-      Ada.Text_IO.Put_Line("nova_var_const:nvc::"
-      &num_var'Image(nv)&"::"
-      &valor'Image(val)&"::"
-      &tipus_subjacent'Image(tsb));
-    --end if;
-
     t:= nv;
   end nova_var_const;
 
-  procedure nou_arg(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; ocup: in despl; offset: in out despl; t: out num_var) is
+  procedure nou_arg(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; offset: in out despl; t: out num_var) is
   begin
     nv:= nv+1;
-    tv(nv):= new e_tvar'(esvar, np, ocup, offset);
-    offset:= offset + ocup;
-
+    tv(nv):= new e_tvar'(esvar, np, ocup_ent, offset);
+    offset:= offset + ocup_ent;
     t:= nv;
   end nou_arg;
 
@@ -219,7 +209,7 @@ package body decls.d_c3a is
     return tv(nv).all.val;
   end consulta_val_const;
 
-  
+
   function consulta_tsb_const(tv: in tvariables; nv: in num_var) return tipus_subjacent is
   begin
     return tv(nv).all.tsb;
@@ -294,12 +284,12 @@ package body decls.d_c3a is
   begin
     return tp(np).nparam;
   end consulta_nparam_proc;
-  
+
   procedure actualitza_ocupvl_proc(tp: in out tprocediments; np: in num_proc; ocup: in despl) is
   begin
     tp(np).ocup_vl:=ocup;
   end actualitza_ocupvl_proc;
-  
+
   procedure actualitza_desp_var(tv: in out tvariables; nv: in num_var; desp: in despl) is
   begin
     tv(nv).all.desp:=desp;

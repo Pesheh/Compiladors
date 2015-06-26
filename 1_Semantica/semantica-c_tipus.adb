@@ -744,7 +744,7 @@ package body semantica.c_tipus is
     despl_args:= 2*ocup_ent;
     first(ts, id_proc, it); nargs:= 0;
     while is_valid(it) loop
-      nou_arg(nv, tv, tp, cim(pproc), ocup_ent, despl_args, t);
+      nou_arg(nv, tv, tp, cim(pproc), despl_args, t);
       get(ts, it, id_arg, desc_arg);
       if desc_arg.td = dvar then
         desc_arg.nv:= t;

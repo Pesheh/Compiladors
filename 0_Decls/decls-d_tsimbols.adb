@@ -1,4 +1,3 @@
-with Ada.Text_IO; use Ada.Text_IO;
 with semantica; use semantica;
 with semantica.missatges; use semantica.missatges;
 package body decls.d_tsimbols is
@@ -86,37 +85,37 @@ package body decls.d_tsimbols is
       ie:= te(ie).next;
     end loop;
     if ie=0 then d:= (td => dnula);
-  else d:= te(ie).d;
-end if;
-return d;
-    end get_camp;
+    else d:= te(ie).d;
+    end if;
+    return d;
+  end get_camp;
 
-procedure update(ts: in out tsimbols; id: in id_nom; d: in descripcio) is
+  procedure update(ts: in out tsimbols; id: in id_nom; d: in descripcio) is
     td: tdescripcio renames ts.td;
   begin
     td(id).d:=d;
   end update;
 
 
-procedure put_index(ts: in out tsimbols; ida: in id_nom; di: in descripcio) is
-  td: tdescripcio renames ts.td;
-  tb: tblocks renames ts.tb;
-  te: texpansio renames ts.te;
-  prof: profunditat renames ts.prof;
-  ie, iep: index_expansio;
-begin
-  if td(ida).d.td /= dtipus then raise no_es_tipus; end if;
-  if td(ida).d.dt.tsb /= tsb_arr then raise no_es_array; end if;
-  iep:=0; ie:= td(ida).next;
-  while ie /= 0 loop
-    iep:= ie; ie:= te(ie).next;
-  end loop;
-  ie:= tb(prof); ie:= ie+1; tb(prof):= ie;
-  te(ie).id:= null_id; te(ie).d:= di; te(ie).prof:= -1;
-  if iep = 0 then td(ida).next:= ie;
-else te(iep).next:= ie;
-        end if;
-        te(ie).next:= 0;
+  procedure put_index(ts: in out tsimbols; ida: in id_nom; di: in descripcio) is
+    td: tdescripcio renames ts.td;
+    tb: tblocks renames ts.tb;
+    te: texpansio renames ts.te;
+    prof: profunditat renames ts.prof;
+    ie, iep: index_expansio;
+  begin
+    if td(ida).d.td /= dtipus then raise no_es_tipus; end if;
+    if td(ida).d.dt.tsb /= tsb_arr then raise no_es_array; end if;
+    iep:=0; ie:= td(ida).next;
+    while ie /= 0 loop
+      iep:= ie; ie:= te(ie).next;
+    end loop;
+    ie:= tb(prof); ie:= ie+1; tb(prof):= ie;
+    te(ie).id:= null_id; te(ie).d:= di; te(ie).prof:= -1;
+    if iep = 0 then td(ida).next:= ie;
+    else te(iep).next:= ie;
+    end if;
+      te(ie).next:= 0;
   end put_index;
 
 
@@ -244,12 +243,12 @@ else te(iep).next:= ie;
   begin
     return ts.prof;
   end get_prof;
-  
+
   function "<"(prof1, prof2: in profunditat) return boolean is
   begin
     return Integer(prof1) < Integer(prof2);
   end "<";
-    
+
   function value(prof: in profunditat) return integer is
   begin
     return Integer(prof);

@@ -15,8 +15,6 @@ project Make is
    for Main use ("main.adb");
 
    package Compiler is
-      -- El flag -gnatc checkea la semantica sin compilar, ya sabes petar
-      -- for Default_Switches ("Ada") use ("-gnat2012","-gnatc");
       for Default_Switches ("Ada") use ("-gnat2012");
    end Compiler;
 

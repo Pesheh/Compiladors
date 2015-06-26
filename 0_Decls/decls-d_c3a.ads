@@ -42,16 +42,20 @@ package decls.d_c3a is
   type tvariables is limited private;
   type tprocediments is limited private;
 
+
   procedure nova_var(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; ocup: in despl; t: out num_var);
   procedure nova_var_const(nv: in out num_var; tv: in out tvariables; val: in valor; tsb: in tipus_subjacent; t: out num_var);
-  procedure nou_arg(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; ocup: in despl; offset: in out despl; t: out num_var);
+  procedure nou_arg(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; offset: in out despl; t: out num_var);
   procedure nou_proc(np: in out num_proc; tp: in out tprocediments; e: in num_etiq; prof: in profunditat; nparam: in natural; p: out num_proc);
   procedure nou_proc_std(np: in out num_proc; tp: in out tprocediments; id: in id_nom; prof: in profunditat; nparam: in natural; p: out num_proc);
   procedure nova_etiq (ne: in out num_etiq; e: out num_etiq);
 
   procedure act_proc_args(tp: in out tprocediments; np: in num_proc; nargs: in natural);
 
-  -- Si posam Valor, entra en conflicte amb el tipus valor
+
+  -- Funcions de consulta i conversió
+
+
   function Value(t: in tinstruccio; a: in num_var) return instr_3a;
   function Value(t: in tinstruccio; a,b: in num_var) return instr_3a;
   function Value(t: in tinstruccio; a,b,c: in num_var) return instr_3a;
@@ -61,10 +65,11 @@ package decls.d_c3a is
 
   function Imatge(i3a: in instr_3a) return String;
 
+  -- Conversió d'instrucció normal a instrucció binària (per guardar al fitxer)
   function To_i3a_bin(i3a: in instr_3a) return instr_3a_bin;
   function To_i3a(i3a_b: in instr_3a_bin) return instr_3a;
 
-  -- funcions per consultar els camps de les instruccions
+  -- Funcions per consultar els camps de les instruccions
   function consulta_tipus(i3a: in instr_3a) return tinstruccio;
   function consulta_arg_nv(i3a: in instr_3a) return num_var;
   function consulta_arg_np(i3a: in instr_3a) return num_proc;
@@ -72,7 +77,7 @@ package decls.d_c3a is
   function consulta_arg2(i3a: in instr_3a) return num_var;
   function consulta_arg3(i3a: in instr_3a) return num_var;
 
-  -- funcions per consultar els camps de les variables
+  -- Funcions per consultar els camps de les variables
   function consulta_val_const(tv: in tvariables; nv: in num_var) return valor;
   function consulta_tsb_const(tv: in tvariables; nv: in num_var) return tipus_subjacent;
   function consulta_np_var(tv: in tvariables; nv: in num_var) return num_proc;
@@ -80,6 +85,7 @@ package decls.d_c3a is
   function consulta_ocup_var(tv: in tvariables; nv: in num_var) return despl;
   function es_var(tv: in tvariables; nv: in num_var) return boolean;
 
+  -- Funcions per consultar els camps dels procediements
   function consulta_tproc(tp: in tprocediments; np: in num_proc) return tproc;
   function consulta_prof_proc(tp: in tprocediments; np: in num_proc) return profunditat;
   function consulta_ocup_proc(tp: in tprocediments; np: in num_proc) return despl;
@@ -108,9 +114,8 @@ private
       end case;
     end record;
 
-  -- aquestes son les instruccions que escrivim
-  -- al fitxer binari, aixi es simplifica molt
-  -- la seva gestio
+  -- Aquest es el tipus d'instruccions escrites al fitxer binári ja que simplifiquen
+  -- molt la seua gestió
   type instr_3a_bin is
     record
       t: tinstruccio;

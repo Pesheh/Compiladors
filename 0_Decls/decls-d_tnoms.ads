@@ -1,8 +1,6 @@
 with Ada.Containers; use Ada.Containers;
-with Ada.Strings; use Ada.Strings;
 
 package decls.d_tnoms is
---    pragma pure;
 
     type tnoms is limited private;
 

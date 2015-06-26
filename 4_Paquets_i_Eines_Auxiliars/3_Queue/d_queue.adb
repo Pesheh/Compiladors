@@ -4,10 +4,12 @@ package body d_queue is
     q.els:=0;
   end empty;
 
+
   function is_empty(q: in queue) return boolean is
   begin
     return q.els=0;
   end is_empty;
+
 
   procedure put(q: in out queue; p: in pnode; i: in Integer) is
     b: pitem renames q.b;
@@ -28,6 +30,7 @@ package body d_queue is
     end if;
     els:=els+1;
   end put;
+
 
   procedure pop(q: in out queue; p: out pnode; i: out Integer) is
     b: pitem renames q.b;

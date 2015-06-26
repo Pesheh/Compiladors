@@ -10,7 +10,7 @@ package decls.d_descripcio is
 
   type descr_tipus(tsb: tipus_subjacent:= tsb_nul) is
     record
-      ocup: despl; -- :)
+      ocup: despl;
       case tsb is
         when tsb_bool | tsb_car | tsb_ent  =>
           linf,lsup: valor;

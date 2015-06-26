@@ -669,8 +669,8 @@ package body semantica.g_codi_ass is
     nova_etiq(ne, e1);
     ga_escriure(ga_load(b, eax)
     & ga_load(c, ebx)
-    & "  cmpl %ebx, %eax" & newline
-    & "  jg  E" & Value(e) & newline
+    & "  cmpl %eax, %ecx" & newline
+    & "  jgt  E" & Value(e) & newline
     & "  movl $-1, %ecx" & newline
     & ga_goto(e1)
     & ga_etiq(e)
@@ -690,7 +690,7 @@ package body semantica.g_codi_ass is
     nova_etiq(ne, e1);
     ga_escriure(ga_load(b, eax)
     & ga_load(c, ebx)
-    & "  cmpl %ebx, %eax" & newline
+    & "  cmpl %eax, %ebx" & newline
     & "  jge  E" & Value(e) & newline
     & "  movl $-1, %ecx" & newline
     & ga_goto(e1)
@@ -711,8 +711,8 @@ package body semantica.g_codi_ass is
     nova_etiq(ne, e1);
     ga_escriure(ga_load(b, eax)
     & ga_load(c, ebx)
-    & "  cmpl %ebx, %eax" & newline
-    & "  jne  E" & Value(e) & newline
+    & "  cmpl %eax, %ebx" & newline
+    & "  je  E" & Value(e) & newline
     & "  movl $-1, %ecx" & newline
     & ga_goto(e1)
     & ga_etiq(e)
@@ -732,12 +732,12 @@ package body semantica.g_codi_ass is
     nova_etiq(ne, e1);
     ga_escriure(ga_load(b, eax)
     & ga_load(c, ebx)
-    & "  cmpl %ebx, %eax" & newline
+    & "  cmpl %eax, %ebx" & newline
     & "  jne  E" & Value(e) & newline
-    & "  movl $0, %ecx" & newline
+    & "  movl $-1, %ecx" & newline
     & ga_goto(e1)
     & ga_etiq(e)
-    & "  movl $-1, %ecx" & newline
+    & "  movl $0, %ecx" & newline
     & ga_etiq(e1)
     & ga_store(a, ecx));
   end ga_neq;
@@ -753,7 +753,7 @@ package body semantica.g_codi_ass is
     nova_etiq(ne, e1);
     ga_escriure(ga_load(b, eax)
     & ga_load(c, ebx)
-    & "  cmpl %ebx, %eax" & newline
+    & "  cmpl %eax, %ebx" & newline
     & "  jle  E" & Value(e) & newline
     & "  movl $-1, %ecx" & newline
     & ga_goto(e1)
@@ -774,8 +774,8 @@ package body semantica.g_codi_ass is
     nova_etiq(ne, e1);
     ga_escriure(ga_load(b, eax)
     & ga_load(c, ebx)
-    & "  cmpl %ebx, %eax" & newline
-    & "  jl  E" & Value(e) & newline
+    & "  cmpl %eax, %ebx" & newline
+    & "  jlt  E" & Value(e) & newline
     & "  movl $-1, %ecx" & newline
     & ga_goto(e1)
     & ga_etiq(e)

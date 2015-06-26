@@ -4,20 +4,23 @@ with semantica; use semantica;
 package body decls.d_c3a is
 
   procedure nova_var(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; ocup: in despl; t: out num_var) is
+    i: despl;
   begin
     nv:= nv+1;
     if tp(np).tp = std then
       -- els procs std tenen 1 o 0 args
       tv(nv):= new e_tvar'(esvar, np, ocup, 0);
     else
-      tv(nv):= new e_tvar'(esvar, np, ocup, tp(np).ocup_vl);
-      tp(np).ocup_vl:= tp(np).ocup_vl + ocup;
-    end if;
-    -- si portessim a terme una etapa d'optimitzacio, aixo hauria de calcular-se
-    -- un cop hagues acabat l'esmentada etapa (es absurd calcular una ocupacio que canviara).
-
-    if DEBUG then
-      Ada.Text_IO.Put_Line("nova_var:nv::"&num_var'Image(nv));
+      -- si portessim a terme una etapa d'optimitzacio, aixo hauria de calcular-se
+      -- un cop hagues acabat l'esmentada etapa (es absurd calcular una ocupacio que canviara).
+      if tp(np).ocup_vl = 0 then
+        tv(nv):= new e_tvar'(esvar, np, ocup, 0 - ocup_ent);
+        tp(np).ocup_vl:= ocup;
+      else
+        i:= tp(np).ocup_vl;
+        tv(nv):= new e_tvar'(esvar, np, ocup, 0 - i);
+        tp(np).ocup_vl:= i + ocup;
+      end if;
     end if;
 
     t:= nv;
@@ -38,6 +41,15 @@ package body decls.d_c3a is
 
     t:= nv;
   end nova_var_const;
+
+  procedure nou_arg(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; ocup: in despl; offset: in out despl; t: out num_var) is
+  begin
+    nv:= nv+1;
+    tv(nv):= new e_tvar'(esvar, np, ocup, offset);
+    offset:= offset + ocup;
+
+    t:= nv;
+  end nou_arg;
 
 
   procedure nou_proc(np: in out num_proc; tp: in out tprocediments; e: in num_etiq; prof: in profunditat; nparam: in natural; p: out num_proc) is

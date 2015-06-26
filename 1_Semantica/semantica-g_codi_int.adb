@@ -88,9 +88,7 @@ package body semantica.g_codi_int is
     p: pnode renames nd_proc;
   begin
     empila(pproc, p.proc_cproc.cproc_np);
-    if p.proc_cproc.tn /= nd_null then
-      gc_cproc(p.proc_cproc);
-    end if;
+    gc_cproc(p.proc_cproc);
     if p.proc_decls.tn /= nd_null then
       gc_decls(p.proc_decls);
     end if;
@@ -103,15 +101,8 @@ package body semantica.g_codi_int is
 
   procedure gc_cproc(nd_cproc: in pnode) is
     p: pnode renames nd_cproc;
-    nargs: natural;
-    e: num_etiq;
   begin
-    nargs:= 0; -- usat a la taula de procediments
-    if p.cproc_args.tn /= nd_null then
-      gc_args(p.cproc_args, nargs);
-    end if;
-    nova_etiq(ne, e);
-    genera(Value(etiq, e));
+    genera(Value(etiq, consulta_etiq_proc(tp, cim(pproc))));
   end gc_cproc;
 
 
@@ -134,6 +125,7 @@ package body semantica.g_codi_int is
     if p.decls_decls.tn /= nd_null then
       gc_decls(p.decls_decls);
     end if;
+    -- nomes cal generar codi per als procediments
     if p.decls_decl.decl_real.tn = nd_proc then
       gc_proc(p.decls_decl.decl_real);
     end if;

@@ -1,7 +1,6 @@
 with decls.d_descripcio; use decls.d_descripcio;
 
 package decls.d_tsimbols is
---    pragma pure;
 
     type tsimbols is limited private;
 

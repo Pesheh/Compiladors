@@ -1,3 +1,4 @@
+with Ada.Text_IO; use Ada.Text_IO;
 with semantica; use semantica;
 with semantica.missatges; use semantica.missatges;
 package body decls.d_tsimbols is
@@ -31,6 +32,7 @@ package body decls.d_tsimbols is
     if not error then
       ie:= tb(prof); ie:= ie+1; tb(prof):= ie;
       te(ie).prof:= td(id).prof; te(ie).d:= td(id).d;
+      td(id).prof:= prof;
       td(id).d:= d;
       te(ie).id:= id; te(ie).next:= 0;
     end if;

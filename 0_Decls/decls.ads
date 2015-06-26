@@ -1,7 +1,7 @@
 package decls is
   pragma pure;
 
-  DEBUG: constant boolean:= true;
+  DEBUG: constant boolean:= false;
 
   type valor is new integer;
   type despl is new integer;

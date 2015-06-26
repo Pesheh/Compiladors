@@ -9,7 +9,8 @@ package body semantica.c_tipus is
 
   use Pila_Procediments;
 
-  DEBUG: constant boolean:= false;
+  -- instanciat a ct_decl_proc
+  despl_args: despl;
 
   --DEFINICIONS
   --Declaracions
@@ -709,7 +710,11 @@ package body semantica.c_tipus is
 
     desc_idx:= (td=>dindx, tind=>id_rang);
     put_index(ts, id_array, desc_idx);
-    num_comp:= num_comp + lnc;
+    if num_comp = 0 then
+      num_comp:= lnc;
+    else
+      num_comp:= num_comp * lnc;
+    end if;
   end ct_array_idx;
 
 
@@ -733,6 +738,8 @@ package body semantica.c_tipus is
       missatges_conflictes_declaracio(nd_procediment.proc_cproc.cproc_id.id_pos, id_proc);
     end if;
 
+    -- el desplaçament del primer argument es bp + antic Disp + @RTN
+    despl_args:= 2*ocup_ent;
     if nd_procediment.proc_cproc.cproc_args.tn /= nd_null then
       ct_decl_args(nd_procediment.proc_cproc.cproc_args, id_proc);
     end if;
@@ -748,6 +755,8 @@ package body semantica.c_tipus is
       put(ts, id_arg, desc_arg, error);
       next(ts, it); nargs:= nargs + 1;
     end loop;
+    -- tot i que aixo pot anar abans del desempila(pproc) aixi sembla mes adecuat
+    act_proc_args(tp, cim(pproc), nargs);
 
     if nd_procediment.proc_decls.tn /= nd_null then
       ct_decls(nd_procediment.proc_decls);
@@ -757,7 +766,6 @@ package body semantica.c_tipus is
     end if;
     exit_block(ts);
 
-    act_proc_args(tp, cim(pproc), nargs);
     desempila(pproc);
   end ct_decl_proc;
 
@@ -795,9 +803,10 @@ package body semantica.c_tipus is
     -- BEGIN
     desc:= get(ts, id_tipus);
     -- END
-    nova_var(nv, tv, tp, cim(pproc), desc.dt.ocup, t);
+    --nova_var(nv, tv, tp, cim(pproc), desc.dt.ocup, t);
+    nou_arg(nv, tv, tp, cim(pproc), ocup_ent, despl_args, t);
     case mode is
-      when md_in_out => desc_arg:= (td=>dvar, tv=>id_tipus, nv=> t);
+      when md_in_out => desc_arg:= (td=>dvar, tv=>id_tipus, nv=>t);
       when md_in => desc_arg:= (td=>dargc, ta=>id_tipus, na=> t);
     end case;
     if DEBUG then

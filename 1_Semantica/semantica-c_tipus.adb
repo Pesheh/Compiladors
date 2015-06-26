@@ -113,7 +113,6 @@ package body semantica.c_tipus is
     prof: profunditat;
     t: num_var;
     p: num_proc;
-    e: num_etiq;
   begin
     prof:= get_prof(ts);
 
@@ -719,6 +718,7 @@ package body semantica.c_tipus is
     nargs: natural;
     p: num_proc;
     e: num_etiq;
+    t: num_var;
   begin
     id_proc:= nd_procediment.proc_cproc.cproc_id.id_id;
     nova_etiq(ne, e);
@@ -732,7 +732,6 @@ package body semantica.c_tipus is
     end if;
 
     -- el desplaçament del primer argument es bp + antic Disp + @RTN
-    despl_args:= 2*ocup_ent;
     if nd_procediment.proc_cproc.cproc_args.tn /= nd_null then
       ct_decl_args(nd_procediment.proc_cproc.cproc_args, id_proc);
     end if;
@@ -742,9 +741,16 @@ package body semantica.c_tipus is
     empila(pproc, desc_proc.np);
 
     enter_block(ts);
+    despl_args:= 2*ocup_ent;
     first(ts, id_proc, it); nargs:= 0;
     while is_valid(it) loop
+      nou_arg(nv, tv, tp, cim(pproc), ocup_ent, despl_args, t);
       get(ts, it, id_arg, desc_arg);
+      if desc_arg.td = dvar then
+        desc_arg.nv:= t;
+      else
+        desc_arg.na:= t;
+      end if;
       put(ts, id_arg, desc_arg, error);
       next(ts, it); nargs:= nargs + 1;
     end loop;
@@ -786,7 +792,6 @@ package body semantica.c_tipus is
   procedure ct_decl_arg(nd_lid_arg: in out pnode;id_proc, id_tipus: in id_nom;mode: in tmode) is
     id_arg: id_nom;
     desc_arg,desc: descripcio;
-    t: num_var;
     error: boolean;
   begin
     if nd_lid_arg.lid_seg.tn /= nd_null then
@@ -796,11 +801,9 @@ package body semantica.c_tipus is
     -- BEGIN
     desc:= get(ts, id_tipus);
     -- END
-    --nova_var(nv, tv, tp, cim(pproc), desc.dt.ocup, t);
-    nou_arg(nv, tv, tp, cim(pproc), ocup_ent, despl_args, t);
     case mode is
-      when md_in_out => desc_arg:= (td=>dvar, tv=>id_tipus, nv=>t);
-      when md_in => desc_arg:= (td=>dargc, ta=>id_tipus, na=> t);
+      when md_in_out => desc_arg:= (td=>dvar, tv=>id_tipus, nv=>null_nv);
+      when md_in => desc_arg:= (td=>dargc, ta=>id_tipus, na=> null_nv);
     end case;
     if DEBUG then
       missatges_ct_debugging("ct_decl_arg",tmode'Image(mode)&"::"

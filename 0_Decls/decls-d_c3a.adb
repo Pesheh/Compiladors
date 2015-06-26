@@ -13,14 +13,9 @@ package body decls.d_c3a is
       -- si portessim a terme una etapa d'optimitzacio, aixo hauria de calcular-se
       -- un cop hagues acabat l'esmentada etapa (es absurd calcular una ocupacio que canviara).
       -- però com que no es el cas, ho feim aquí
-      if tp(np).ocup_vl = 0 then
-        tv(nv):= new e_tvar'(esvar, np, ocup, 0 - ocup_ent);
-        tp(np).ocup_vl:= ocup;
-      else
-        i:= tp(np).ocup_vl;
-        tv(nv):= new e_tvar'(esvar, np, ocup, 0 - i);
-        tp(np).ocup_vl:= i + ocup;
-      end if;
+      i:= tp(np).ocup_vl + ocup_ent;
+      tv(nv):= new e_tvar'(esvar, np, ocup, -i);
+      tp(np).ocup_vl:= tp(np).ocup_vl + ocup;
     end if;
     t:= nv;
   end nova_var;

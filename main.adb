@@ -14,7 +14,7 @@ with semantica; use semantica;
 with semantica.c_arbre; use semantica.c_arbre;
 with semantica.c_tipus; use semantica.c_tipus;
 with semantica.g_codi_int; use semantica.g_codi_int;
---with semantica.g_codi_ass; use semantica.g_codi_ass;
+with semantica.g_codi_ass; use semantica.g_codi_ass;
 
 procedure main is
   function substring(s: in string; sc: in character) return String is
@@ -49,7 +49,7 @@ begin
     if not err then
     --  semantica.print_arbre;
       semantica.g_codi_int.gen_codi_int;
-  --    semantica.g_codi_ass.gen_codi_ass;
+      semantica.g_codi_ass.gen_codi_ass;
     end if;
     conclou_analisi;
   end if;

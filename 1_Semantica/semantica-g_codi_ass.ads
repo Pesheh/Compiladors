@@ -1,13 +1,13 @@
 package semantica.g_codi_ass is
-  
+
   procedure gen_codi_ass;
   procedure prepara_g_codi_ass(nomf: in String);
-  
+
 
 private
   type registre is (
-    eax, 
-    ebx, 
+    eax,
+    ebx,
     ecx,
     edx,
     esi,

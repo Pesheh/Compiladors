@@ -167,7 +167,7 @@ package body semantica.c_tipus is
     --putc
     put(tn, "putc", idstdio);
     nou_proc_std(np, tp, idstdio, prof, 1, p);
-    desc:= (td=>dproc, np=> p); 
+    desc:= (td=>dproc, np=> p);
     empila(pproc, np);
     put(ts, idstdio, desc, error);
     if error then
@@ -741,7 +741,7 @@ package body semantica.c_tipus is
     empila(pproc, desc_proc.np);
 
     enter_block(ts);
-    despl_args:= 2*ocup_ent;
+    despl_args:= 3*ocup_ent;
     first(ts, id_proc, it); nargs:= 0;
     while is_valid(it) loop
       nou_arg(nv, tv, tp, cim(pproc), ocup_ent, despl_args, t);
@@ -1144,9 +1144,10 @@ package body semantica.c_tipus is
           ERROR:= true;
           missatges_tipus_incosistent_lit(pos, id_tipus_arg, tsb_expr);
         end if;
-      else 
-        if desc_arg.td /=dargc then
+      else
+        if tsb_expr /= tsb_nul then
           ERROR:=true;
+          missatges_tipus_incosistent_lit(pos, id_tipus_arg, tsb_expr);
         end if;
       end if;
     else

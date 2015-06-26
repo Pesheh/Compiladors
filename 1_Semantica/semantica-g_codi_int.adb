@@ -88,10 +88,10 @@ package body semantica.g_codi_int is
     p: pnode renames nd_proc;
   begin
     empila(pproc, p.proc_cproc.cproc_np);
-    gc_cproc(p.proc_cproc);
     if p.proc_decls.tn /= nd_null then
       gc_decls(p.proc_decls);
     end if;
+    gc_cproc(p.proc_cproc);
     genera(Value(pmb, cim(pproc)));
     gc_sents(p.proc_sents);
     genera(Value(rtn, cim(pproc)));

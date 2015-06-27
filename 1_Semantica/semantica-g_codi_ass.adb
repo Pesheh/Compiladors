@@ -289,7 +289,7 @@ package body semantica.g_codi_ass is
     desplacament: constant String:= Value(consulta_desp_var(tv, nv));
   begin
     return  "  movl " & desplacament & "(%ebp), %esi" & newline
-    & "  movl (%esi), %" & reg & newline;
+          & "  movl (%esi), %" & reg & newline;
   end ga_load_param_local;
 
   function ga_load_var_global(nv: in num_var; r: in registre) return String is
@@ -299,8 +299,8 @@ package body semantica.g_codi_ass is
     desplacament: constant String:= Value(consulta_desp_var(tv, nv));
   begin
     return  "  movl $DISP, %esi" & newline
-    & "  movl " & desp_display & "(%esi), %esi" & newline
-    & "  movl " & desplacament & "(%esi), %" & reg & newline;
+          & "  movl " & desp_display & "(%esi), %esi" & newline
+          & "  movl " & desplacament & "(%esi), %" & reg & newline;
   end ga_load_var_global;
 
   function ga_load_param_global(nv: in num_var; r: in registre) return String is
@@ -310,9 +310,9 @@ package body semantica.g_codi_ass is
     desplacament: constant String:= Value(consulta_desp_var(tv, nv));
   begin
     return  "  movl $DISP, %esi" & newline
-    & "  movl " & desp_display & "(%esi), %esi" & newline
-    & "  movl " & desplacament & "(%esi), %esi" & newline
-    & "  movl (%esi), %" & reg & newline;
+          & "  movl " & desp_display & "(%esi), %esi" & newline
+          & "  movl " & desplacament & "(%esi), %esi" & newline
+          & "  movl (%esi), %" & reg & newline;
   end ga_load_param_global;
 
 
@@ -352,7 +352,7 @@ package body semantica.g_codi_ass is
     desplacament: constant String:= Value(consulta_desp_var(tv, nv));
   begin
     return "  movl " & desplacament & "(%ebp), %edi" & newline
-    & "  movl %" & reg & ", (%edi)" & newline;
+         & "  movl %" & reg & ", (%edi)" & newline;
   end ga_store_param_local;
 
 
@@ -363,8 +363,8 @@ package body semantica.g_codi_ass is
     desplacament: constant String:= Value(consulta_desp_var(tv, nv));
   begin
     return  "  movl $DISP, %esi" & newline
-    & "  movl " & desp_display & "(%esi), %edi" & newline
-    & "  movl %" & reg & " ," & desplacament & "(%edi)" & newline;
+          & "  movl " & desp_display & "(%esi), %edi" & newline
+          & "  movl %" & reg & " ," & desplacament & "(%edi)" & newline;
   end ga_store_var_global;
 
 
@@ -375,9 +375,9 @@ package body semantica.g_codi_ass is
     desplacament: constant String:= Value(consulta_desp_var(tv, nv));
   begin
     return  "  movl $DISP, %esi" & newline
-    & "  movl " & desp_display & "(%esi), %esi" & newline
-    & "  movl " & desplacament & "(%esi), %edi" & newline
-    & "  movl %" & reg & ", (%edi)" & newline;
+          & "  movl " & desp_display & "(%esi), %esi" & newline
+          & "  movl " & desplacament & "(%esi), %edi" & newline
+          & "  movl %" & reg & ", (%edi)" & newline;
   end ga_store_param_global;
 
 
@@ -413,23 +413,23 @@ package body semantica.g_codi_ass is
     case consulta_tsb_const(tv, nv) is
       when tsb_ent | tsb_bool=>
         return    ".section .data" & newline
-        &  "ec"   & Value(ecx) & ": .long   "& Value(consulta_val_const(tv, nv)) & newline
-        &  ".section .text" & newline
-        &  "movl  $ec" & Value(ecx) & ", %" & registre'Image(r) & newline;
+               &  "ec"   & Value(ecx) & ": .long   "& Value(consulta_val_const(tv, nv)) & newline
+               &  ".section .text" & newline
+               &  "  movl  $ec" & Value(ecx) & ", %" & registre'Image(r) & newline;
 
       when tsb_car =>
         return    ".section .data" & newline
-        &  "ec" & Value(ecx) & ": .ascii  """
-        &  Character'Val(Integer(consulta_val_const(tv, nv))) & """" & newline
-        &  ".section .text" & newline
-        &  "movl  $ec" & Value(ecx) & ", %" & registre'Image(r) & newline;
+               &  "ec" & Value(ecx) & ": .ascii  """
+               &  Character'Val(Integer(consulta_val_const(tv, nv))) & """" & newline
+               &  ".section .text" & newline
+               &  "  movl  $ec" & Value(ecx) & ", %" & registre'Image(r) & newline;
 
       when tsb_nul=>
         return    ".section .data" & newline
-        &  "ec" & Value(ecx) & ": .asciz  "
-        &  decls.d_tnoms.get(tn, id_str(consulta_val_const(tv, nv)))  &  newline
-        &  ".section .text" & newline
-        &  "movl  $ec" & Value(ecx) & ", %" & registre'Image(r) & newline;
+               &  "ec" & Value(ecx) & ": .asciz  "
+               &  decls.d_tnoms.get(tn, id_str(consulta_val_const(tv, nv)))  &  newline
+               &  ".section .text" & newline
+               &  "  movl  $ec" & Value(ecx) & ", %" & registre'Image(r) & newline;
 
       when others  => null;
     end case;
@@ -460,8 +460,8 @@ package body semantica.g_codi_ass is
     desplacament: constant String:= Value(consulta_desp_var(tv, nv));
   begin
     return  "  movl $DISP, %esi" & newline
-    & "  movl " & desp_display & "(%esi), %esi" & newline
-    & "  leal " & desplacament & "(%esi), %" & reg &  newline;
+          & "  movl " & desp_display & "(%esi), %esi" & newline
+          & "  leal " & desplacament & "(%esi), %" & reg &  newline;
   end ga_load_address_var_global;
 
   function ga_load_address_param_global(nv: in num_var; r: in registre) return String is
@@ -471,8 +471,8 @@ package body semantica.g_codi_ass is
     desplacament: constant String:= Value(consulta_desp_var(tv, nv));
   begin
     return  "  movl $DISP, %esi" & newline
-    & "  movl " & desp_display & "(%esi), %esi" & newline
-    & "  movl " & desplacament & "(%esi), %" & reg &  newline;
+          & "  movl " & desp_display & "(%esi), %esi" & newline
+          & "  movl " & desplacament & "(%esi), %" & reg &  newline;
   end ga_load_address_param_global;
 
 
@@ -492,10 +492,10 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(c, eax)
-    & ga_load_address(b, esi)
-    & "  addl %eax, %esi" & newline
-    & "  movl (%esi), %eax" & newline
-    & ga_store(a, eax));
+              & ga_load_address(b, esi)
+              & "  addl %eax, %esi" & newline
+              & "  movl (%esi), %eax" & newline
+              & ga_store(a, eax));
   end ga_cons_idx;
 
   procedure ga_cp_idx(i3a: in instr_3a) is
@@ -504,10 +504,10 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-    & ga_load(c, ebx)
-    & ga_load_address(a, edi)
-    & "  addl %eax, %edi" & newline
-    & "  movl %ebx, (%edi)" & newline);
+							& ga_load(c, ebx)
+							& ga_load_address(a, edi)
+							& "  addl %eax, %edi" & newline
+							& "  movl %ebx, (%edi)" & newline);
   end ga_cp_idx;
 
   --Instruccions artimetic-logiques
@@ -517,9 +517,9 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-    & ga_load(c, ebx)
-    & "  addl %ebx, %eax" & newline
-    & ga_store(a, eax));
+						 	& ga_load(c, ebx)
+						 	& "  addl %ebx, %eax" & newline
+						 	& ga_store(a, eax));
   end ga_sum;
 
   procedure ga_res(i3a: in instr_3a) is
@@ -528,9 +528,9 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-    & ga_load(c, ebx)
-    & "  subl %ebx, %eax" & newline
-    & ga_store(a, eax));
+							& ga_load(c, ebx)
+							& "  subl %ebx, %eax" & newline
+							& ga_store(a, eax));
   end ga_res;
 
   procedure ga_mul(i3a: in instr_3a) is
@@ -539,9 +539,9 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-    & ga_load(c, ebx)
-    & "  imul %ebx, %eax" & newline
-    & ga_store(a, eax));
+              & ga_load(c, ebx)
+              & "  imul %ebx, %eax" & newline
+              & ga_store(a, eax));
   end ga_mul;
 
   procedure ga_div(i3a: in instr_3a) is
@@ -550,11 +550,11 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-    & "  movl %eax, %edx" & newline
-    & "  sarl $31, %edx" & newline
-    & ga_load(c, ebx)
-    & "  idivl  %ebx" & newline
-    & ga_store(a, eax));
+              & "  movl %eax, %edx" & newline
+              & "  sarl $31, %edx" & newline
+              & ga_load(c, ebx)
+              & "  idivl  %ebx" & newline
+              & ga_store(a, eax));
   end ga_div;
 
   procedure ga_modul(i3a: in instr_3a) is
@@ -563,11 +563,11 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-    & "  movl %eax, %edx" & newline
-    & "  sarl $31, %edx" & newline
-    & ga_load(c, ebx)
-    & "  idivl  %ebx" & newline
-    & ga_store(a, edx));
+              & "  movl %eax, %edx" & newline
+              & "  sarl $31, %edx" & newline
+              & ga_load(c, ebx)
+              & "  idivl  %ebx" & newline
+              & ga_store(a, edx));
   end ga_modul;
 
   procedure ga_neg(i3a: in instr_3a) is
@@ -576,8 +576,8 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-    & "  negl %eax" & newline
-    & ga_store(a, eax));
+              & "  negl %eax" & newline
+              & ga_store(a, eax));
   end ga_neg;
 
   procedure ga_op_not(i3a: in instr_3a) is
@@ -585,8 +585,8 @@ package body semantica.g_codi_ass is
     b: constant num_var:= consulta_arg2(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-    & "  notl %eax" & newline
-    & ga_store(a, eax));
+              & "  notl %eax" & newline
+              & ga_store(a, eax));
   end ga_op_not;
 
   procedure ga_op_and(i3a: in instr_3a) is
@@ -595,9 +595,9 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-    & ga_load(c, ebx)
-    & "  andl %ebx, %eax" & newline
-    & ga_store(a, eax));
+              & ga_load(c, ebx)
+              & "  andl %ebx, %eax" & newline
+              & ga_store(a, eax));
   end ga_op_and;
 
   procedure ga_op_or(i3a: in instr_3a) is
@@ -606,9 +606,9 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-    & ga_load(c, ebx)
-    & "  orl  %ebx, %eax" & newline
-    & ga_store(a, eax));
+              & ga_load(c, ebx)
+              & "  orl  %ebx, %eax" & newline
+              & ga_store(a, eax));
   end ga_op_or;
 
   --Instruccions de Brancament
@@ -651,11 +651,11 @@ package body semantica.g_codi_ass is
   begin
     nova_etiq(ne, e1);
     ga_escriure(ga_load(a, eax)
-    & ga_load(b, ebx)
-    & "  cmpl %ebx, %eax" & newline
-    & "  jne  E" & Value(e1) & newline
-    & ga_goto(e)
-    & ga_etiq(e1));
+              & ga_load(b, ebx)
+              & "  cmpl %ebx, %eax" & newline
+              & "  jne  E" & Value(e1) & newline
+              & ga_goto(e)
+              & ga_etiq(e1));
   end ga_ieq_goto;
 
 
@@ -668,15 +668,15 @@ package body semantica.g_codi_ass is
     nova_etiq(ne, e);
     nova_etiq(ne, e1);
     ga_escriure(ga_load(b, eax)
-    & ga_load(c, ebx)
-    & "  cmpl %eax, %ecx" & newline
-    & "  jgt  E" & Value(e) & newline
-    & "  movl $-1, %ecx" & newline
-    & ga_goto(e1)
-    & ga_etiq(e)
-    & "  movl $0, %ecx" & newline
-    & ga_etiq(e1)
-    & ga_store(a, ecx));
+              & ga_load(c, ebx)
+              & "  cmpl %eax, %ebx" & newline
+              & "  jge  E" & Value(e) & newline
+              & "  movl $-1, %ecx" & newline
+              & ga_goto(e1)
+              & ga_etiq(e)
+              & "  movl $0, %ecx" & newline
+              & ga_etiq(e1)
+              & ga_store(a, ecx));
   end ga_gt;
 
 
@@ -689,15 +689,15 @@ package body semantica.g_codi_ass is
     nova_etiq(ne, e);
     nova_etiq(ne, e1);
     ga_escriure(ga_load(b, eax)
-    & ga_load(c, ebx)
-    & "  cmpl %eax, %ebx" & newline
-    & "  jge  E" & Value(e) & newline
-    & "  movl $-1, %ecx" & newline
-    & ga_goto(e1)
-    & ga_etiq(e)
-    & "  movl $0, %ecx" & newline
-    & ga_etiq(e1)
-    & ga_store(a, ecx));
+              & ga_load(c, ebx)
+              & "  cmpl %eax, %ebx" & newline
+              & "  jg  E" & Value(e) & newline
+              & "  movl $-1, %ecx" & newline
+              & ga_goto(e1)
+              & ga_etiq(e)
+              & "  movl $0, %ecx" & newline
+              & ga_etiq(e1)
+              & ga_store(a, ecx));
   end ga_ge;
 
 
@@ -710,15 +710,15 @@ package body semantica.g_codi_ass is
     nova_etiq(ne, e);
     nova_etiq(ne, e1);
     ga_escriure(ga_load(b, eax)
-    & ga_load(c, ebx)
-    & "  cmpl %eax, %ebx" & newline
-    & "  je  E" & Value(e) & newline
-    & "  movl $-1, %ecx" & newline
-    & ga_goto(e1)
-    & ga_etiq(e)
-    & "  movl $0, %ecx" & newline
-    & ga_etiq(e1)
-    & ga_store(a, ecx));
+              & ga_load(c, ebx)
+              & "  cmpl %eax, %ebx" & newline
+              & "  jne  E" & Value(e) & newline
+              & "  movl $-1, %ecx" & newline
+              & ga_goto(e1)
+              & ga_etiq(e)
+              & "  movl $0, %ecx" & newline
+              & ga_etiq(e1)
+              & ga_store(a, ecx));
   end ga_eq;
 
 
@@ -731,37 +731,16 @@ package body semantica.g_codi_ass is
     nova_etiq(ne, e);
     nova_etiq(ne, e1);
     ga_escriure(ga_load(b, eax)
-    & ga_load(c, ebx)
-    & "  cmpl %eax, %ebx" & newline
-    & "  jne  E" & Value(e) & newline
-    & "  movl $-1, %ecx" & newline
-    & ga_goto(e1)
-    & ga_etiq(e)
-    & "  movl $0, %ecx" & newline
-    & ga_etiq(e1)
-    & ga_store(a, ecx));
+              & ga_load(c, ebx)
+              & "  cmpl %eax, %ebx" & newline
+              & "  je  E" & Value(e) & newline
+              & "  movl $-1, %ecx" & newline
+              & ga_goto(e1)
+              & ga_etiq(e)
+              & "  movl $0, %ecx" & newline
+              & ga_etiq(e1)
+              & ga_store(a, ecx));
   end ga_neq;
-
-
-  procedure ga_le(i3a: in instr_3a) is
-    a: constant num_var:= consulta_arg_nv(i3a);
-    b: constant num_var:= consulta_arg2(i3a);
-    c: constant num_var:= consulta_arg3(i3a);
-    e, e1: num_etiq;
-  begin
-    nova_etiq(ne, e);
-    nova_etiq(ne, e1);
-    ga_escriure(ga_load(b, eax)
-    & ga_load(c, ebx)
-    & "  cmpl %eax, %ebx" & newline
-    & "  jle  E" & Value(e) & newline
-    & "  movl $-1, %ecx" & newline
-    & ga_goto(e1)
-    & ga_etiq(e)
-    & "  movl $0, %ecx" & newline
-    & ga_etiq(e1)
-    & ga_store(a, ecx));
-  end ga_le;
 
 
   procedure ga_lt(i3a: in instr_3a) is
@@ -773,16 +752,37 @@ package body semantica.g_codi_ass is
     nova_etiq(ne, e);
     nova_etiq(ne, e1);
     ga_escriure(ga_load(b, eax)
-    & ga_load(c, ebx)
-    & "  cmpl %eax, %ebx" & newline
-    & "  jlt  E" & Value(e) & newline
-    & "  movl $-1, %ecx" & newline
-    & ga_goto(e1)
-    & ga_etiq(e)
-    & "  movl $0, %ecx" & newline
-    & ga_etiq(e1)
-    & ga_store(a, ecx));
+              & ga_load(c, ebx)
+              & "  cmpl %eax, %ebx" & newline
+              & "  jle  E" & Value(e) & newline
+              & "  movl $-1, %ecx" & newline
+              & ga_goto(e1)
+              & ga_etiq(e)
+              & "  movl $0, %ecx" & newline
+              & ga_etiq(e1)
+              & ga_store(a, ecx));
   end ga_lt;
+
+
+  procedure ga_le(i3a: in instr_3a) is
+    a: constant num_var:= consulta_arg_nv(i3a);
+    b: constant num_var:= consulta_arg2(i3a);
+    c: constant num_var:= consulta_arg3(i3a);
+    e, e1: num_etiq;
+  begin
+    nova_etiq(ne, e);
+    nova_etiq(ne, e1);
+    ga_escriure(ga_load(b, eax)
+              & ga_load(c, ebx)
+              & "  cmpl %eax, %ebx" & newline
+              & "  jl  E" & Value(e) & newline
+              & "  movl $-1, %ecx" & newline
+              & ga_goto(e1)
+              & ga_etiq(e)
+              & "  movl $0, %ecx" & newline
+              & ga_etiq(e1)
+              & ga_store(a, ecx));
+  end ga_le;
 
   --Crida a procediments
   procedure ga_pmb(i3a: in instr_3a) is
@@ -793,12 +793,12 @@ package body semantica.g_codi_ass is
   begin
     empila(pproc, np);
     ga_escriure("  movl $DISP, %esi" & newline
-    & "  movl " & desp_display & "(%esi), %eax" & newline
-    & "  pushl %eax" & newline
-    & "  pushl %ebp" & newline
-    & "  movl %esp, %ebp" & newline
-    & "  movl %ebp, " & desp_display & "(%esi)" & newline
-    & "  subl  $" & ocupacio_proc & ", %esp" & newline);
+              & "  movl " & desp_display & "(%esi), %eax" & newline
+              & "  pushl %eax" & newline
+              & "  pushl %ebp" & newline
+              & "  movl %esp, %ebp" & newline
+              & "  movl %ebp, " & desp_display & "(%esi)" & newline
+              & "  subl  $" & ocupacio_proc & ", %esp" & newline);
   end ga_pmb;
 
   procedure ga_rtn(i3a: in instr_3a) is
@@ -807,11 +807,11 @@ package body semantica.g_codi_ass is
     desp_display: constant String:= Value(desp_disp);
   begin
     ga_escriure("  movl %ebp, %esp" & newline
-    & "  popl %ebp" & newline
-    & "  movl $DISP, %edi" & newline
-    & "  popl %eax" & newline
-    & "  movl %eax, " & desp_display & "(%edi)" & newline
-    & "  ret" & newline);
+              & "  popl %ebp" & newline
+              & "  movl $DISP, %edi" & newline
+              & "  popl %eax" & newline
+              & "  movl %eax, " & desp_display & "(%edi)" & newline
+              & "  ret" & newline);
     desempila(pproc);
   end ga_rtn;
 
@@ -819,7 +819,7 @@ package body semantica.g_codi_ass is
     a: constant num_var:= consulta_arg_nv(i3a);
   begin
     ga_escriure(ga_load_address(a, eax)
-    & "  pushl %eax" & newline);
+              & "  pushl %eax" & newline);
   end ga_params;
 
   procedure ga_paramc(i3a: in instr_3a) is
@@ -827,9 +827,9 @@ package body semantica.g_codi_ass is
     b: constant num_var:=consulta_arg2(i3a);
   begin
     ga_escriure(ga_load_address(a, eax)
-    & ga_load(b, ebx)
-    & "  addl %ebx, %eax" & newline
-    & "  pushl %eax" & newline);
+              & ga_load(b, ebx)
+              & "  addl %ebx, %eax" & newline
+              & "  pushl %eax" & newline);
   end ga_paramc;
 
   procedure ga_call(i3a: in instr_3a) is
@@ -838,12 +838,11 @@ package body semantica.g_codi_ass is
     tamany_nparam: constant String:= Value(nparam);
   begin
     if consulta_tproc(tp, np)=comu then
-
       ga_escriure("  call E" & Value(consulta_etiq_proc(tp, np)) & newline
-      & "  addl $" & tamany_nparam & ", %esp" & newline);
+                & "  addl $" & tamany_nparam & ", %esp" & newline);
     else
       ga_escriure("  call _" & consulta_nom_proc(tp, np, tn) & newline
-      & "  addl $" & tamany_nparam & ", %esp" & newline);
+                & "  addl $" & tamany_nparam & ", %esp" & newline);
     end if;
   end ga_call;
   

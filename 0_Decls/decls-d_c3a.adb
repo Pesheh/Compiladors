@@ -28,11 +28,10 @@ package body decls.d_c3a is
     t:= nv;
   end nova_var_const;
 
-  procedure nou_arg(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; offset: in out despl; t: out num_var) is
+  procedure nou_arg(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; offset: in despl; t: out num_var) is
   begin
     nv:= nv+1;
     tv(nv):= new e_tvar'(esvar, np, ocup_ent, offset);
-    offset:= offset + ocup_ent;
     t:= nv;
   end nou_arg;
 

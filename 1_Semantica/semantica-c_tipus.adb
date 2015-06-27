@@ -35,7 +35,7 @@ package body semantica.c_tipus is
   procedure ct_array_idx(nd_lidx: in out pnode;id_array: in id_nom; num_comp: in out valor; b: in out valor);
 
   procedure ct_decl_proc(nd_procediment: in out pnode);
-  procedure ct_decl_args(nd_args: in out pnode;id_proc: in id_nom);
+  procedure ct_decl_args(nd_args: in out pnode;id_proc: in id_nom; nargs: in out natural);
   procedure ct_decl_arg(nd_lid_arg: in out pnode;id_proc,id_tipus: in id_nom;mode: in tmode);
 
   --Sentencias
@@ -715,7 +715,7 @@ package body semantica.c_tipus is
     desc_proc,desc_arg: descripcio;
     error:boolean;
     it: iterador_arg;
-    nargs: natural;
+    nargs: natural:= 0;
     p: num_proc;
     e: num_etiq;
     t: num_var;
@@ -733,7 +733,7 @@ package body semantica.c_tipus is
 
     -- el desplaçament del primer argument es bp + antic Disp + @RTN
     if nd_procediment.proc_cproc.cproc_args.tn /= nd_null then
-      ct_decl_args(nd_procediment.proc_cproc.cproc_args, id_proc);
+      ct_decl_args(nd_procediment.proc_cproc.cproc_args, id_proc, nargs);
     end if;
 
     -- Per simplificar la GC
@@ -741,8 +741,8 @@ package body semantica.c_tipus is
     empila(pproc, desc_proc.np);
 
     enter_block(ts);
-    despl_args:= 3*ocup_ent;
-    first(ts, id_proc, it); nargs:= 0;
+    despl_args:= 3*ocup_ent*despl(nargs);
+    first(ts, id_proc, it);
     while is_valid(it) loop
       nou_arg(nv, tv, tp, cim(pproc), despl_args, t);
       get(ts, it, id_arg, desc_arg);
@@ -752,7 +752,8 @@ package body semantica.c_tipus is
         desc_arg.na:= t;
       end if;
       put(ts, id_arg, desc_arg, error);
-      next(ts, it); nargs:= nargs + 1;
+      next(ts, it);
+      despl_args:= despl_args - ocup_ent;
     end loop;
     -- tot i que aixo pot anar abans del desempila(pproc) aixi sembla mes adecuat
     act_proc_args(tp, cim(pproc), nargs);
@@ -769,14 +770,16 @@ package body semantica.c_tipus is
   end ct_decl_proc;
 
 
-  procedure ct_decl_args(nd_args: in out pnode;id_proc: in id_nom) is
+  procedure ct_decl_args(nd_args: in out pnode;id_proc: in id_nom; nargs: in out natural) is
     id_tipus: id_nom;
     desc_tipus: descripcio;
 
   begin
     if nd_args.args_args.tn /= nd_null then
-      ct_decl_args(nd_args.args_args, id_proc);
+      ct_decl_args(nd_args.args_args, id_proc, nargs);
     end if;
+
+    nargs:= nargs + 1;
 
     id_tipus:= nd_args.args_arg.arg_tipus.id_id;
     desc_tipus:= get(ts, id_tipus);

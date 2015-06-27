@@ -45,7 +45,7 @@ package decls.d_c3a is
 
   procedure nova_var(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; ocup: in despl; t: out num_var);
   procedure nova_var_const(nv: in out num_var; tv: in out tvariables; val: in valor; tsb: in tipus_subjacent; t: out num_var);
-  procedure nou_arg(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; offset: in out despl; t: out num_var);
+  procedure nou_arg(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; offset: in despl; t: out num_var);
   procedure nou_proc(np: in out num_proc; tp: in out tprocediments; e: in num_etiq; prof: in profunditat; nparam: in natural; p: out num_proc);
   procedure nou_proc_std(np: in out num_proc; tp: in out tprocediments; id: in id_nom; prof: in profunditat; nparam: in natural; p: out num_proc);
   procedure nova_etiq (ne: in out num_etiq; e: out num_etiq);

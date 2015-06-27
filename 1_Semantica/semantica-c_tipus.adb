@@ -923,9 +923,16 @@ package body semantica.c_tipus is
 
   procedure ct_sent_crida(nd_sent: in out pnode) is
     id_base, id_tipus: id_nom;
+    desc_ref: descripcio;
     pos_ref: posicio:= (0, 0);
   begin
     ct_ref(nd_sent.scrida_ref, id_base, id_tipus, pos_ref);
+    desc_ref:= get(ts, id_base);
+    if desc_ref.td /= dproc then
+      --Posar missatge d'error
+      ERROR:=true;
+      return;
+    end if;
   end ct_sent_crida;
 
 

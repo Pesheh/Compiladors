@@ -702,7 +702,7 @@ package body semantica.c_tipus is
     if num_comp = 0 then
       num_comp:= lnc;
     else
-      num_comp:= num_comp * lnc;
+      num_comp:= num_comp * (lnc);
     end if;
   end ct_array_idx;
 

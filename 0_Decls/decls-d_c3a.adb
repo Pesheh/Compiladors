@@ -1,3 +1,4 @@
+with Ada.Text_IO; use ada.text_io;
 with decls.d_tnoms;
 with semantica; use semantica;
 package body decls.d_c3a is
@@ -39,6 +40,7 @@ package body decls.d_c3a is
       tp(np).ocup_vl:= tp(np).ocup_vl + ocup;
     end if;
     t:= nv;
+    Ada.Text_IO.Put_Line(print_tv(tv, nv));
   end nova_var;
 
 
@@ -129,27 +131,27 @@ package body decls.d_c3a is
     if i3a.b = null_nv then
       case i3a.d is
         when comu =>
-          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&" - - ("&print_tv(tv, i3a.nv)&")";
+          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&" - - {"&print_tv(tv, i3a.nv)&"}";
         when proc =>
-          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&" - - ("&print_tp(tp, i3a.np)&")";
+          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&" - - {"&print_tp(tp, i3a.np)&"}";
         when etiq =>
           return tinstruccio'Image(i3a.t)&""&num_etiq'Image(i3a.ne)&" - -";
       end case;
     elsif i3a.c = null_nv then
       case i3a.d is
         when comu =>
-          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&""&num_var'Image(i3a.b)&" - ("&print_tv(tv, i3a.nv)&", "&print_tv(tv, i3a.b)&")";
+          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&""&num_var'Image(i3a.b)&" - {"&print_tv(tv, i3a.nv)&"}, {"&print_tv(tv, i3a.b)&"}";
         when proc =>
-          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&""&num_var'Image(i3a.b)&" - ("&print_tp(tp, i3a.np)&", "&print_tv(tv, i3a.b)&")";
+          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&""&num_var'Image(i3a.b)&" - {"&print_tp(tp, i3a.np)&"}, {"&print_tv(tv, i3a.b)&"}";
         when etiq =>
           return tinstruccio'Image(i3a.t)&""&num_etiq'Image(i3a.ne)&""&num_var'Image(i3a.b)&" -";
       end case;
     else
       case i3a.d is
         when comu =>
-          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c)&" ("&print_tv(tv, i3a.nv)&", "&print_tv(tv, i3a.b)&", "&print_tv(tv, i3a.c)&")";
+          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c)&" {"&print_tv(tv, i3a.nv)&"}, {"&print_tv(tv, i3a.b)&"}, {"&print_tv(tv, i3a.c)&"}";
         when proc =>
-          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c)&" ("&print_tp(tp, i3a.np)&", "&print_tv(tv, i3a.b)&", "&print_tv(tv, i3a.c)&")";
+          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c)&" {"&print_tp(tp, i3a.np)&"}, {"&print_tv(tv, i3a.b)&"}, {"&print_tv(tv, i3a.c)&"}";
         when etiq =>
           return tinstruccio'Image(i3a.t)&""&num_etiq'Image(i3a.ne)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c);
       end case;

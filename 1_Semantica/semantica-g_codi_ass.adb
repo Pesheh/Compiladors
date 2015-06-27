@@ -100,7 +100,7 @@ package body semantica.g_codi_ass is
     Open(File=>Input, Mode=>In_File, Name=> To_String(nf) & ".c3a");
     Create(File=>Output, Mode=>Out_File, Name=> To_String(nf) & ".s");
     buida(pproc);
-    --calcul_desplacaments;
+    calcul_desplacaments;
     generacio_assemblador;
     Close(Input);
     Close(Output);

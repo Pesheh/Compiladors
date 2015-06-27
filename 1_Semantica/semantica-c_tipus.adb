@@ -214,8 +214,8 @@ package body semantica.c_tipus is
     put_arg(ts, idstdio, id_arg, desc_arg, error);
 
     --newline
-    put(tn, "newline", idstdio);
-    --nova_etiq(ne, e);
+    put(tn, "new_line", idstdio);
+    nou_proc_std(np, tp, idstdio, prof, 0, p);
     desc:= (td=>dproc, np=> p);
     empila(pproc, np);
     put(ts, idstdio, desc, error);

@@ -20,8 +20,12 @@ package body semantica.g_codi_int is
 
   procedure gc_proc(nd_proc: in pnode);
   procedure gc_cproc(nd_cproc: in pnode);
-  procedure gc_args(nd_args: in pnode; nargs: out natural);
+--procedure gc_args(nd_args: in pnode; nargs: out natural);
+
+
   procedure gc_decls(nd_decls: in pnode);
+
+
   procedure gc_sents(nd_sents: in pnode);
   procedure gc_sent(nd_sent: in pnode);
   procedure gc_siter(nd_siter: in pnode);
@@ -29,10 +33,14 @@ package body semantica.g_codi_int is
   procedure gc_scrida(nd_cproc: in pnode);
   procedure gc_scrida_args(nod_lexpr: in pnode);
   procedure gc_sassign(nd_sassign: in pnode);
+
+
   procedure gc_ref(nd_ref: in pnode; r: out num_var; d: out num_var);
   procedure gc_ref_id(nd_id: in pnode; r: out num_var; dc: out despl; dv: out num_var);
   procedure gc_ref_qs(nd_qs: in pnode; dc: in out despl; dv: in out num_var);
   procedure gc_ref_lexpr(nd_lexpr: in pnode; desp: in out num_var);
+
+
   procedure gc_expressio(nd_expr: in pnode; r: out num_var; d: out num_var);
   procedure gc_and(nod_and: in pnode; r: out num_var; d: out num_var);
   procedure gc_or(nod_or: in pnode; r: out num_var; d: out num_var);
@@ -92,7 +100,6 @@ package body semantica.g_codi_int is
       gc_decls(p.proc_decls);
     end if;
     gc_cproc(p.proc_cproc);
-    genera(Value(pmb, cim(pproc)));
     gc_sents(p.proc_sents);
     genera(Value(rtn, cim(pproc)));
     desempila(pproc);
@@ -103,17 +110,18 @@ package body semantica.g_codi_int is
     p: pnode renames nd_cproc;
   begin
     genera(Value(etiq, consulta_etiq_proc(tp, cim(pproc))));
+    genera(Value(pmb, cim(pproc)));
   end gc_cproc;
 
 
-  procedure gc_args(nd_args: in pnode; nargs: out natural) is
-    p: pnode renames nd_args;
-  begin
-    if p.args_args.tn /= nd_null then
-      gc_args(p.args_args, nargs);
-    end if;
-    nargs:= nargs+1;
-  end gc_args;
+--procedure gc_args(nd_args: in pnode; nargs: out natural) is
+--  p: pnode renames nd_args;
+--begin
+--  if p.args_args.tn /= nd_null then
+--    gc_args(p.args_args, nargs);
+--  end if;
+--  nargs:= nargs+1;
+--end gc_args;
 
 
   procedure gc_decls(nd_decls: in pnode) is
@@ -356,7 +364,7 @@ package body semantica.g_codi_int is
       gc_ref_qs(p.qs_qs, dc, dv);
     end if;
     if p.qs_q.tn = nd_rec then
-      dc:= dc + despl(consulta_val_const(tv, p.qs_q.rec_td));
+      dc:= dc - despl(consulta_val_const(tv, p.qs_q.rec_td));
     else -- p.qs_q.tn = nd_arry
       gc_ref_lexpr(p.qs_q.arry_lexpr, desp);
       nova_var(nv, tv, tp, cim(pproc), ocup_ent, t);

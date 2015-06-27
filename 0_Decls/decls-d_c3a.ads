@@ -64,6 +64,7 @@ package decls.d_c3a is
   function Value(t: in tinstruccio; a: in num_proc) return instr_3a;
 
   function Imatge(i3a: in instr_3a) return String;
+  function debug_Imatge(i3a: in instr_3a; tv: in tvariables; tp: in tprocediments) return String;
 
   -- Conversió d'instrucció normal a instrucció binària (per guardar al fitxer)
   function To_i3a_bin(i3a: in instr_3a) return instr_3a_bin;

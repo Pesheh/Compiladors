@@ -2,6 +2,27 @@ with decls.d_tnoms;
 with semantica; use semantica;
 package body decls.d_c3a is
 
+
+  function print_tv(tv: in tvariables; nv: in num_var) return string is
+  begin
+    if tv(nv).tv = esconst then
+      return "nv: "&num_Var'image(nv)&"; valor:"&valor'image(tv(nv).val)&"; tsb: "&tipus_subjacent'image(tv(nv).tsb);
+    else
+      return "nv: "&num_var'image(nv)&"; num_proc:"&num_proc'image(tv(nv).np)&"; ocup: "&despl'image(tv(nv).ocup)&"; desp: "&despl'image(tv(nv).ocup);
+    end if;
+  end print_tv;
+
+  function print_tp(tp: in tprocediments; np: in num_proc) return String is
+  begin
+    if tp(np).tp = std then
+      return "np: "&num_proc'image(np)&"; id_nom: "&id_nom'image(tp(np).id)&
+      "; nparam: "&natural'image(tp(np).nparam);
+    else 
+      return "np: "&num_proc'image(np)&"; num_etiq: "&num_etiq'image(tp(np).e)&
+      "; ocup_vl: "&despl'image(tp(np).ocup_vl)&"; nparam: "&natural'image(tp(np).nparam);
+    end if;
+  end print_tp;
+
   procedure nova_var(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; ocup: in despl; t: out num_var) is
     i: despl;
   begin
@@ -101,6 +122,39 @@ package body decls.d_c3a is
   begin
     return (proc, t, np=> a, b=> null_nv, c=> null_nv);
   end Value;
+
+
+  function debug_Imatge(i3a: in instr_3a; tv: in tvariables; tp: in tprocediments) return String is
+  begin
+    if i3a.b = null_nv then
+      case i3a.d is
+        when comu =>
+          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&" - - ("&print_tv(tv, i3a.nv)&")";
+        when proc =>
+          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&" - - ("&print_tp(tp, i3a.np)&")";
+        when etiq =>
+          return tinstruccio'Image(i3a.t)&""&num_etiq'Image(i3a.ne)&" - -";
+      end case;
+    elsif i3a.c = null_nv then
+      case i3a.d is
+        when comu =>
+          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&""&num_var'Image(i3a.b)&" - ("&print_tv(tv, i3a.nv)&", "&print_tv(tv, i3a.b)&")";
+        when proc =>
+          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&""&num_var'Image(i3a.b)&" - ("&print_tp(tp, i3a.np)&", "&print_tv(tv, i3a.b)&")";
+        when etiq =>
+          return tinstruccio'Image(i3a.t)&""&num_etiq'Image(i3a.ne)&""&num_var'Image(i3a.b)&" -";
+      end case;
+    else
+      case i3a.d is
+        when comu =>
+          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c)&" ("&print_tv(tv, i3a.nv)&", "&print_tv(tv, i3a.b)&", "&print_tv(tv, i3a.c)&")";
+        when proc =>
+          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c)&" ("&print_tp(tp, i3a.np)&", "&print_tv(tv, i3a.b)&", "&print_tv(tv, i3a.c)&")";
+        when etiq =>
+          return tinstruccio'Image(i3a.t)&""&num_etiq'Image(i3a.ne)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c);
+      end case;
+    end if;
+  end debug_Imatge;
 
 
   function Imatge(i3a: in instr_3a) return String is

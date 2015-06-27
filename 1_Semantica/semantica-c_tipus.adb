@@ -9,9 +9,6 @@ package body semantica.c_tipus is
 
   use Pila_Procediments;
 
-  -- instanciat a ct_decl_proc
-  despl_args: despl;
-
   --DEFINICIONS
   --Declaracions
   procedure ct_decls(nd_decls: in out pnode);
@@ -36,7 +33,7 @@ package body semantica.c_tipus is
 
   procedure ct_decl_proc(nd_procediment: in out pnode);
   procedure ct_decl_args(nd_args: in out pnode;id_proc: in id_nom; nargs: in out natural);
-  procedure ct_decl_arg(nd_lid_arg: in out pnode;id_proc,id_tipus: in id_nom;mode: in tmode);
+  procedure ct_decl_arg(nd_lid_arg: in out pnode;id_proc,id_tipus: in id_nom;mode: in tmode; nargs: in out natural);
 
   --Sentencias
   procedure ct_sents(nd_sents: in out pnode);
@@ -716,9 +713,10 @@ package body semantica.c_tipus is
     error:boolean;
     it: iterador_arg;
     nargs: natural:= 0;
+    despl_args: despl;
+    t: num_var;
     p: num_proc;
     e: num_etiq;
-    t: num_var;
   begin
     id_proc:= nd_procediment.proc_cproc.cproc_id.id_id;
     nova_etiq(ne, e);
@@ -744,6 +742,7 @@ package body semantica.c_tipus is
     -- + ocup_ent * nargs (això es degut a que l'operació pushl no 
     -- funciona exactament com un podria esperar)
     despl_args:= 3 * ocup_ent + ocup_ent * despl(nargs);
+    --Ada.Text_IO.Put_Line("nargs: "&natural'image(nargs)&"despl: "&despl'image(despl_args));
     first(ts, id_proc, it);
     while is_valid(it) loop
       -- ho feim aixi perque el càlcul anterior, deixa el punter a 4 posicions mes enllà
@@ -783,8 +782,6 @@ package body semantica.c_tipus is
       ct_decl_args(nd_args.args_args, id_proc, nargs);
     end if;
 
-    nargs:= nargs + 1;
-
     id_tipus:= nd_args.args_arg.arg_tipus.id_id;
     desc_tipus:= get(ts, id_tipus);
     if desc_tipus.td /= dtipus then
@@ -792,18 +789,21 @@ package body semantica.c_tipus is
       missatges_desc_no_es_tipus(nd_args.args_arg.arg_tipus.id_pos, id_tipus);
     end if;
 
-    ct_decl_arg(nd_args.args_arg.arg_lid, id_proc, id_tipus, nd_args.args_arg.arg_mode);
+    ct_decl_arg(nd_args.args_arg.arg_lid, id_proc, id_tipus, nd_args.args_arg.arg_mode, nargs);
   end ct_decl_args;
 
 
-  procedure ct_decl_arg(nd_lid_arg: in out pnode;id_proc, id_tipus: in id_nom;mode: in tmode) is
+  procedure ct_decl_arg(nd_lid_arg: in out pnode; id_proc, id_tipus: in id_nom; mode: in tmode; nargs: in out natural) is
     id_arg: id_nom;
     desc_arg,desc: descripcio;
     error: boolean;
   begin
     if nd_lid_arg.lid_seg.tn /= nd_null then
-      ct_decl_arg(nd_lid_arg.lid_seg, id_proc, id_tipus, mode);
+      ct_decl_arg(nd_lid_arg.lid_seg, id_proc, id_tipus, mode, nargs);
     end if;
+
+    nargs:= nargs + 1;
+
     -- GC stuff
     -- BEGIN
     desc:= get(ts, id_tipus);

@@ -731,7 +731,6 @@ package body semantica.c_tipus is
       missatges_conflictes_declaracio(nd_procediment.proc_cproc.cproc_id.id_pos, id_proc);
     end if;
 
-    -- el desplaçament del primer argument es bp + antic Disp + @RTN
     if nd_procediment.proc_cproc.cproc_args.tn /= nd_null then
       ct_decl_args(nd_procediment.proc_cproc.cproc_args, id_proc, nargs);
     end if;
@@ -741,9 +740,15 @@ package body semantica.c_tipus is
     empila(pproc, desc_proc.np);
 
     enter_block(ts);
-    despl_args:= 3*ocup_ent*despl(nargs);
+    -- el desplaçament del primer argument es bp + antic Disp + @RTN
+    -- + ocup_ent * nargs (això es degut a que l'operació pushl no 
+    -- funciona exactament com un podria esperar)
+    despl_args:= 3 * ocup_ent + ocup_ent * despl(nargs);
     first(ts, id_proc, it);
     while is_valid(it) loop
+      -- ho feim aixi perque el càlcul anterior, deixa el punter a 4 posicions mes enllà
+      -- d'on caldria
+      despl_args:= despl_args - ocup_ent;
       nou_arg(nv, tv, tp, cim(pproc), despl_args, t);
       get(ts, it, id_arg, desc_arg);
       if desc_arg.td = dvar then
@@ -753,7 +758,6 @@ package body semantica.c_tipus is
       end if;
       put(ts, id_arg, desc_arg, error);
       next(ts, it);
-      despl_args:= despl_args - ocup_ent;
     end loop;
     -- tot i que aixo pot anar abans del desempila(pproc) aixi sembla mes adecuat
     act_proc_args(tp, cim(pproc), nargs);

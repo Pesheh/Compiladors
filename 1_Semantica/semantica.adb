@@ -1,14 +1,8 @@
-with Ada.Text_IO; --TMP
 with semantica.missatges;
 with semantica.g_codi_int;
 with semantica.c_tipus;
 with semantica.g_codi_ass;
 package body semantica is
-
---procedure print_arbre is
---begin
---  missatges.imprimir_arbre(root);
---end print_arbre;
 
   procedure prepara_analisi(nomf: in String) is
     cert, fals: num_var;

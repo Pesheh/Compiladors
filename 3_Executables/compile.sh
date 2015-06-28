@@ -1,6 +1,6 @@
 #!/bin/bash
 gcc -c -m32 stdio.s -o stdio.o
-if [ $1 != "" ]; then
+if [ $1 ]; then
   ./main $1
   f=$(echo $1 | sed 's/\.kb$//')
   gcc -c -m32 $f.s -o $f.o

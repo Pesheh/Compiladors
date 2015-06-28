@@ -1,7 +1,6 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed; --El trim
-with Ada.Directories;
 
 with semantica; use semantica;
 with decls.d_c3a; use decls.d_c3a;

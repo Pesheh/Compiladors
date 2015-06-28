@@ -98,6 +98,8 @@ package decls.d_c3a is
   procedure actualitza_ocupvl_proc(tp: in out tprocediments; np: in num_proc; ocup: in despl);
   procedure actualitza_desp_var(tv: in out tvariables; nv: in num_var; desp: in despl);
 
+  procedure print_procs_and_vars(tp: in tprocediments; tv: in tvariables; np: in num_proc; nv: in num_var);
+  procedure calcul_desplacaments (tv: in out tvariables; nv: in num_var; tp: in out tprocediments; np: in num_proc);
 private
 
   type instr_3a (d: discr_instruccio:= comu) is

@@ -322,10 +322,11 @@ package body semantica.g_codi_int is
       d:= null_nv;
     elsif dc = 0 and then dv /= 0 then
       -- r = r(dv)
+      genera(Value(neg, dv, dv));
       d:= dv;
     elsif dc /= 0 and then dv = 0 then
       -- invertim el desplaçament perque al codi assemblador les variables s'indexen amb offsets negatius
-      nova_var_const(nv, tv, valor(-dc), tsb_ent, t);
+      nova_var_const(nv, tv, valor(dc), tsb_ent, t);
       if DEBUG then
         missatges_gc_debugging("gc_ref","dc /= 0 & dv = 0:"&num_var'Image(t));
       end if;
@@ -333,13 +334,14 @@ package body semantica.g_codi_int is
       d:= t;
     else -- dc /= 0 and dv /= 0
       -- invertim el desplaçament perque al codi assemblador les variables s'indexen amb offsets negatius
-      nova_var_const(nv, tv, valor(-dc), tsb_ent, t);
+      nova_var_const(nv, tv, valor(dc), tsb_ent, t);
       if DEBUG then
         missatges_gc_debugging("gc_ref","dc /= 0 & dv /= 0:"&num_var'Image(t));
       end if;
       nova_var(nv, tv, tp, cim(pproc), ocup_ent, t1);
       -- de nou el mateix, el despl ha de ser negatiu, per això feim l'operació tal que el resultat compleixi la condició
-      genera(Value(res, t1, t, dv));
+      genera(Value(neg, dv, dv));
+      genera(Value(sum, t1, t, dv));
       -- r:= r.dc(dv)
       d:= t1;
     end if;
@@ -367,7 +369,7 @@ package body semantica.g_codi_int is
       gc_ref_qs(p.qs_qs, dc, dv);
     end if;
     if p.qs_q.tn = nd_rec then
-      dc:= dc + despl(consulta_val_const(tv, p.qs_q.rec_td));
+      dc:= dc - despl(consulta_val_const(tv, p.qs_q.rec_td));
     else -- p.qs_q.tn = nd_arry
       gc_ref_lexpr(p.qs_q.arry_lexpr, desp);
       nova_var(nv, tv, tp, cim(pproc), ocup_ent, t);

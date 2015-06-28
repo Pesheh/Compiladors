@@ -14,18 +14,18 @@ package body semantica.missatges is
     --Podria ser que pondremos el fichero en que se ha producido el error
   procedure missatges_desc_no_es_tipus(pos: in posicio; id: in id_nom) is
   begin
-    put_line(pos.fila'img&":"&pos.columna'img&": """&get(tn, id)&""" no es un tipus.");
+    put_line(pos.fila'img&":"&pos.columna'img&": """&get(tn, id)&""" no és un tipus.");
   end missatges_desc_no_es_tipus;
 
 
   procedure missatges_conflictes_declaracio(pos: in posicio; id: in id_nom) is
   begin
-    put_line(pos.fila'img&":"&pos.columna'img&": """&get(tn, id)&""" esta en conflicte amb altra declaracio.");
+    put_line(pos.fila'img&":"&pos.columna'img&": """&get(tn, id)&""" està en conflicte amb una altre declaració.");
   end missatges_conflictes_declaracio;
 
   procedure missatges_operacio_amb_escalar(pos: in posicio) is
   begin
-    put_line(pos.fila'img&":"&pos.columna'img&": Operacio illegal=> Aquesta assignacio nomes es pot fer amb un tipus escalar.");
+    put_line(pos.fila'img&":"&pos.columna'img&": Operació il·legal=> Aquest tipus d'assignacions sols es poden dur a terme entre escalars.");
   end missatges_operacio_amb_escalar;
 
   procedure missatges_tipus_incosistent_lit(pos: in posicio; id_tipus: in id_nom;tsb_found: in tipus_subjacent) is
@@ -34,10 +34,10 @@ package body semantica.missatges is
     put(pos.fila'img&":"&pos.columna'img&":");
     case tsb_found is
       when tsb_bool=>
-        put_line("S'ha trobat un tipus boolea.");
+        put_line("S'ha trobat un tipus booleà.");
 
       when tsb_car=>
-        put_line("S'ha trobat un tipus caracter.");
+        put_line("S'ha trobat un tipus caràcter.");
 
       when tsb_ent=>
         put_line("S'ha trobat un tipus enter.");
@@ -67,13 +67,13 @@ package body semantica.missatges is
 
   procedure missatges_rang_incorrecte(pos: in posicio) is
   begin
-    put_line(pos.fila'img&":"&pos.columna'img&": Rang incorrecte=> El limit inferior ha de ser mes petit que el limit superior.");
+    put_line(pos.fila'img&":"&pos.columna'img&": Rang incorrecte=> El límit inferior ha de ser menor que el límit superior.");
   end missatges_rang_incorrecte;
 
 
   procedure missatges_assignacio_incorrecta(pos: in posicio) is
   begin
-    put_line(pos.fila'img&":"&pos.columna'img&": Assignacio illegal=> ");
+    put_line(pos.fila'img&":"&pos.columna'img&": Assignació il·legal ");
   end missatges_assignacio_incorrecta;
 
 
@@ -81,44 +81,44 @@ package body semantica.missatges is
   begin
     case op is
       when major | majorigual | igual | diferent | menorigual | menor=>
-        put(pos.fila'img&":"&pos.columna'img&": Els operadors relacionals no son definits ");
+        put(pos.fila'img&":"&pos.columna'img&": Els operadors relacionals no han estat definits per a aquest tipus ");
 
       when sum=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""+"" no esta definit ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""+"" no està definit per a aquest tipus ");
 
       when res=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""-"" no esta definit ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""-"" no està definit per a aquest tipus  ");
 
       when prod=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""*"" no esta definit ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""*"" no està definit per a aquest tipus  ");
 
       when quoci=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""/"" no esta definit ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""/"" no està definit per a aquest tipus  ");
 
       when modul=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""mod"" no esta definit ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""mod"" no està definit per a aquest tipus  ");
 
       when neg_log=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""not"" no esta definit ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""not"" no està definit per a aquest tipus ");
 
       when neg_alg=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""-"" no esta definit ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""- unari"" no esta definit per a aquest tipus ");
 
       when others=> null;
     end case;
 
     case tsb_tipus is
       when tsb_bool=>
-        put_line("per un tipus boolea.");
+        put_line("per a un tipus booleà.");
 
       when tsb_car=>
-        put_line("per un tipus caracter.");
+        put_line("per a un tipus caràcter.");
 
       when tsb_ent=>
-        put_line("per un tipus enter.");
+        put_line("per a un tipus enter.");
 
       when tsb_arr=>
-        put_line("per un tipus array.");
+        put_line("per a un tipus array.");
 
       when tsb_rec=>
         put_line("per un tipus record.");
@@ -154,7 +154,7 @@ package body semantica.missatges is
   procedure missatges_sent_buida is
   begin
       --Pobablemente se tendria que cambiar para tener en cuenta la posicion!
-    put("Sentencia esperada.");
+    put("Sentencia esperada, no s'admeten blocs de senténcies buides, si voleu deixar-los buits empreu la keyword ""null"".");
   end missatges_sent_buida;
 
   procedure missatges_expressions_incompatibles(pos: in posicio; id_tipus1, id_tipus2: in id_nom) is
@@ -167,13 +167,13 @@ package body semantica.missatges is
 
   procedure missatges_menys_indexos_array(pos: in posicio; id_array: in id_nom) is
   begin
-    put_line(pos.fila'img&":"&pos.columna'img&": Nombre insuficient d'indexos per l'array """&get(tn, id_array)&""".");
+    put_line(pos.fila'img&":"&pos.columna'img&": Nombre insuficient d'indexos per a l'array """&get(tn, id_array)&""".");
   end missatges_menys_indexos_array;
 
 
   procedure missatges_massa_indexos_array(pos: in posicio; id_array: in id_nom) is
   begin
-    put_line(pos.fila'img&":"&pos.columna'img&": Nombre major d'indexos que els necessaris per l'array """&get(tn, id_array)&""".");
+    put_line(pos.fila'img&":"&pos.columna'img&": Nombre major d'indexos que els acceptats al rang de l'array """&get(tn, id_array)&""".");
   end missatges_massa_indexos_array;
 
 
@@ -184,22 +184,22 @@ package body semantica.missatges is
 
 procedure missatges_camp_no_record(pos: in posicio; id_rec, id_camp: in id_nom) is
 begin
-   put_line(pos.fila'img&":"&pos.columna'img&": El record """&get(tn, id_rec)&""" no te camp amb el nom """&get(tn, id_camp)&""".");
+   put_line(pos.fila'img&":"&pos.columna'img&": El record """&get(tn, id_rec)&""" no té cap camp amb el nom """&get(tn, id_camp)&""".");
 end missatges_camp_no_record;
 
   procedure missatges_no_array(pos: in posicio; id: in id_nom) is
   begin
-      put_line(pos.fila'img&":"&pos.columna'img&": El tipus """&get(tn, id)&""" no es un array.");
+      put_line(pos.fila'img&":"&pos.columna'img&": El tipus """&get(tn, id)&""" no és un array.");
   end missatges_no_array;
 
  procedure missatges_menys_arguments_proc(pos: in posicio; id_proc: in id_nom) is
  begin
-    put_line(pos.fila'img&":"&pos.columna'img&": Nombre insuficient d'arguments pel procediment """&get(tn, id_proc)&""".");
+    put_line(pos.fila'img&":"&pos.columna'img&": Nombre insuficient d'arguments pel al procediment """&get(tn, id_proc)&""".");
  end missatges_menys_arguments_proc;
 
  procedure missatges_massa_arguments_proc(pos: in posicio; id_proc: in id_nom) is
  begin
-    put_line(pos.fila'img&":"&pos.columna'img&": Nombre d'arguments que els necessaris pel procediment """&get(tn, id_proc)&""".");
+    put_line(pos.fila'img&":"&pos.columna'img&": Nombre major d'arguments que els acceptats pel procediment """&get(tn, id_proc)&""".");
 
  end missatges_massa_arguments_proc;
 
@@ -211,8 +211,7 @@ end missatges_camp_no_record;
 
   procedure missatges_proc_mult_parentesis(pos: in posicio) is
   begin
-    put_line(pos.fila'img&":"&pos.columna'img&": No es permeten procediments amb multiples dimensions.");
-    --No estoy seguro si son multiples dimensiones u otra cosa
+    put_line(pos.fila'img&":"&pos.columna'img&": Paréntesis no lligats a cap expressió.");
   end missatges_proc_mult_parentesis;
 
   procedure missatges_cond_bool(pos: in posicio; tsb: in tipus_subjacent) is
@@ -221,10 +220,10 @@ end missatges_camp_no_record;
     put(pos.fila'img&":"&pos.columna'img&":");
     case tsb is
       when tsb_bool=>
-        put_line("S'ha trobat un tipus boolea.");
+        put_line("S'ha trobat un tipus booleà.");
 
       when tsb_car=>
-        put_line("S'ha trobat un tipus caracter.");
+        put_line("S'ha trobat un tipus caràcter.");
 
       when tsb_ent=>
         put_line("S'ha trobat un tipus enter.");
@@ -241,7 +240,7 @@ end missatges_camp_no_record;
 
   procedure missatges_no_definida(pos: in posicio; id: in id_nom) is
   begin
-    put_line(pos.fila'img&":"&pos.columna'img&": La entitat """&get(tn, id)&""" no esta definida.");
+    put_line(pos.fila'img&":"&pos.columna'img&": La entitat """&get(tn, id)&""" no està definida.");
 
   end missatges_no_definida;
 

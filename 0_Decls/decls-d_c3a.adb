@@ -7,9 +7,9 @@ package body decls.d_c3a is
   function print_tv(tv: in tvariables; nv: in num_var) return string is
   begin
     if tv(nv).tv = esconst then
-      return "nv: "&num_Var'image(nv)&"; valor:"&valor'image(tv(nv).val)&"; tsb: "&tipus_subjacent'image(tv(nv).tsb);
+      return "nv: "&num_Var'image(nv)&"; valor:"&valor'image(tv(nv).all.val)&"; tsb: "&tipus_subjacent'image(tv(nv).all.tsb);
     else
-      return "nv: "&num_var'image(nv)&"; num_proc:"&num_proc'image(tv(nv).np)&"; ocup: "&despl'image(tv(nv).ocup)&"; desp: "&despl'image(tv(nv).ocup);
+      return "nv: "&num_var'image(nv)&"; num_proc:"&num_proc'image(tv(nv).all.np)&"; ocup: "&despl'image(tv(nv).all.ocup)&"; desp: "&despl'image(tv(nv).all.desp);
     end if;
   end print_tv;
 
@@ -35,12 +35,9 @@ package body decls.d_c3a is
       -- si portessim a terme una etapa d'optimitzacio, aixo hauria de calcular-se
       -- un cop hagues acabat l'esmentada etapa (es absurd calcular una ocupacio que canviara).
       -- però com que no es el cas, ho feim aquí
-      i:= tp(np).ocup_vl + ocup_ent;
       tv(nv):= new e_tvar'(esvar, np, ocup, -i);
-      tp(np).ocup_vl:= tp(np).ocup_vl + ocup;
     end if;
     t:= nv;
-    Ada.Text_IO.Put_Line(print_tv(tv, nv));
   end nova_var;
 
 
@@ -344,4 +341,48 @@ package body decls.d_c3a is
   begin
     tv(nv).all.desp:=desp;
   end actualitza_desp_var;
+
+  procedure print_procs_and_vars(tp: in tprocediments; tv: in tvariables; np: in num_proc; nv: in num_var) is
+  begin
+    for num_p in null_np+1..np loop
+     ada.text_io.put_line(print_tp(tp, num_p));
+    end loop;
+    for num_v in null_nv+1..nv loop
+     ada.text_io.put_line(print_tv(tv, num_v));
+    end loop;
+  end print_procs_and_vars;
+
+  procedure calcul_desplacaments (tv: in out tvariables; nv: in num_var; tp: in out tprocediments; np: in num_proc) is
+    desp: despl;
+    var: e_tvar(esvar);
+    lvar: array (num_proc range null_np+1..np) of num_var;
+    ldesp: array(num_proc range null_np+1..np) of despl;
+  begin
+    for ip in null_np+1..np loop
+      if tp(ip).all.tp = comu then
+        tp(ip).all.ocup_vl:= 0;
+        ldesp(ip):= ocup_ent;
+      end if;
+    end loop;
+
+    for iv in null_nv+1..nv loop
+      if tv(iv).tv = esvar  and then tv(iv).all.desp <= 0 then
+        var:= tv(iv).all;
+        if tp(var.np).all.tp = comu then
+          desp:= ldesp(var.np);
+          tp(var.np).all.ocup_vl:= desp;
+          tv(iv).all.desp:= -desp;
+          ldesp(var.np):= desp + var.ocup;
+          lvar(var.np):= iv;
+        end if;
+      end if;
+    end loop;
+
+    for ip in null_np+1..np loop
+      if tp(ip).all.tp = comu and then tp(ip).all.ocup_vl > 0 then
+        tp(ip).all.ocup_vl:= tp(ip).all.ocup_vl + tv(lvar(ip)).all.ocup;
+      end if;
+    end loop;
+  end calcul_desplacaments;
+
 end decls.d_c3a;

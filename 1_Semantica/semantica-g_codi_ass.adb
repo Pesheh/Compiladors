@@ -24,7 +24,7 @@ package body semantica.g_codi_ass is
   function ga_llegir return instr_3a;
   procedure ga_escriure(text: in String);
 
-  procedure calcul_desplacaments;
+  procedure calcul_despl;
   procedure generacio_assemblador;
   procedure init_memoria;
 
@@ -100,30 +100,35 @@ package body semantica.g_codi_ass is
     Open(File=>Input, Mode=>In_File, Name=> To_String(nf) & ".c3a");
     Create(File=>Output, Mode=>Out_File, Name=> To_String(nf) & ".s");
     buida(pproc);
-    calcul_desplacaments;
+    calcul_despl;
     generacio_assemblador;
     Close(Input);
     Close(Output);
   end gen_codi_ass;
 
-  procedure calcul_desplacaments is
+  procedure calcul_despl is
     ip: num_proc;
+    desp: despl;
+    ocup: despl;
   begin
-    for ip in null_np+1..np loop
-      if consulta_tproc(tp, ip) = comu then
-        actualitza_ocupvl_proc(tp, ip, 0);
-      end if;
-    end loop;
-    for iv in null_nv+1..nv loop
-      if  es_var(tv, iv) and then consulta_desp_var(tv, iv) <= 0 then
-        ip:=consulta_np_var(tv, iv);
-        if consulta_tproc(tp, ip) = comu then
-          actualitza_ocupvl_proc(tp, ip, consulta_ocup_proc(tp, ip) + consulta_ocup_var(tv, iv));
-          actualitza_desp_var(tv, iv, -consulta_ocup_proc(tp, ip));
-        end if;
-      end if;
-    end loop;
-  end calcul_desplacaments;
+    print_procs_and_vars(tp, tv, np, nv);
+    calcul_desplacaments(tv, nv, tp, np);
+    print_procs_and_vars(tp, tv, np, nv);
+  --for ip in null_np+1..np loop
+  --  if consulta_tproc(tp, ip) = comu then
+  --    actualitza_ocupvl_proc(tp, ip, 0);
+  --  end if;
+  --end loop;
+  --for iv in null_nv+1..nv loop
+  --  if  es_var(tv, iv) and then consulta_desp_var(tv, iv) <= 0 then
+  --    ip:=consulta_np_var(tv, iv);
+  --    if consulta_tproc(tp, ip) = comu then
+  --      actualitza_ocupvl_proc(tp, ip, consulta_ocup_proc(tp, ip) + consulta_ocup_var(tv, iv));
+  --      actualitza_desp_var(tv, iv, -consulta_ocup_proc(tp, ip));
+  --    end if;
+  --  end if;
+  --end loop;
+  end calcul_despl;
 
 
   procedure prepara_g_codi_ass(nomf: in String) is
@@ -504,10 +509,10 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-							& ga_load(c, ebx)
-							& ga_load_address(a, edi)
-							& "  addl %eax, %edi" & newline
-							& "  movl %ebx, (%edi)" & newline);
+              & ga_load(c, ebx)
+              & ga_load_address(a, edi)
+              & "  addl %eax, %edi" & newline
+              & "  movl %ebx, (%edi)" & newline);
   end ga_cp_idx;
 
   --Instruccions artimetic-logiques
@@ -517,9 +522,9 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-						 	& ga_load(c, ebx)
-						 	& "  addl %ebx, %eax" & newline
-						 	& ga_store(a, eax));
+               & ga_load(c, ebx)
+               & "  addl %ebx, %eax" & newline
+               & ga_store(a, eax));
   end ga_sum;
 
   procedure ga_res(i3a: in instr_3a) is
@@ -528,9 +533,9 @@ package body semantica.g_codi_ass is
     c: constant num_var:= consulta_arg3(i3a);
   begin
     ga_escriure(ga_load(b, eax)
-							& ga_load(c, ebx)
-							& "  subl %ebx, %eax" & newline
-							& ga_store(a, eax));
+              & ga_load(c, ebx)
+              & "  subl %ebx, %eax" & newline
+              & ga_store(a, eax));
   end ga_res;
 
   procedure ga_mul(i3a: in instr_3a) is
@@ -540,7 +545,7 @@ package body semantica.g_codi_ass is
   begin
     ga_escriure(ga_load(b, eax)
               & ga_load(c, ebx)
-              & "  imul %ebx, %eax" & newline
+              & "  imull %ebx, %eax" & newline
               & ga_store(a, eax));
   end ga_mul;
 

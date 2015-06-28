@@ -119,7 +119,7 @@ package body semantica.c_tipus is
     put(ts, idb, desc, error);
     if error then
       ERROR:= true;
-      missatges_ct_error_intern((fila=>115, columna=>5), "posa_entorn_standart");
+      missatges_ct_error_intern((fila=>18, columna=>5), "posa_entorn_standart");
     end if;
 
     put(tn, "true", idtr);
@@ -127,7 +127,7 @@ package body semantica.c_tipus is
     put(ts, idtr, desc, error);
     if error then
       ERROR:= true;
-      missatges_ct_error_intern((fila=>124, columna=>5), "posa_entorn_standart");
+      missatges_ct_error_intern((fila=>26, columna=>5), "posa_entorn_standart");
     end if;
     nova_var_const(nv, tv, -1, tsb_ent, c);
 
@@ -136,7 +136,7 @@ package body semantica.c_tipus is
     put(ts, idf, desc, error);
     if error then
       ERROR:= true;
-      missatges_ct_error_intern((fila=>131, columna=>5), "posa_entorn_standart");
+      missatges_ct_error_intern((fila=>35, columna=>5), "posa_entorn_standart");
     end if;
     nova_var_const(nv, tv, 0, tsb_ent, f);
 
@@ -147,7 +147,7 @@ package body semantica.c_tipus is
 
     if error then
       ERROR:= true;
-      missatges_ct_error_intern((fila=>140, columna=>5), "posa_entorn_standart");
+      missatges_ct_error_intern((fila=>46, columna=>5), "posa_entorn_standart");
     end if;
 
     --Caracters
@@ -156,7 +156,7 @@ package body semantica.c_tipus is
     put(ts, idchar, desc, error);
     if error then
       ERROR:= true;
-      missatges_ct_error_intern((fila=>150, columna=>5), "posa_entorn_standart");
+      missatges_ct_error_intern((fila=>55, columna=>5), "posa_entorn_standart");
     end if;
 
 
@@ -169,7 +169,7 @@ package body semantica.c_tipus is
     put(ts, idstdio, desc, error);
     if error then
       ERROR:= true;
-      missatges_ct_error_intern((fila=>161, columna=>5), "posa_entorn_standart");
+      missatges_ct_error_intern((fila=>68, columna=>5), "posa_entorn_standart");
     end if;
 
     put(tn, "c", id_arg);
@@ -186,7 +186,7 @@ package body semantica.c_tipus is
     put(ts, idstdio, desc, error);
     if error then
       ERROR:= true;
-      missatges_ct_error_intern((fila=>170, columna=>5), "posa_entorn_standart");
+      missatges_ct_error_intern((fila=>85, columna=>5), "posa_entorn_standart");
     end if;
 
     put(tn, "n", id_arg);
@@ -204,7 +204,7 @@ package body semantica.c_tipus is
     put(ts, idstdio, desc, error);
     if error then
       ERROR:= true;
-      missatges_ct_error_intern((fila=>179, columna=>5), "posa_entorn_standart");
+      missatges_ct_error_intern((fila=>103, columna=>5), "posa_entorn_standart");
     end if;
 
     put(tn, "s", id_arg);
@@ -221,7 +221,7 @@ package body semantica.c_tipus is
     put(ts, idstdio, desc, error);
     if error then
       ERROR:= true;
-      missatges_ct_error_intern((fila=>188, columna=>5), "posa_entorn_standart");
+      missatges_ct_error_intern((fila=>120, columna=>5), "posa_entorn_standart");
     end if;
 
     --geti
@@ -231,7 +231,7 @@ package body semantica.c_tipus is
     put(ts, idstdio, desc, error);
     if error then
       ERROR:= true;
-      missatges_ct_error_intern((fila=>197, columna=>5), "posa_entorn_standart");
+      missatges_ct_error_intern((fila=>130, columna=>5), "posa_entorn_standart");
     end if;
 
     put(tn, "n", id_arg);
@@ -247,7 +247,7 @@ package body semantica.c_tipus is
     put(ts, idstdio, desc, error);
     if error then
       ERROR:= true;
-      missatges_ct_error_intern((fila=>206, columna=>5), "posa_entorn_standart");
+      missatges_ct_error_intern((fila=>146, columna=>5), "posa_entorn_standart");
     end if;
 
     put(tn, "c", id_arg);
@@ -263,7 +263,7 @@ package body semantica.c_tipus is
     put(ts, idstdio, desc, error);
     if error then
       ERROR:= true;
-      missatges_ct_error_intern((fila=>215, columna=>5), "posa_entorn_standart");
+      missatges_ct_error_intern((fila=>162, columna=>5), "posa_entorn_standart");
     end if;
 
     put(tn, "c", id_arg);
@@ -299,8 +299,8 @@ package body semantica.c_tipus is
 
       when others =>
         ERROR:= true;
-        missatges_ct_error_intern((fila=>233, columna=>5), "ct_decls");
-
+        missatges_ct_error_intern((fila=>22, columna=>5), "ct_decls");
+        return;
     end case;
   end ct_decls;
 
@@ -320,7 +320,8 @@ package body semantica.c_tipus is
 
       when others =>
         ERROR:= true;
-        missatges_ct_error_intern((fila=>258, columna=>5), "ct_decl_tipus");
+        missatges_ct_error_intern((fila=>15, columna=>5), "ct_decl_tipus");
+        return;
     end case;
   end ct_decl_tipus;
 
@@ -334,6 +335,7 @@ package body semantica.c_tipus is
     if d_tipus.td /= dtipus then
       ERROR:= true;
       missatges_desc_no_es_tipus(decl_var.dvar_tipus.id_pos, id_tipus);
+      return;
     end if;
     ct_lid_var(decl_var.dvar_lid, id_tipus);
   end ct_decl_var;
@@ -376,25 +378,27 @@ package body semantica.c_tipus is
 
     if d_tipus.td /= dtipus then
       ERROR:= true;
-      missatges_desc_no_es_tipus(decl_const.dconst_tipus.id_pos, id_tipus);
+      missatges_desc_no_es_tipus(decl_const.dconst_tipus.id_pos, id_tipus); 
     end if;
 
     if d_tipus.dt.tsb > tsb_ent then
       ERROR:= true;
       missatges_operacio_amb_escalar(decl_const.dconst_tipus.id_pos);
+      return;
     end if;
 
     ct_valor(decl_const.dconst_valor, id_valor, tsb_valor, v_valor, pos_valor);
-
+    if ERROR then return; end if;
     if id_valor = null_id and then tsb_valor /= d_tipus.dt.tsb then
-      --Sabem que es un literal ja que id_valor = null_id
       ERROR:= true;
       missatges_tipus_incosistent_lit(pos_valor, id_tipus, tsb_valor);
+      return;
     end if;
 
     if id_valor /= null_id and then id_valor /= id_tipus then
       ERROR:= true;
       missatges_tipus_incosistent_id(pos_valor, id_tipus, id_valor);
+      return;
     end if;
 
     if v_valor < d_tipus.dt.linf or v_valor > d_tipus.dt.lsup then
@@ -448,11 +452,12 @@ package body semantica.c_tipus is
 
     if desc_tipus.dt.tsb > tsb_ent then
       ERROR:= true;
-      --!!!Hay que cambiar el rang_id a un nodo para poder acceder a la posicion!!!
-      --missatges_operacio_amb_escalar(nd_rang.rang_
+      missatges_operacio_amb_escalar(nd_rang.rang_pos);
+      return;
     end if;
 
     ct_valor(nd_rang.rang_linf, id_valor1, tsb_valor1, v_valor1, pos_valor1);
+    if ERROR then return; end if;
     if id_valor1 = null_id and then tsb_valor1 /= desc_tipus.dt.tsb then
       ERROR:= true;
       missatges_tipus_incosistent_lit(pos_valor1, id_tipus, tsb_valor1);
@@ -461,12 +466,14 @@ package body semantica.c_tipus is
     if id_valor1 /= null_id and then id_valor1 /= id_tipus then
       ERROR:= true;
       missatges_tipus_incosistent_id(pos_valor1, id_tipus, id_valor1);
+      return;
     end if;
 
     ct_valor(nd_rang.rang_lsup, id_valor2, tsb_valor2, v_valor2, pos_valor2);
     if id_valor2 = null_id and then tsb_valor2 /= desc_tipus.dt.tsb then
       ERROR:= true;
       missatges_tipus_incosistent_lit(pos_valor2, id_tipus, tsb_valor2);
+      return;
     end if;
 
     if id_valor2 /= null_id and then id_valor2 /= id_tipus then
@@ -489,7 +496,6 @@ package body semantica.c_tipus is
       missatges_valor_fora_rang(pos_valor2, id_tipus);
     end if;
 
-    --Se que es chapuza!! Pero el tsb debe ser estatico
     case desc_tipus.dt.tsb is
 
       when tsb_ent =>
@@ -506,7 +512,7 @@ package body semantica.c_tipus is
 
       when others =>
         ERROR:= true;
-        missatges_ct_error_intern((fila=>450, columna=>5), "ct_rang");
+        missatges_ct_error_intern((fila=>85, columna=>5), "ct_rang");
     end case;
 
     put(ts, id_rang, desc, error);
@@ -528,6 +534,7 @@ package body semantica.c_tipus is
         if desc.td /= dconst then
           ERROR:= true;
           missatges_assignacio_incorrecta(p.id_pos);
+          return; 
         end if;
         d_tipus:= get(ts, desc.tc);
 
@@ -562,7 +569,7 @@ package body semantica.c_tipus is
 
       when others =>
         ERROR:= true;
-        missatges_ct_error_intern((fila=>506, columna=>5), "ct_valor");
+        missatges_ct_error_intern((fila=>46, columna=>5), "ct_valor");
     end case;
 
   end ct_valor;
@@ -582,6 +589,7 @@ package body semantica.c_tipus is
     if error then
       ERROR:= true;
       missatges_conflictes_declaracio(nd_record.dt_id.id_pos, id_record);
+      return;
     end if;
 
     --processament de camps
@@ -611,6 +619,7 @@ package body semantica.c_tipus is
     if desc_tipus.td /= dtipus then
       ERROR:= true;
       missatges_desc_no_es_tipus(nd_dcamp.dcamp_decl.dvar_tipus.id_pos, id_tipus);
+      return;
     end if;
 
     ct_dcamp_lid(nd_dcamp.dcamp_decl.dvar_lid, id_tipus, idr, desp, desc_tipus.dt.ocup);
@@ -655,6 +664,7 @@ package body semantica.c_tipus is
     if error then
       ERROR:= true;
       missatges_conflictes_declaracio(nd_array.dt_id.id_pos, id_array);
+      return;
     end if;
 
     ct_array_idx(nd_array.dt_cont.dtcont_idx, id_array, num_components, ib);
@@ -663,6 +673,7 @@ package body semantica.c_tipus is
     if desc_tipus.td /= dtipus then
       ERROR:= true;
       missatges_desc_no_es_tipus(nd_array.dt_cont.dtcont_tipus.id_pos, id_tipus);
+      return;
     end if;
 
     ocup:= despl(num_components)*desc_tipus.dt.ocup;
@@ -686,11 +697,13 @@ package body semantica.c_tipus is
     if desc_rang.td /= dtipus then
       ERROR:= true;
       missatges_desc_no_es_tipus(nd_lidx.lid_id.id_pos, id_rang);
+      return;
     end if;
 
     if desc_rang.dt.tsb > tsb_ent then
       ERROR:= true;
       missatges_operacio_amb_escalar(nd_lidx.lid_id.id_pos);
+      return;
     end if;
 
     linf:= desc_rang.dt.linf;
@@ -727,6 +740,7 @@ package body semantica.c_tipus is
     if error then
       ERROR:= true;
       missatges_conflictes_declaracio(nd_procediment.proc_cproc.cproc_id.id_pos, id_proc);
+      return;
     end if;
 
     if nd_procediment.proc_cproc.cproc_args.tn /= nd_null then
@@ -742,7 +756,6 @@ package body semantica.c_tipus is
     -- + ocup_ent * nargs (això es degut a que l'operació pushl no 
     -- funciona exactament com un podria esperar)
     despl_args:= 3 * ocup_ent + ocup_ent * despl(nargs);
-    --Ada.Text_IO.Put_Line("nargs: "&natural'image(nargs)&"despl: "&despl'image(despl_args));
     first(ts, id_proc, it);
     while is_valid(it) loop
       -- ho feim aixi perque el càlcul anterior, deixa el punter a 4 posicions mes enllà
@@ -858,7 +871,7 @@ package body semantica.c_tipus is
         ct_sent_assign(nd_sents_nob.snb_sent.sent_sent);
       when others =>
         ERROR:= true;
-        missatges_ct_error_intern((fila=>736, columna=>16), "ct_sents_nob");
+        missatges_ct_error_intern((fila=>19, columna=>16), "ct_sents_nob");
     end case;
   end ct_sents_nob;
 
@@ -880,7 +893,6 @@ package body semantica.c_tipus is
       missatges_sent_buida;
     end if;
 
-    -- comparació innecessaria si es fes un return en cas d'error al if anterior
     if nd_sent.siter_sents.tn = nd_sents then
       ct_sents(nd_sent.siter_sents);
     end if;
@@ -927,9 +939,10 @@ package body semantica.c_tipus is
     pos_ref: posicio:= (0, 0);
   begin
     ct_ref(nd_sent.scrida_ref, id_base, id_tipus, pos_ref);
+    if ERROR then return; end if;
     desc_ref:= get(ts, id_base);
     if desc_ref.td /= dproc then
-      --Posar missatge d'error
+      missatges_no_proc(pos_ref);
       ERROR:=true;
       return;
     end if;
@@ -951,6 +964,7 @@ package body semantica.c_tipus is
     if desc_ref.td /= dvar then
       ERROR:= true;
       missatges_assignacio_incorrecta(pos_ref);
+      return;
     end if;
 
     ct_expr(nd_sent.sassign_expr, id_texpr, tsb_expr, expr_esvar, pos_exp);
@@ -995,12 +1009,14 @@ package body semantica.c_tipus is
         desc_ref:= get(ts, desc_ref.ta);
         if desc_ref.td /= dtipus then
           ERROR:= true;
-          missatges_ct_error_intern((fila=>868, columna=>20), "ct_ref::una cosa que ha pasat el test com a tipus, ara ja no ho es");
+          missatges_ct_error_intern((fila=>19, columna=>20), "ct_ref::una cosa que ha pasat el test com a tipus, ara ja no ho es");
+          return;
         end if;
 
         if desc_ref.dt.tsb > tsb_ent then
           ERROR:= true;
-          missatges_ct_error_intern((fila=>873, columna=>20), "ct_ref::una cosa que ha pasat el test de constant, ara ja no ho es");
+          missatges_ct_error_intern((fila=>25, columna=>20), "ct_ref::una cosa que ha pasat el test de constant, ara ja no ho es");
+          return;
         end if;
 
         if not ERROR then
@@ -1033,12 +1049,14 @@ package body semantica.c_tipus is
         desc_ref:= get(ts, desc_ref.tc);
         if desc_ref.td /= dtipus then
           ERROR:= true;
-          missatges_ct_error_intern((fila=>868, columna=>20), "ct_ref::una cosa que ha pasat el test com a tipus, ara ja no ho es");
+          missatges_ct_error_intern((fila=>59, columna=>20), "ct_ref::una cosa que ha pasat el test com a tipus, ara ja no ho es");
+          return;
         end if;
 
         if desc_ref.dt.tsb > tsb_ent then
           ERROR:= true;
-          missatges_ct_error_intern((fila=>873, columna=>20), "ct_ref::una cosa que ha pasat el test de constant, ara ja no ho es");
+          missatges_ct_error_intern((fila=>65, columna=>20), "ct_ref::una cosa que ha pasat el test de constant, ara ja no ho es");
+          return;
         end if;
 
         -- Per simplificar la GC
@@ -1063,12 +1081,14 @@ package body semantica.c_tipus is
           if nd_ref.ref_qs.tn = nd_null then
             ERROR:= true;
             missatges_menys_arguments_proc(pos, id_base);
+            return;
           end if;
           ct_qs_proc(nd_ref.ref_qs, id_base, pos);
         else
           if nd_ref.ref_qs.tn /= nd_null then
             ERROR:= true;
             missatges_massa_arguments_proc(pos, id_base);
+            return;
           end if;
         end if;
         id_tipus:= null_id;
@@ -1113,6 +1133,7 @@ package body semantica.c_tipus is
     if is_valid(it) then
       ERROR:= true;
       missatges_menys_arguments_proc(pos, id_base);
+      return;
     end if;
 
   end ct_qs_proc;
@@ -1130,7 +1151,9 @@ package body semantica.c_tipus is
 
     ct_expr(nd_lexpr.lexpr_expr, id_texpr, tsb_expr, esvar, pos);
     if not is_valid(it) then
+      ERROR:=true;
       missatges_massa_arguments_proc(pos, id_base);
+      return;
     end if;
 
     get(ts, it, id_arg, desc_arg);
@@ -1147,8 +1170,8 @@ package body semantica.c_tipus is
 
       when others =>
         ERROR:= true;
-        missatges_ct_error_intern((fila=>868, columna=>20), "ct_lexpr_proc");
-
+        missatges_ct_error_intern((fila=>31, columna=>20), "ct_lexpr_proc");
+        return;
     end case;
 
      if id_texpr = null_id then
@@ -1199,6 +1222,7 @@ package body semantica.c_tipus is
         if desc_tipus.dt.tsb /= tsb_rec then
           ERROR:= true;
           missatges_no_record(pos, id_tipus);
+          return;
         end if;
 
         pos:= nd_q.q_contingut.id_pos;
@@ -1224,6 +1248,7 @@ package body semantica.c_tipus is
         if desc_tipus.dt.tsb /= tsb_arr then
           ERROR:= true;
           missatges_no_array(pos, id_tipus);
+          return;
         end if;
         first(ts, id_tipus, it);
         ct_lexpr_array(nd_q.q_contingut, id_base, id_tipus, it, pos);
@@ -1250,7 +1275,7 @@ package body semantica.c_tipus is
 
       when others =>
         ERROR:= true;
-        missatges_ct_error_intern((fila=> 920, columna=>20), "ct_q");
+        missatges_ct_error_intern((fila=> 66, columna=>20), "ct_q");
     end case;
 
     -- Per simplificar la GC (& ens carregam el node pont q_contingut)
@@ -1279,6 +1304,7 @@ package body semantica.c_tipus is
     if not is_valid(it) then
       ERROR:= true;
       missatges_massa_indexos_array(pos, id_tipus);
+      return;
     end if;
 
     desc_index:= get(ts, it);
@@ -1329,7 +1355,7 @@ package body semantica.c_tipus is
 
       when others =>
         ERROR:= true;
-        missatges_ct_error_intern((fila=>960, columna=>20), "ct_expr");
+        missatges_ct_error_intern((fila=>11, columna=>20), "ct_expr");
 
     end case;
   end ct_expr;
@@ -1347,12 +1373,13 @@ package body semantica.c_tipus is
     else
       ct_eop(nd_e.e_ope, id_tipus1, tsb1, esvar1, pos1);
     end if;
+    
     ct_eop(nd_e.e_opd, id_tipus2, tsb2, esvar2, pos2);
 
     tipus_compatible(id_tipus1, id_tipus2, tsb1, tsb2, id_texpr, tsb_expr, error);
     if error then
       ERROR:= true;
-      missatges_expressions_incompatibles(pos1, id_tipus1, id_tipus2);
+      missatges_expressions_incompatibles(pos1, id_tipus1, id_tipus2, tsb1, tsb2);
     end if;
 
     if tsb1 /= tsb_bool then
@@ -1373,6 +1400,7 @@ package body semantica.c_tipus is
       &tnode'Image(nd_e.eop_opd.tn)&"::"
       &tnode'Image(nd_e.eop_ope.tn));
     end if;
+  
     case nd_e.eop_operand is
       when major | menor | menorigual | majorigual | igual | diferent  =>
         ct_eop_op_rel(nd_e, id_texpr, tsb_expr, esvar, pos);
@@ -1391,7 +1419,7 @@ package body semantica.c_tipus is
 
       when others =>
         ERROR:= true;
-        missatges_ct_error_intern((fila=>1016, columna=>20), "ct_eop");
+        missatges_ct_error_intern((fila=>27, columna=>20), "ct_eop");
     end case;
   end ct_eop;
 
@@ -1427,13 +1455,13 @@ package body semantica.c_tipus is
     pos1, pos2: posicio:= (0, 0);
     error: boolean;
   begin
+    
     ct_eop(nd_e.eop_ope, id_tipus1, tsb1, esvar1, pos1);
     ct_eop(nd_e.eop_opd, id_tipus2, tsb2, esvar2, pos2);
-
     tipus_compatible(id_tipus1, id_tipus2, tsb1, tsb2, id_texpr, tsb_expr, error);
     if error then
       ERROR:= true;
-      missatges_expressions_incompatibles(pos1, id_tipus1, id_tipus2);
+      missatges_expressions_incompatibles(pos1, id_tipus1, id_tipus2,tsb1, tsb2);
     end if;
 
     if tsb1 /= tsb_ent then
@@ -1482,6 +1510,7 @@ package body semantica.c_tipus is
   begin
     if DEBUG then
       missatges_ct_debugging("ct_et",tnode'Image(nd_e.tn));
+      missatges_ct_debugging("ct_et",tnode'Image(nd_e.et_cont.tn));
     end if;
     case nd_e.et_cont.tn is
       when nd_ref =>
@@ -1495,7 +1524,7 @@ package body semantica.c_tipus is
 
       when others =>
         ERROR:= true;
-        missatges_ct_error_intern((fila=>1075, columna=>16), "ct_et");
+        missatges_ct_error_intern((fila=>18, columna=>16), "ct_et");
     end case;
   end ct_et;
 
@@ -1518,7 +1547,7 @@ package body semantica.c_tipus is
       when dargc => esvar:= false;
       when others =>
         ERROR:= true;
-        missatges_ct_error_intern((fila=>1100, columna=>16), "ct_et_ref");
+        missatges_ct_error_intern((fila=>18, columna=>16), "ct_et_ref");
     end case;
   end ct_et_ref;
 

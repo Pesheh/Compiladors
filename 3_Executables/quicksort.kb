@@ -1,51 +1,85 @@
 procedure main is
-  type rang is new integer range 1..20;
-  type un_array is array(rang) of integer;
-  input: un_array;
+  limit_sup: constant Integer:=20;
+  limit_inf: constant Integer:=-1;
+  type Array_Range is new integer range limit_inf..limit_sup;
+  type Array_Type is array(Array_Range) of Integer;
+
+  procedure initArray(taula: in out Array_Type; left, right: in Array_Range) is
+    i: Array_Range;
+    k: Integer;
+  begin
+    i:=left;
+    k:=limit_sup;
+    while i<=right loop
+      taula(i):=k;
+      i:=i+1; k:=k-1;
+    end loop;
+  end procedure;
+
+  procedure printArray(taula: in Array_Type; left, right: in Array_Range) is
+    i: Array_Range;
+  begin
+    i:=left;
+    while i<=right loop
+      puti(taula(i));
+      new_line;
+      i:=i+1;
+    end loop;
+  end procedure;
   
-  procedure quicksort(left: in out rang; right: in rang) is
-    pivot: rang; 
-    left,right: rang;
-
-    procedure swap(left, right: in out rang) is
-    temp: integer;
+  procedure Quicksort(taula: in out Array_Type; left, right: in Array_Range) is
+    procedure swap(taula: in out Array_Type; left, right: in Array_Range) is
+      temp: Integer;
     begin
-      temp:=input(left);
-      input(left):=input(right);
-      input(right):=temp;
+      temp:=taula(left);
+      taula(left):=taula(right);
+      taula(right):=temp;
     end procedure;
 
-    procedure partition(left, right: in out rang; pivot: in out rang) is
-      pivotVal: integer;
-      i: rang;
+    procedure partition(taula: in out Array_Type; left, right: in Array_Range; ret: in out Array_Range) is
+  	  m, li, ls: Array_Range;
+  	  pivot: Integer;
     begin
-      pivot:= (left+right)/2;
-      pivotVal:=input(pivot);
-      swap(pivot,right);
-      i:=left;
-      while i< right loop
-        if input(i) < pivotVal then
-          swap(i,left);
-          left:=left+1;
-        end if;
-        i:=i+1;
-      end loop;
-      swap(left,right);
-      pivot:=left;
-    end procedure;
+  	  m:=(left+right)/2;
+      swap(taula, left, m);
+  	  pivot:=taula(left);
+      li:=left+1; ls:= right;
+  	  while li < ls loop
+  	    while taula(ls) > pivot loop
+  	      ls:=ls-1;
+  	    end loop;
 
+  	    while li < ls and taula(li) < pivot loop
+  	      li:= li+1;
+  	    end loop;
+        if li < ls then
+  	      swap(taula, li, ls);
+  	      li:=li+1; ls:= ls-1;
+  	    end if;
+  	  end loop;
+  	  swap(taula, left, ls);
+  	  ret:=ls;
+  	end procedure;
+
+    q: Array_Range;
   begin
     if left < right then
-      partition(left,right,pivot);
-      quicksort(left, pivot-1);
-      quicksort(pivot,right);
+      partition(taula, left, right, q);
+      quicksort(taula, left, q-1);
+      quicksort(taula, q+1, right);
     end if;
   end procedure;
 
-  left, right: rang;
-
-begin
-  left:=1; 
+  input: Array_Type;
+  left, right: Array_Range;
+begin 
+  left:=-1;
   right:=20;
-  quicksort(left, right);
+  initArray(input, left, right);
+  printArray(input, left, right);
+
+  Quicksort(input, left, right);
+  
+  new_line;
+  printArray(input, left, right);
 end procedure;

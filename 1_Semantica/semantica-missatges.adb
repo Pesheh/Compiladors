@@ -81,28 +81,28 @@ package body semantica.missatges is
   begin
     case op is
       when major | majorigual | igual | diferent | menorigual | menor=>
-        put(pos.fila'img&":"&pos.columna'img&": Els operadors relacionals no han estat definits per a aquest tipus ");
+        put(pos.fila'img&":"&pos.columna'img&": Els operadors relacionals no han estat definits ");
 
       when sum=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""+"" no està definit per a aquest tipus ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""+"" no està definit ");
 
       when res=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""-"" no està definit per a aquest tipus  ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""-"" no està definit ");
 
       when prod=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""*"" no està definit per a aquest tipus  ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""*"" no està definit ");
 
       when quoci=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""/"" no està definit per a aquest tipus  ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""/"" no està definit ");
 
       when modul=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""mod"" no està definit per a aquest tipus  ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""mod"" no està definit ");
 
       when neg_log=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""not"" no està definit per a aquest tipus ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""not"" no està definit ");
 
       when neg_alg=>
-        put(pos.fila'img&":"&pos.columna'img&": L'operador ""- unari"" no esta definit per a aquest tipus ");
+        put(pos.fila'img&":"&pos.columna'img&": L'operador ""- unari"" no esta definit ");
 
       when others=> null;
     end case;
@@ -157,10 +157,56 @@ package body semantica.missatges is
     put("Sentencia esperada, no s'admeten blocs de senténcies buides, si voleu deixar-los buits empreu la keyword ""null"".");
   end missatges_sent_buida;
 
-  procedure missatges_expressions_incompatibles(pos: in posicio; id_tipus1, id_tipus2: in id_nom) is
+  procedure missatges_expressions_incompatibles(pos: in posicio; id_tipus1, id_tipus2: in id_nom; tsb1, tsb2: in tipus_subjacent) is
   begin
 
-    put_line(pos.fila'img&":"&pos.columna'img&": El tipus  """&get(tn, id_tipus1)&""" no es compatible amb el tipus """ &get(tn, id_tipus2)&""".");
+    put(pos.fila'img&":"&pos.columna'img&": El tipus """ );     
+    if id_tipus1 /= null_id then
+      put(get(tn, id_tipus1)); 
+    else 
+    case tsb1 is
+      when tsb_bool=>
+        put("boolea");
+
+      when tsb_car=>
+        put("caracter");
+
+      when tsb_ent=>
+        put("enter");
+
+      when tsb_arr=>
+        put("array");
+
+      when tsb_rec=>
+        put("record");
+      when others=> null;
+    end case;
+
+    end if;
+    put(""" no es compatible amb el tipus """);
+    if id_tipus2 /= null_id then
+      put_line(get(tn, id_tipus2)&""".");
+    else
+    case tsb2 is
+      when tsb_bool=>
+        put_line("boolea"".");
+
+      when tsb_car=>
+        put_line("caracter"".");
+
+      when tsb_ent=>
+        put_line("enter"".");
+
+      when tsb_arr=>
+        put_line("array"".");
+
+      when tsb_rec=>
+        put_line("record"".");
+      when others=> null;
+    end case;
+
+    end if;
+
 
   end missatges_expressions_incompatibles;
 
@@ -244,8 +290,10 @@ end missatges_camp_no_record;
 
   end missatges_no_definida;
 
-
-
+  procedure missatges_no_proc(pos: in posicio) is
+  begin
+    put_line(pos.fila'img&":"&pos.columna'img&": S'espera un procediment, no un array.");
+  end missatges_no_proc;
 
 
 

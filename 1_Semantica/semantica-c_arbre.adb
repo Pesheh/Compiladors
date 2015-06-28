@@ -290,6 +290,7 @@ package body semantica.c_arbre is
   begin
     rang:=new node(nd_rang);
     rang.rang_id:=id_type.id_id;
+    rang.rang_pos:=id_type.id_pos;
     rang.rang_linf:=linf;
     rang.rang_lsup:=lsup;
   end rs_Rang;

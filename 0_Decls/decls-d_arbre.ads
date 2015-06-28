@@ -177,6 +177,7 @@ package decls.d_arbre is
 
         when nd_rang =>
           rang_id: id_nom;
+          rang_pos: posicio;
           rang_linf: pnode;
           rang_lsup: pnode;
 

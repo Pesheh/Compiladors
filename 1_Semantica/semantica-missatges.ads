@@ -15,7 +15,7 @@ package semantica.missatges is
   procedure missatges_operador_tipus(pos: in posicio; tsb_tipus: in tipus_subjacent; op: in operand);
   procedure missatges_log_operador(pos: in posicio; tsb: in tipus_subjacent);
   procedure missatges_sent_buida;
-  procedure missatges_expressions_incompatibles(pos: in posicio; id_tipus1, id_tipus2: in id_nom);
+  procedure missatges_expressions_incompatibles(pos: in posicio; id_tipus1, id_tipus2: in id_nom; tsb1, tsb2: in tipus_subjacent);
   procedure missatges_no_record(pos: in posicio; id: in id_nom);
   procedure missatges_camp_no_record(pos: in posicio; id_rec, id_camp: in id_nom);
   procedure missatges_no_array(pos: in posicio; id: in id_nom);
@@ -27,8 +27,7 @@ package semantica.missatges is
   procedure missatges_proc_mult_parentesis(pos: in posicio);
   procedure missatges_cond_bool(pos: in posicio; tsb: in tipus_subjacent);
   procedure missatges_no_definida(pos: in posicio; id: in id_nom);
-
-
+  procedure missatges_no_proc(pos: in posicio);
 
 
 

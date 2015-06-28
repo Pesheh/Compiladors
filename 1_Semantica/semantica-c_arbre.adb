@@ -3,12 +3,18 @@ with decls.d_arbre;
 package body semantica.c_arbre is
 
 
-  -- Rutina de control
+  -- Rutines de control
 
   procedure rl_atom(a: out atribut) is
   begin
     a:= new node(nd_null);
   end rl_atom;
+
+
+  procedure rs_atom(a: out atribut) is
+  begin
+    a:= new node(nd_null);
+  end rs_atom;
 
   -- Rutines lèxiques
 

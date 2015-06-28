@@ -1,8 +1,9 @@
 with decls.d_descripcio;
 package semantica.c_arbre is
 
-  -- Rutina de control
+  -- Rutines de control
   procedure rl_atom(a: out atribut);
+  procedure rs_atom(a: out atribut);
 
 
   -- Rutines Fonamentals

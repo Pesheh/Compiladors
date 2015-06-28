@@ -55,7 +55,6 @@ package decls.d_c3a is
 
   -- Funcions de consulta i conversió
 
-
   function Value(t: in tinstruccio; a: in num_var) return instr_3a;
   function Value(t: in tinstruccio; a,b: in num_var) return instr_3a;
   function Value(t: in tinstruccio; a,b,c: in num_var) return instr_3a;
@@ -63,8 +62,7 @@ package decls.d_c3a is
   function Value(t: in tinstruccio; a: in num_etiq; b,c: in num_var) return instr_3a;
   function Value(t: in tinstruccio; a: in num_proc) return instr_3a;
 
-  function Imatge(i3a: in instr_3a) return String;
-  function debug_Imatge(i3a: in instr_3a; tv: in tvariables; tp: in tprocediments) return String;
+  function Imatge(i3a: in instr_3a; tv: in tvariables; tp: in tprocediments) return String;
 
   -- Conversió d'instrucció normal a instrucció binària (per guardar al fitxer)
   function To_i3a_bin(i3a: in instr_3a) return instr_3a_bin;
@@ -94,11 +92,7 @@ package decls.d_c3a is
   function consulta_nom_proc(tp: in tprocediments; np: in num_proc; tn: in tnoms) return String;
   function consulta_nparam_proc(tp: in tprocediments; np: in num_proc) return natural;
 
-  --Procediments per actualitzar els campsde les variables/procs
-  procedure actualitza_ocupvl_proc(tp: in out tprocediments; np: in num_proc; ocup: in despl);
-  procedure actualitza_desp_var(tv: in out tvariables; nv: in num_var; desp: in despl);
-
-  procedure print_procs_and_vars(tp: in tprocediments; tv: in tvariables; np: in num_proc; nv: in num_var);
+  --Procediment per actualitzar els campsde les variables/procs
   procedure calcul_desplacaments (tv: in out tvariables; nv: in num_var; tp: in out tprocediments; np: in num_proc);
 private
 

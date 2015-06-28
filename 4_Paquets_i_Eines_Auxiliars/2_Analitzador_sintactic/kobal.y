@@ -60,7 +60,7 @@ PROC:
 
 DECLS:
      DECLS DECL                                                         {rs_Decls($$,$1,$2);}
-  |                                                                     {rl_atom($$);}
+  |                                                                     {rs_atom($$);}
   ;
 
 DECL:
@@ -140,7 +140,7 @@ IDX_CONT:
 
 SENTS:
      SENTS_NOB                                                          {rs_Sents($$,$1);}
-  |  Pc_null Punticoma                                                  {rl_atom($$);}
+  |  Pc_null Punticoma                                                  {rs_atom($$);}
   ;
 
 SENTS_NOB:
@@ -186,7 +186,7 @@ REF:
 
 QS:
      QS Q                                                               {rs_Qs($$,$1,$2);}
-  |                                                                     {rl_atom($$);}
+  |                                                                     {rs_atom($$);}
   ;
 
 Q:

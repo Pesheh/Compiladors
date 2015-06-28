@@ -1,42 +1,12 @@
-with Ada.Text_IO; use ada.text_io;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with decls.d_tnoms;
 with semantica; use semantica;
 package body decls.d_c3a is
 
-
-  function print_tv(tv: in tvariables; nv: in num_var) return string is
-  begin
-    if tv(nv).tv = esconst then
-      return "nv: "&num_Var'image(nv)&"; valor:"&valor'image(tv(nv).all.val)&"; tsb: "&tipus_subjacent'image(tv(nv).all.tsb);
-    else
-      return "nv: "&num_var'image(nv)&"; num_proc:"&num_proc'image(tv(nv).all.np)&"; ocup: "&despl'image(tv(nv).all.ocup)&"; desp: "&despl'image(tv(nv).all.desp);
-    end if;
-  end print_tv;
-
-  function print_tp(tp: in tprocediments; np: in num_proc) return String is
-  begin
-    if tp(np).tp = std then
-      return "np: "&num_proc'image(np)&"; id_nom: "&id_nom'image(tp(np).id)&
-      "; nparam: "&natural'image(tp(np).nparam);
-    else 
-      return "np: "&num_proc'image(np)&"; num_etiq: "&num_etiq'image(tp(np).e)&
-      "; ocup_vl: "&despl'image(tp(np).ocup_vl)&"; nparam: "&natural'image(tp(np).nparam);
-    end if;
-  end print_tp;
-
   procedure nova_var(nv: in out num_var; tv: in out tvariables; tp: in out tprocediments; np: in num_proc; ocup: in despl; t: out num_var) is
-    i: despl;
   begin
     nv:= nv+1;
-    if tp(np).tp = std then
-      -- els procs std tenen 1 o 0 args
-      tv(nv):= new e_tvar'(esvar, np, ocup, 0);
-    else
-      -- si portessim a terme una etapa d'optimitzacio, aixo hauria de calcular-se
-      -- un cop hagues acabat l'esmentada etapa (es absurd calcular una ocupacio que canviara).
-      -- però com que no es el cas, ho feim aquí
-      tv(nv):= new e_tvar'(esvar, np, ocup, -i);
-    end if;
+    tv(nv):= new e_tvar'(esvar, np, ocup, 0);
     t:= nv;
   end nova_var;
 
@@ -60,7 +30,6 @@ package body decls.d_c3a is
   begin
     np:= np+1;
     tp(np):= new e_tproc'(comu, e=> e, prof=> prof, ocup_vl=> 0, nparam=> nparam);
-
     p:= np;
   end nou_proc;
 
@@ -69,14 +38,13 @@ package body decls.d_c3a is
   begin
     np:= np+1;
     tp(np):= new e_tproc'(std, id=> id, prof=> prof, nparam=> nparam);
-
     p:= np;
   end nou_proc_std;
+
 
   procedure nova_etiq (ne: in out num_etiq; e: out num_etiq) is
   begin
     ne:= ne+1;
-
     e:= ne;
   end nova_etiq;
 
@@ -123,69 +91,109 @@ package body decls.d_c3a is
   end Value;
 
 
-  function debug_Imatge(i3a: in instr_3a; tv: in tvariables; tp: in tprocediments) return String is
+  function tv_Image(tv: in tvariables; nv: in num_var) return string is
   begin
-    if i3a.b = null_nv then
-      case i3a.d is
-        when comu =>
-          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&" - - {"&print_tv(tv, i3a.nv)&"}";
-        when proc =>
-          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&" - - {"&print_tp(tp, i3a.np)&"}";
-        when etiq =>
-          return tinstruccio'Image(i3a.t)&""&num_etiq'Image(i3a.ne)&" - -";
-      end case;
-    elsif i3a.c = null_nv then
-      case i3a.d is
-        when comu =>
-          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&""&num_var'Image(i3a.b)&" - {"&print_tv(tv, i3a.nv)&"}, {"&print_tv(tv, i3a.b)&"}";
-        when proc =>
-          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&""&num_var'Image(i3a.b)&" - {"&print_tp(tp, i3a.np)&"}, {"&print_tv(tv, i3a.b)&"}";
-        when etiq =>
-          return tinstruccio'Image(i3a.t)&""&num_etiq'Image(i3a.ne)&""&num_var'Image(i3a.b)&" -";
-      end case;
+    if tv(nv).tv = esconst then
+      return "nv: "&num_Var'image(nv)&"; valor:"&valor'image(tv(nv).all.val)&"; tsb: "&tipus_subjacent'image(tv(nv).all.tsb);
     else
-      case i3a.d is
-        when comu =>
-          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c)&" {"&print_tv(tv, i3a.nv)&"}, {"&print_tv(tv, i3a.b)&"}, {"&print_tv(tv, i3a.c)&"}";
-        when proc =>
-          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c)&" {"&print_tp(tp, i3a.np)&"}, {"&print_tv(tv, i3a.b)&"}, {"&print_tv(tv, i3a.c)&"}";
-        when etiq =>
-          return tinstruccio'Image(i3a.t)&""&num_etiq'Image(i3a.ne)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c);
-      end case;
+      return "nv: "&num_var'image(nv)&"; num_proc:"&num_proc'image(tv(nv).all.np)&"; ocup: "&despl'image(tv(nv).all.ocup)&"; desp: "&despl'image(tv(nv).all.desp);
     end if;
-  end debug_Imatge;
+  end tv_Image;
 
 
-  function Imatge(i3a: in instr_3a) return String is
+  function tp_Image(tp: in tprocediments; np: in num_proc) return String is
   begin
-    if i3a.b = null_nv then
-      case i3a.d is
-        when comu =>
-          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&" - -";
-        when proc =>
-          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&" - -";
-        when etiq =>
-          return tinstruccio'Image(i3a.t)&""&num_etiq'Image(i3a.ne)&" - -";
-      end case;
-    elsif i3a.c = null_nv then
-      case i3a.d is
-        when comu =>
-          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&""&num_var'Image(i3a.b)&" -";
-        when proc =>
-          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&""&num_var'Image(i3a.b)&" -";
-        when etiq =>
-          return tinstruccio'Image(i3a.t)&""&num_etiq'Image(i3a.ne)&""&num_var'Image(i3a.b)&" -";
-      end case;
-    else
-      case i3a.d is
-        when comu =>
-          return tinstruccio'Image(i3a.t)&""&num_var'Image(i3a.nv)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c);
-        when proc =>
-          return tinstruccio'Image(i3a.t)&""&num_proc'Image(i3a.np)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c);
-        when etiq =>
-          return tinstruccio'Image(i3a.t)&""&num_etiq'Image(i3a.ne)&""&num_var'Image(i3a.b)&""&num_var'Image(i3a.c);
-      end case;
+    if tp(np).tp = std then
+      return "np: "&num_proc'image(np)&"; id_nom: "&id_nom'image(tp(np).id)&
+      "; nparam: "&natural'image(tp(np).nparam);
+    else 
+      return "np: "&num_proc'image(np)&"; num_etiq: "&num_etiq'image(tp(np).e)&
+      "; ocup_vl: "&despl'image(tp(np).ocup_vl)&"; nparam: "&natural'image(tp(np).nparam);
     end if;
+  end tp_Image;
+
+
+  -- debug {Var,Etiq,Proc} image
+  function dvi(tv: in tvariables; nv: in num_var) return String is
+  begin
+    if tv(nv).tv = esconst then
+      return Trim(valor'image(tv(nv).val), Ada.Strings.Left);
+    else
+      return "t"&Trim(num_var'image(nv), Ada.Strings.Left);
+    end if;
+  end dvi;
+
+  function dei(ne: in num_etiq) return String is
+  begin
+    return "e"&Trim(num_etiq'image(ne), Ada.Strings.Left);
+  end dei;
+
+  function dpi(tp: in tprocediments; np: in num_proc) return String is
+  begin
+    if tp(np).tp = std then
+      return "_std_"&Trim(id_nom'image(tp(np).id), Ada.Strings.Left);
+    else
+      return "p"&Trim(num_proc'image(np), Ada.Strings.Left);
+    end if;
+  end dpi;
+
+
+  function Imatge(i3a: in instr_3a; tv: in tvariables; tp: in tprocediments) return String is
+  begin
+    case i3a.t is
+        when cp =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b);
+        when cp_idx =>
+          return dvi(tv, i3a.nv)&"["&dvi(tv, i3a.b)&"] := "&dvi(tv, i3a.c);
+        when cons_idx =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&"["&dvi(tv, i3a.c)&"]";
+        when sum =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" + "&dvi(tv, i3a.c);
+        when res =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" - "&dvi(tv, i3a.c);
+        when mul =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" * "&dvi(tv, i3a.c);
+        when div =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" / "&dvi(tv, i3a.c);
+        when modul =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" mod "&dvi(tv, i3a.c);
+        when neg =>
+          return dvi(tv, i3a.nv)&" := -"&dvi(tv, i3a.b);
+        when op_not =>
+          return dvi(tv, i3a.nv)&" := not "&dvi(tv, i3a.b);
+        when op_and =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" and "&dvi(tv, i3a.c);
+        when op_or =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" or "&dvi(tv, i3a.c);
+        when etiq =>
+          return dei(i3a.ne)&": skip";
+        when go_to =>
+          return "goto "&dei(i3a.ne);
+        when ieq_goto =>
+          return "if "&dvi(tv, i3a.b)&" = "&dvi(tv, i3a.c)&" goto "&dei(i3a.ne);
+        when gt =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" > "&dvi(tv, i3a.c);
+        when ge =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" >= "&dvi(tv, i3a.c);
+        when eq =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" = "&dvi(tv, i3a.c);
+        when neq =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" /= "&dvi(tv, i3a.c);
+        when le =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" <= "&dvi(tv, i3a.c);
+        when lt =>
+          return dvi(tv, i3a.nv)&" := "&dvi(tv, i3a.b)&" < "&dvi(tv, i3a.c);
+        when pmb =>
+          return "pmb "&dpi(tp, i3a.np);
+        when rtn =>
+          return "rtn "&dpi(tp, i3a.np);
+        when call =>
+          return "call "&dpi(tp, i3a.np);
+        when params =>
+          return "params "&dvi(tv, i3a.nv);
+        when paramc =>
+          return "paramc "&dvi(tv, i3a.nv)&"["&dvi(tv, i3a.b)&"]";
+    end case;
   end Imatge;
 
 
@@ -238,10 +246,12 @@ package body decls.d_c3a is
     return i3a.ne;
   end consulta_arg_ne;
 
+
   function consulta_arg2(i3a: in instr_3a) return num_var is
   begin
     return i3a.b;
   end consulta_arg2;
+
 
   function consulta_arg3(i3a: in instr_3a) return num_var is
   begin
@@ -249,8 +259,6 @@ package body decls.d_c3a is
   end consulta_arg3;
 
 
-  -- Es l'unica manera de mantenir la privacitat del tipus variable. Si escau
-  -- aplicar aquest esquema als camps necessaris a posteriori d'aquest tipus
   function consulta_val_const(tv: in tvariables; nv: in num_var) return valor is
   begin
     return tv(nv).all.val;
@@ -332,37 +340,14 @@ package body decls.d_c3a is
     return tp(np).nparam;
   end consulta_nparam_proc;
 
-  procedure actualitza_ocupvl_proc(tp: in out tprocediments; np: in num_proc; ocup: in despl) is
-  begin
-    tp(np).ocup_vl:=ocup;
-  end actualitza_ocupvl_proc;
-
-  procedure actualitza_desp_var(tv: in out tvariables; nv: in num_var; desp: in despl) is
-  begin
-    tv(nv).all.desp:=desp;
-  end actualitza_desp_var;
-
-  procedure print_procs_and_vars(tp: in tprocediments; tv: in tvariables; np: in num_proc; nv: in num_var) is
-  begin
-    for num_p in null_np+1..np loop
-     ada.text_io.put_line(print_tp(tp, num_p));
-    end loop;
-    for num_v in null_nv+1..nv loop
-     ada.text_io.put_line(print_tv(tv, num_v));
-    end loop;
-  end print_procs_and_vars;
 
   procedure calcul_desplacaments (tv: in out tvariables; nv: in num_var; tp: in out tprocediments; np: in num_proc) is
     desp: despl;
     var: e_tvar(esvar);
-    lvar: array (num_proc range null_np+1..np) of num_var;
     ldesp: array(num_proc range null_np+1..np) of despl;
   begin
     for ip in null_np+1..np loop
-      if tp(ip).all.tp = comu then
-        tp(ip).all.ocup_vl:= 0;
-        ldesp(ip):= ocup_ent;
-      end if;
+      ldesp(ip):= 0;
     end loop;
 
     for iv in null_nv+1..nv loop
@@ -370,17 +355,19 @@ package body decls.d_c3a is
         var:= tv(iv).all;
         if tp(var.np).all.tp = comu then
           desp:= ldesp(var.np);
-          tp(var.np).all.ocup_vl:= desp;
+          if desp = 0 then
+            ldesp(var.np):= ocup_ent;
+            desp:= ocup_ent;
+          end if;
           tv(iv).all.desp:= -desp;
           ldesp(var.np):= desp + var.ocup;
-          lvar(var.np):= iv;
         end if;
       end if;
     end loop;
 
     for ip in null_np+1..np loop
-      if tp(ip).all.tp = comu and then tp(ip).all.ocup_vl > 0 then
-        tp(ip).all.ocup_vl:= tp(ip).all.ocup_vl + tv(lvar(ip)).all.ocup;
+      if tp(ip).all.tp = comu then
+        tp(ip).all.ocup_vl:= ldesp(ip);
       end if;
     end loop;
   end calcul_desplacaments;

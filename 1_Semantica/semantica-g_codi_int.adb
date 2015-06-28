@@ -74,7 +74,7 @@ package body semantica.g_codi_int is
   procedure genera(i3a: in instr_3a) is
   begin
     Instruccio_IO.Write(f3a, To_i3a_bin(i3a));
-    Ada.Text_IO.Put_Line(f3as, debug_Imatge(i3a, tv, tp));
+    Ada.Text_IO.Put_Line(f3as, Imatge(i3a, tv, tp));
   end genera;
 
 

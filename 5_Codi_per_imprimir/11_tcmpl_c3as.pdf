@@ -1,0 +1,633 @@
+%!PS-Adobe-3.0
+%%Title: new.ada
+%%For: pesh
+%%Creator: VIM - Vi IMproved 7.4 (2013 Aug 10)
+%%CreationDate: Mon Jun 29 00:15:11 2015
+%%DocumentData: Clean8Bit
+%%Orientation: Portrait
+%%Pages: (atend)
+%%PageOrder: Ascend
+%%BoundingBox: 11 25 582 825
+%%DocumentMedia: A4 595 842 0 () ()
+%%DocumentNeededResources: font Courier
+%%+ font Courier-Bold
+%%+ font Courier-Oblique
+%%+ font Courier-BoldOblique
+%%DocumentSuppliedResources: procset VIM-Prolog 1.4 1
+%%+ encoding VIM-latin1 1.0 0
+%%Requirements: collate color
+%%EndComments
+%%BeginDefaults
+%%PageResources: font Courier
+%%+ font Courier-Bold
+%%+ font Courier-Oblique
+%%+ font Courier-BoldOblique
+%%PageMedia: A4
+%%EndDefaults
+%%BeginProlog
+%%BeginResource: procset VIM-Prolog
+%%BeginDocument: /usr/share/vim/vim74/print/prolog.ps
+%!PS-Adobe-3.0 Resource-ProcSet
+%%Title: VIM-Prolog
+%%Version: 1.4 1
+%%EndComments
+% Editing of this file is NOT RECOMMENDED.  You run a very good risk of causing
+% all PostScript printing from VIM failing if you do.  PostScript is not called
+% a write-only language for nothing!
+/packedarray where not{userdict begin/setpacking/pop load def/currentpacking
+false def end}{pop}ifelse/CP currentpacking def true setpacking
+/bd{bind def}bind def/ld{load def}bd/ed{exch def}bd/d/def ld
+/db{dict begin}bd/cde{currentdict end}bd
+/T true d/F false d
+/SO null d/sv{/SO save d}bd/re{SO restore}bd
+/L2 systemdict/languagelevel 2 copy known{get exec}{pop pop 1}ifelse 2 ge d
+/m/moveto ld/s/show ld /ms{m s}bd /g/setgray ld/r/setrgbcolor ld/sp{showpage}bd
+/gs/gsave ld/gr/grestore ld/cp/currentpoint ld
+/ul{gs UW setlinewidth cp UO add 2 copy newpath m 3 1 roll add exch lineto
+stroke gr}bd
+/bg{gs r cp BO add 4 -2 roll rectfill gr}bd
+/sl{90 rotate 0 exch translate}bd
+L2{
+/sspd{mark exch{setpagedevice}stopped cleartomark}bd
+/nc{1 db/NumCopies ed cde sspd}bd
+/sps{3 db/Orientation ed[3 1 roll]/PageSize ed/ImagingBBox null d cde sspd}bd
+/dt{2 db/Tumble ed/Duplex ed cde sspd}bd
+/c{1 db/Collate ed cde sspd}bd
+}{
+/nc{/#copies ed}bd
+/sps{statusdict/setpage get exec}bd
+/dt{statusdict/settumble 2 copy known{get exec}{pop pop pop}ifelse
+statusdict/setduplexmode 2 copy known{get exec}{pop pop pop}ifelse}bd
+/c{pop}bd
+}ifelse
+/ffs{findfont exch scalefont d}bd/sf{setfont}bd
+/ref{1 db findfont dup maxlength dict/NFD ed{exch dup/FID ne{exch NFD 3 1 roll
+put}{pop pop}ifelse}forall/Encoding findresource dup length 256 eq{NFD/Encoding
+3 -1 roll put}{pop}ifelse NFD dup/FontType get 3 ne{/CharStrings}{/CharProcs}
+ifelse 2 copy known{2 copy get dup maxlength dict copy[/questiondown/space]{2
+copy known{2 copy get 2 index/.notdef 3 -1 roll put pop exit}if pop}forall put
+}{pop pop}ifelse dup NFD/FontName 3 -1 roll put NFD definefont pop end}bd
+CP setpacking
+(\004)cvn{}bd
+% vim:ff=unix:
+%%EOF
+%%EndDocument
+%%EndResource
+%%BeginResource: encoding VIM-latin1
+%%BeginDocument: /usr/share/vim/vim74/print/latin1.ps
+%!PS-Adobe-3.0 Resource-Encoding
+%%Title: VIM-latin1
+%%Version: 1.0 0
+%%EndComments
+/VIM-latin1[
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quotesingle
+/parenleft /parenright /asterisk /plus /comma /minus /period /slash
+/zero /one /two /three /four /five /six /seven
+/eight /nine /colon /semicolon /less /equal /greater /question
+/at /A /B /C /D /E /F /G
+/H /I /J /K /L /M /N /O
+/P /Q /R /S /T /U /V /W
+/X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore
+/grave /a /b /c /d /e /f /g
+/h /i /j /k /l /m /n /o
+/p /q /r /s /t /u /v /w
+/x /y /z /braceleft /bar /braceright /asciitilde /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/space /exclamdown /cent /sterling /currency /yen /brokenbar /section
+/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron
+/degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /periodcentered
+/cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown
+/Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla
+/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis
+/Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply
+/Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls
+/agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla
+/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis
+/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide
+/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis]
+/Encoding defineresource pop
+% vim:ff=unix:
+%%EOF
+%%EndDocument
+%%EndResource
+%%EndProlog
+%%BeginSetup
+595 842 0 sps
+1 nc
+F F dt
+T c
+%%IncludeResource: font Courier
+/_F0 /VIM-latin1 /Courier ref
+/F0 10 /_F0 ffs
+%%IncludeResource: font Courier-Bold
+/_F1 /VIM-latin1 /Courier-Bold ref
+/F1 10 /_F1 ffs
+%%IncludeResource: font Courier-Oblique
+/_F2 /VIM-latin1 /Courier-Oblique ref
+/F2 10 /_F2 ffs
+%%IncludeResource: font Courier-BoldOblique
+/_F3 /VIM-latin1 /Courier-BoldOblique ref
+/F3 10 /_F3 ffs
+/UO -1 d
+/UW 0.5 d
+/BO -2.5 d
+%%EndSetup
+%%Page: 1 1
+%%BeginPageSetup
+sv
+0 g
+F0 sf
+%%EndPageSetup
+F0 sf
+(e1)11.9 817.66 ms
+F1 sf
+(:)s
+F0 sf
+( skip)s
+(pmb p8)11.9 807.66 ms
+(t10 )11.9 797.66 ms
+F1 sf
+(:=)s
+F0 sf
+( )s
+F2 sf
+(0)s
+F0 sf
+(t11 )11.9 787.66 ms
+F1 sf
+(:=)s
+F0 sf
+( )s
+F2 sf
+(98)s
+F0 sf
+(t60 )11.9 777.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t10)s
+(t61 )11.9 767.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t60 )s
+F1 sf
+(-)s
+F0 sf
+( )s
+F2 sf
+(-1)s
+F0 sf
+(t62 )11.9 757.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t61 )s
+F1 sf
+(*)s
+F0 sf
+( )s
+F2 sf
+(8)s
+F0 sf
+(t9[t62] )11.9 747.66 ms
+F1 sf
+(:=)s
+F0 sf
+( )s
+F2 sf
+(1)s
+F0 sf
+(t64 )11.9 737.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t10)s
+(t65 )11.9 727.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t64 )s
+F1 sf
+(-)s
+F0 sf
+( )s
+F2 sf
+(-1)s
+F0 sf
+(t66 )11.9 717.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t65 )s
+F1 sf
+(*)s
+F0 sf
+( )s
+F2 sf
+(8)s
+F0 sf
+(t68 )11.9 707.66 ms
+F1 sf
+(:=)s
+F0 sf
+( )s
+F2 sf
+(4)s
+F0 sf
+( )s
+F1 sf
+(+)s
+F0 sf
+( t66)s
+(t9[t68] )11.9 697.66 ms
+F1 sf
+(:=)s
+F0 sf
+( )s
+F2 sf
+(2)s
+F0 sf
+(t9[)11.9 687.66 ms
+F2 sf
+(24)s
+F0 sf
+(] )s
+F1 sf
+(:=)s
+F0 sf
+( )s
+F2 sf
+(100)s
+F0 sf
+(t72 )11.9 677.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t10)s
+(t73 )11.9 667.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t72 )s
+F1 sf
+(*)s
+F0 sf
+( )s
+F2 sf
+(4)s
+F0 sf
+(t74 )11.9 657.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t73 )s
+F1 sf
+(+)s
+F0 sf
+( t11)s
+(t75 )11.9 647.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t74 )s
+F1 sf
+(-)s
+F0 sf
+( )s
+F2 sf
+(93)s
+F0 sf
+(t76 )11.9 637.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t75 )s
+F1 sf
+(*)s
+F0 sf
+( )s
+F2 sf
+(28)s
+F0 sf
+(t77 )11.9 627.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t10)s
+(t78 )11.9 617.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t77 )s
+F1 sf
+(-)s
+F0 sf
+( )s
+F2 sf
+(-1)s
+F0 sf
+(t79 )11.9 607.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t78 )s
+F1 sf
+(*)s
+F0 sf
+( )s
+F2 sf
+(8)s
+F0 sf
+(t80 )11.9 597.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t79 )s
+F1 sf
+(+)s
+F0 sf
+( t76)s
+(t81 )11.9 587.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t10)s
+(t82 )11.9 577.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t81 )s
+F1 sf
+(-)s
+F0 sf
+( )s
+F2 sf
+(-1)s
+F0 sf
+(t83 )11.9 567.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t82 )s
+F1 sf
+(*)s
+F0 sf
+( )s
+F2 sf
+(8)s
+F0 sf
+(t84 )11.9 557.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t9[t83])s
+(t12[t80] )11.9 547.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t84)s
+(t85 )11.9 537.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t10)s
+(t86 )11.9 527.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t85 )s
+F1 sf
+(*)s
+F0 sf
+( )s
+F2 sf
+(4)s
+F0 sf
+(t87 )11.9 517.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t86 )s
+F1 sf
+(+)s
+F0 sf
+( t11)s
+(t88 )11.9 507.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t87 )s
+F1 sf
+(-)s
+F0 sf
+( )s
+F2 sf
+(93)s
+F0 sf
+(t89 )11.9 497.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t88 )s
+F1 sf
+(*)s
+F0 sf
+( )s
+F2 sf
+(28)s
+F0 sf
+(t90 )11.9 487.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t10)s
+(t91 )11.9 477.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t90 )s
+F1 sf
+(-)s
+F0 sf
+( )s
+F2 sf
+(-1)s
+F0 sf
+(t92 )11.9 467.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t91 )s
+F1 sf
+(*)s
+F0 sf
+( )s
+F2 sf
+(8)s
+F0 sf
+(t93 )11.9 457.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t92 )s
+F1 sf
+(+)s
+F0 sf
+( t89)s
+(t95 )11.9 447.66 ms
+F1 sf
+(:=)s
+F0 sf
+( )s
+F2 sf
+(4)s
+F0 sf
+( )s
+F1 sf
+(+)s
+F0 sf
+( t93)s
+(t96 )11.9 437.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t10)s
+(t97 )11.9 427.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t96 )s
+F1 sf
+(-)s
+F0 sf
+( )s
+F2 sf
+(-1)s
+F0 sf
+(t98 )11.9 417.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t97 )s
+F1 sf
+(*)s
+F0 sf
+( )s
+F2 sf
+(8)s
+F0 sf
+(t100 )11.9 407.66 ms
+F1 sf
+(:=)s
+F0 sf
+( )s
+F2 sf
+(4)s
+F0 sf
+( )s
+F1 sf
+(+)s
+F0 sf
+( t98)s
+(t101 )11.9 397.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t9[t100])s
+(t12[t95] )11.9 387.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t101)s
+(t102 )11.9 377.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t10)s
+(t103 )11.9 367.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t102 )s
+F1 sf
+(*)s
+F0 sf
+( )s
+F2 sf
+(4)s
+F0 sf
+(t104 )11.9 357.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t103 )s
+F1 sf
+(+)s
+F0 sf
+( t11)s
+(t105 )11.9 347.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t104 )s
+F1 sf
+(-)s
+F0 sf
+( )s
+F2 sf
+(93)s
+F0 sf
+(t106 )11.9 337.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t105 )s
+F1 sf
+(*)s
+F0 sf
+( )s
+F2 sf
+(28)s
+F0 sf
+(t108 )11.9 327.66 ms
+F1 sf
+(:=)s
+F0 sf
+( )s
+F2 sf
+(24)s
+F0 sf
+( )s
+F1 sf
+(+)s
+F0 sf
+( t106)s
+(t110 )11.9 317.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t9[)s
+F2 sf
+(24)s
+F0 sf
+(])s
+(t12[t108] )11.9 307.66 ms
+F1 sf
+(:=)s
+F0 sf
+( t110)s
+(rtn p8)11.9 297.66 ms
+re sp
+%%PageTrailer
+%%Trailer
+%%Pages: 1
+%%EOF
+
